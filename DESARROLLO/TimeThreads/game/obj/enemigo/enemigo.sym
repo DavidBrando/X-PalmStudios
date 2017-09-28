@@ -1,0 +1,94 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 1.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  2710 L
+    .__.ABS.                                                    =  0000 G
+    .__.CPU.                                                    =  0000 L
+    .__.H$L.                                                    =  0000 L
+  0 _BOestado                                                      06D5 GR
+  1 _ENMirar                                                       0012 GR
+  0 _IA                                                            048A GR
+    __moduchar                                                     **** GX
+    _a                                                             **** GX
+  0 _alive                                                         06CD GR
+  0 _andar_ani2                                                    0170 GR
+  0 _anim_andar2                                                   0056 GR
+  0 _anim_golpear                                                  0060 GR
+  0 _asignarFrame2                                                 0000 GR
+  1 _borracho                                                      0000 GR
+  0 _borrarBorracho                                                00E7 GR
+  1 _c                                                             0014 GR
+    _cpct_drawSpriteMaskedAlignedTable                             **** GX
+    _cpct_etm_drawTileBox2x4                                       **** GX
+    _cpct_getRandom_mxor_u8                                        **** GX
+    _cpct_getScreenPtr                                             **** GX
+    _cpct_hflipSpriteM0                                            **** GX
+    _cpct_isAnyKeyPressed                                          **** GX
+    _cpct_isKeyPressed                                             **** GX
+    _cpct_restoreState_mxor_u8                                     **** GX
+    _cpct_scanKeyboard_f                                           **** GX
+    _cpct_setSeed_mxor                                             **** GX
+    _cpct_waitVSYNC                                                **** GX
+  0 _derecha                                                       01EC GR
+  0 _dibujarBorracho                                               00BD GR
+    _dibujarProta                                                  **** GX
+  1 _e                                                             0011 GR
+  0 _g_Frames                                                      0026 GR
+    _g_borracho_0                                                  **** GX
+    _g_borracho_1                                                  **** GX
+    _g_borracho_2                                                  **** GX
+    _g_borracho_3                                                  **** GX
+    _g_borracho_4                                                  **** GX
+    _g_borracho_5                                                  **** GX
+    _g_borracho_6                                                  **** GX
+    _g_borracho_7                                                  **** GX
+    _g_map1                                                        **** GX
+  0 _get_BX                                                        041D GR
+  0 _get_BY                                                        0422 GR
+    _get_CX                                                        **** GX
+    _get_CY                                                        **** GX
+    _get_X                                                         **** GX
+    _get_Y                                                         **** GX
+    _get_tip_mapa                                                  **** GX
+  0 _girarFrame2                                                   0064 GR
+  0 _golpear                                                       0217 GR
+  0 _golpear_ani2                                                  0189 GR
+  0 _ini_andar2                                                    01A2 GR
+  0 _ini_estado                                                    06DF GR
+  0 _inicializar_borracho                                          06E7 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+  0 _izquierda                                                     01BF GR
+  1 _j                                                             0013 GR
+  1 _mapaJug                                                       000F GR
+  0 _mata_enemigo                                                  026C GR
+  1 _pmapa                                                         000D GR
+  0 _quietoENE                                                     0244 GR
+  0 _quitar_vida                                                   03D5 GR
+  0 _redibujarBorracho                                             015C GR
+    _restaVida                                                     **** GX
+  0 _reviveIA                                                      0427 GR
+  0 _seleccionarSpriteBorracho                                     0086 GR
+  0 _wait4UserKeypress                                             03E3 GR
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
+Hexadecimal [16-Bits]
+
+Area Table
+
+   0 _CODE                                      size  73B   flags    0
+   1 _DATA                                      size   18   flags    0
+   2 _INITIALIZED                               size    0   flags    0
+   3 _DABS                                      size    0   flags    8
+   4 _HOME                                      size    0   flags    0
+   5 _GSINIT                                    size    0   flags    0
+   6 _GSFINAL                                   size    0   flags    0
+   7 _INITIALIZER                               size    0   flags    0
+   8 _CABS                                      size    0   flags    8
+

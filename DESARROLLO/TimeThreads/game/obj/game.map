@@ -1,0 +1,446 @@
+ASxxxx Linker V03.00 + NoICE + sdld,  page 1.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000000  .__.ABS.                           
+     00000000  l__CABS                         
+     00000000  l__DABS                         
+     00000000  l__GSFINAL                      
+     00000000  l__GSINIT                       
+     00000000  l__HOME                         
+     00000000  l__INITIALIZED                  
+     00000000  l__INITIALIZER                  
+     00000000  l__a_                           
+     00000000  s__CABS                         
+     00000000  s__DABS                         
+     00000000  s__a_                           
+     00000000  s__a_0                          
+     0000003F  l__DATA                         
+     00000100  l__a_0                          
+     00000BF8  l__CSEG                         
+     00004000  s__CODE                         
+     0000613B  l__CODE                         
+     0000A13B  s__DATA                         
+     0000A17A  s__CSEG                         
+     0000A17A  s__GSFINAL                      
+     0000A17A  s__GSINIT                       
+     0000A17A  s__HOME                         
+     0000A17A  s__INITIALIZED                  
+     0000A17A  s__INITIALIZER                  
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CODE                               00004000    0000613B =       24891. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00004000  _g_map7                            map7
+     00004528  _g_map6                            map6
+     00004A50  _g_map5                            map5
+     00004F78  _g_map4                            map4
+     000054A0  _g_map3                            map3
+     000059C8  _g_map2                            map2
+     00005EF0  _g_map1                            map1
+     00006418  _g_palette                         personaje
+     00006428  _g_personaje_00                    personaje
+     00006628  _g_personaje_01                    personaje
+     00006828  _g_personaje_02                    personaje
+     00006A28  _g_personaje_03                    personaje
+     00006C28  _g_personaje_04                    personaje
+     00006E28  _g_personaje_05                    personaje
+     00007028  _g_personaje_06                    personaje
+     00007228  _g_personaje_07                    personaje
+     00007428  _g_personaje_08                    personaje
+     00007628  _g_personaje_09                    personaje
+     00007828  _g_personaje_10                    personaje
+     00007A28  _presenta                          main
+     00007A92  _fin                               main
+     00007ABD  _muerteJug                         main
+     00007ADA  _inicializar                       main
+     00007B00  _cambiaEstado                      main
+     00007B09  _teclado                           main
+     00007B55  _main                              main
+     00007C39  _asignarFrame2                     enemigo
+     00007C5F  _g_Frames                          enemigo
+     00007C8F  _anim_andar2                       enemigo
+     00007C99  _anim_golpear                      enemigo
+     00007C9D  _girarFrame2                       enemigo
+     00007CBF  _seleccionarSpriteBorracho         enemigo
+     00007CF6  _dibujarBorracho                   enemigo
+     00007D20  _borrarBorracho                    enemigo
+     00007D95  _redibujarBorracho                 enemigo
+     00007DA9  _andar_ani2                        enemigo
+     00007DC2  _golpear_ani2                      enemigo
+     00007DDB  _ini_andar2                        enemigo
+     00007DF8  _izquierda                         enemigo
+     00007E25  _derecha                           enemigo
+     00007E50  _golpear                           enemigo
+     00007E7D  _quietoENE                         enemigo
+     00007EA5  _mata_enemigo                      enemigo
+     0000800E  _quitar_vida                       enemigo
+     0000801C  _wait4UserKeypress                 enemigo
+     00008056  _get_BX                            enemigo
+     0000805B  _get_BY                            enemigo
+     00008060  _reviveIA                          enemigo
+     000080C3  _IA                                enemigo
+     00008306  _alive                             enemigo
+ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CODE                               00004000    0000613B =       24891. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000830E  _BOestado                          enemigo
+     00008318  _ini_estado                        enemigo
+     00008320  _inicializar_borracho              enemigo
+     00008374  _g_borracho_0                      borracho
+     0000844C  _g_borracho_1                      borracho
+     00008524  _g_borracho_2                      borracho
+     000085FC  _g_borracho_3                      borracho
+     000086D4  _g_borracho_4                      borracho
+     000087AC  _g_borracho_5                      borracho
+     00008884  _g_borracho_6                      borracho
+     0000895C  _g_borracho_7                      borracho
+     00008A34  _dummy_cpct_transparentMaskTable   jugador
+     00008A34  _g_cuchillo                        cuchillo
+     00008A44  _inicializar_mapa                  carga_mapa
+     00008A53  _dibujarMapa                       carga_mapa
+     00008A6A  _g_cinta                           cinta
+     00008C72  _g_async                           async
+     00008F72  _g_tileset                         tiles
+     00008FA8  _g_tiles_00                        tiles
+     00008FB0  _g_tiles_01                        tiles
+     00008FB8  _g_tiles_02                        tiles
+     00008FC0  _g_tiles_03                        tiles
+     00008FC8  _g_tiles_04                        tiles
+     00008FD0  _g_tiles_05                        tiles
+     00008FD8  _g_tiles_06                        tiles
+     00008FE0  _g_tiles_07                        tiles
+     00008FE8  _g_tiles_08                        tiles
+     00008FF0  _g_tiles_09                        tiles
+     00008FF8  _g_tiles_10                        tiles
+     00009000  _g_tiles_11                        tiles
+     00009008  _g_tiles_12                        tiles
+     00009010  _g_tiles_13                        tiles
+     00009018  _g_tiles_14                        tiles
+     00009020  _g_tiles_15                        tiles
+     00009028  _g_tiles_16                        tiles
+     00009030  _g_tiles_17                        tiles
+     00009038  _g_tiles_18                        tiles
+     00009040  _g_tiles_19                        tiles
+     00009048  _g_tiles_20                        tiles
+     00009050  _g_tiles_21                        tiles
+     00009058  _g_tiles_22                        tiles
+     00009060  _g_tiles_23                        tiles
+     00009068  _g_tiles_24                        tiles
+     00009070  _g_tiles_25                        tiles
+     00009078  _g_tiles_26                        tiles
+     00009080  _cpct_setPalette                   cpct_video
+     00009097  _cpct_isKeyPressed                 cpct_keyboard
+     00009097  cpct_isKeyPressed_asm              cpct_keyboard
+     000090A3  _cpct_scanKeyboard_f               cpct_keyboard
+     000090A3  cpct_scanKeyboard_f_asm            cpct_keyboard
+     0000910D  _cpct_setPALColour                 cpct_video
+ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CODE                               00004000    0000613B =       24891. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00009119  _cpct_drawStringM0                 cpct_strings
+     00009121  cpct_drawStringM0_asm              cpct_strings
+     0000913D  _cpct_drawSprite                   cpct_sprites
+     000091E2  _cpct_etm_drawTileBox2x4           cpct_easytilemaps
+     00009271  __moduchar                         
+     0000927D  __moduint                          
+     00009288  _cpct_etm_setTileset2x4            cpct_easytilemaps
+     00009288  cpct_etm_setTileset2x4_asm         cpct_easytilemaps
+     0000928C  _cpct_drawCharM0                   cpct_strings
+     00009299  cpct_drawCharM0_asm                cpct_strings
+     00009319  __divuint                          
+     00009321  __divuchar                         
+     00009328  __divu8                            
+     0000932B  __divu16                           
+     0000935A  _cpct_keyboardStatusBuffer         cpct_keyboard
+     00009364  _cpct_setSeed_mxor                 cpct_random
+     00009364  cpct_setSeed_mxor_asm              cpct_random
+     0000936C  _cpct_restoreState_mxor_u8         cpct_random
+     0000936C  cpct_restoreState_mxor_u8_asm      cpct_random
+     00009372  _cpct_getRandom_mxor_u8            cpct_random
+     00009372  cpct_getRandom_mxor_u8             cpct_random
+     00009373  cpct_randomIdx_mxor_u8             cpct_random
+     00009397  _cpct_etm_drawTileRow2x4           cpct_easytilemaps
+     0000939E  cpct_etm_drawTileRow2x4_asm        cpct_easytilemaps
+     000093A0  dtr_restore_ptileset               cpct_easytilemaps
+     000093D8  _vsprintf                          sprintf
+     0000940D  _sprintf                           sprintf
+     00009442  _cpct_nextRandom_mxor_u32          cpct_random
+     00009442  cpct_nextRandom_mxor_u32_asm       cpct_random
+     00009465  _cpct_isAnyKeyPressed              cpct_keyboard
+     00009465  cpct_isAnyKeyPressed_asm           cpct_keyboard
+     00009472  _cpct_get2Bits                     cpct_bitarray
+     00009498  _cpct_scanKeyboard_if              cpct_keyboard
+     00009498  cpct_scanKeyboard_if_asm           cpct_keyboard
+     00009500  _cpct_hflipSpriteM0                cpct_sprites
+     00009544  _cpct_waitVSYNC                    cpct_video
+     00009544  cpct_waitVSYNC_asm                 cpct_video
+     0000954C  _cpct_setVideoMode                 cpct_video
+     0000955A  dc_mode0_ct                        cpct_strings
+     0000956A  _cpct_memset                       cpct_memutils
+     00009578  _cpct_disableFirmware              cpct_firmware
+     00009578  _cpct_removeInterruptHandler       cpct_firmware
+     00009578  cpct_disableFirmware_asm           cpct_firmware
+     00009578  cpct_removeInterruptHandler_asm    cpct_firmware
+     00009588  cpct_drawTileAligned2x4_f_asm      cpct_sprites
+     000095A9  _cpct_mode_rom_status              cpct_firmware
+     000095AA  _cpct_getScreenPtr                 cpct_video
+     000095CA  _cpct_drawSpriteMaskedAlignedTab   cpct_sprites
+     00009708  __print_format                     printf_large
+     0000A127  _cpct_mxor32_seed                  cpct_random
+     0000A12B  ___sdcc_call_hl                    
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CODE                               00004000    0000613B =       24891. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000A12C  _strlen                            
+ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_DATA                               0000A13B    0000003F =          63. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000A13B  _estados                           main
+     0000A13C  _borracho                          enemigo
+     0000A149  _pmapa                             enemigo
+     0000A14B  _mapaJug                           enemigo
+     0000A14D  _e                                 enemigo
+     0000A14E  _ENMirar                           enemigo
+     0000A14F  _j                                 enemigo
+     0000A150  _c                                 enemigo
+     0000A154  _map                               jugador
+     0000A156  _num_mapa                          jugador
+     0000A157  _q                                 jugador
+     0000A158  _prota                             jugador
+     0000A166  _EEstados                          jugador
+     0000A167  _cuchillo                          jugador
+     0000A173  _EMirar                            jugador
+     0000A174  _mapaCU                            jugador
+     0000A176  _o                                 jugador
+     0000A177  _Jy                                jugador
+     0000A178  _mapa                              carga_mapa
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_a_0                                00000000    00000100 =         256. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000100  _a                                 jugador
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CSEG                               0000A17A    00000BF8 =        3064. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000A17A  _dibujarProta                      jugador
+     0000A1A3  _g_frames                          jugador
+     0000A1C7  _anim_andar                        jugador
+     0000A1D1  _anim_salto                        jugador
+     0000A1D9  _mapas                             jugador
+     0000A1E7  _g_tablaSalto                      jugador
+     0000A1ED  _borrarProta                       jugador
+     0000A261  _borrarCuchillo                    jugador
+     0000A2D3  _redibujarProta                    jugador
+     0000A2E7  _moverCuchillo                     jugador
+     0000A325  _dibujarCuchillo                   jugador
+     0000A34C  _avanzarMapa                       jugador
+     0000A391  _retrocederMapa                    jugador
+     0000A3D5  _redibujarCuchillo                 jugador
+     0000A3E9  _obtenerTilePtr                    jugador
+     0000A42A  _girarFrame                        jugador
+     0000A44C  _asignarFrame                      jugador
+     0000A472  _ini_preSalto                      jugador
+     0000A482  _ini_salto                         jugador
+     0000A492  _ini_andar                         jugador
+     0000A4AF  _ini_quieto                        jugador
+     0000A4BA  _ini_caer                          jugador
+     0000A4CA  _caer                              jugador
+     0000A4D2  _cayendo_entrar                    jugador
+     0000A4E2  _ajustarAlSuelo                    jugador
+     0000A4EA  _sobreSuelo                        jugador
+     0000A508  _imprimirMuni                      jugador
+     0000A547  _imprimirVida                      jugador
+     0000A586  _atacar                            jugador
+     0000A5D8  _estatico                          jugador
+     0000A62D  _compruebaTeclas                   jugador
+     0000A66D  _selectSprite                      jugador
+     0000A6A4  _descender                         jugador
+     0000A6CB  _cayendo                           jugador
+     0000A710  _ascender                          jugador
+     0000A740  _saltando                          jugador
+     0000A783  _saltar_ani                        jugador
+     0000A7A3  _finsalto                          jugador
+     0000A7E6  _andar_ani                         jugador
+     0000A7FF  _moverIzquierda                    jugador
+     0000A892  _moverDerecha                      jugador
+     0000A935  _moverIzq2                         jugador
+     0000A956  _moverDer2                         jugador
+     0000A97D  _ante_salto                        jugador
+     0000A98B  _saltar                            jugador
+     0000A9B1  _andar                             jugador
+     0000AA09  _cambiarEstado                     jugador
+     0000AA3C  _imprimeHUD                        jugador
+     0000AAFF  _restaVida                         jugador
+     0000AB07  _inicializar_cuchillo              jugador
+ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CSEG                               0000A17A    00000BF8 =        3064. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000AB42  _inicializar_jugador               jugador
+     0000ABA0  _muerteCaida                       jugador
+     0000ACDD  _get_X                             jugador
+     0000ACE2  _get_Y                             jugador
+     0000ACE7  _get_CX                            jugador
+     0000ACEC  _get_CY                            jugador
+     0000ACF1  _get_mapa                          jugador
+     0000ACF9  _get_tip_mapa                      jugador
+     0000ACFD  _get_vida                          jugador
+     0000AD02  _ejecutar_jugador                  jugador
+ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
+
+Files Linked                              [ module(s) ]
+
+obj/mapa/map7.rel                         [ map7 ]
+obj/mapa/map6.rel                         [ map6 ]
+obj/mapa/map5.rel                         [ map5 ]
+obj/mapa/map4.rel                         [ map4 ]
+obj/mapa/map3.rel                         [ map3 ]
+obj/mapa/map2.rel                         [ map2 ]
+obj/mapa/map1.rel                         [ map1 ]
+obj/jugador/personaje.rel                 [ personaje ]
+obj/main.rel                              [ main ]
+obj/enemigo/enemigo.rel                   [ enemigo ]
+obj/enemigo/borracho.rel                  [ borracho ]
+obj/jugador/jugador.rel                   [ jugador ]
+obj/jugador/cuchillo.rel                  [ cuchillo ]
+obj/mapa/carga_mapa.rel                   [ carga_mapa ]
+obj/tiles/cinta.rel                       [ cinta ]
+obj/tiles/async.rel                       [ async ]
+obj/tiles/tiles.rel                       [ tiles ]
+
+
+Libraries Linked                          [ object file ]
+
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_setPalette_cbindings.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_isKeyPressed.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_scanKeyboard_f.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_setPALColour_cbindings.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawStringM0.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawSprite_cbindings.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_etm_drawTileBox2x4_cbinding ]
+/home/Hector/cpctelera/cpctelera/tools/sdcc-3.5.5/bin/../share/sdcc/lib/z80/z80.lib
+                                          [ modunsigned.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_etm_setTileset2x4.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawCharM0.rel ]
+/home/Hector/cpctelera/cpctelera/tools/sdcc-3.5.5/bin/../share/sdcc/lib/z80/z80.lib
+                                          [ divunsigned.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ keyboard.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_setSeed_mxor.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_restoreState_mxor_u8.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_getRandom_mxor_u8.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_etm_drawTileRow2x4.rel ]
+/home/Hector/cpctelera/cpctelera/tools/sdcc-3.5.5/bin/../share/sdcc/lib/z80/z80.lib
+                                          [ sprintf.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_nextRandom_mxor_u32.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_isAnyKeyPressed.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_get2Bits_cbindings.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_scanKeyboard_if.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_hflipSpriteM0_cbindings.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_waitVSYNC.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_setVideoMode_cbindings.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_dc_mode0_ct.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_memset_cbinding.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_removeInterruptHandler.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawTileAligned2x4_f_asmbin ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpc_mode_rom_status.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_getScreenPtr_cbindings.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawSpriteMaskedAlignedTabl ]
+/home/Hector/cpctelera/cpctelera/tools/sdcc-3.5.5/bin/../share/sdcc/lib/z80/z80.lib
+                                          [ printf_large.rel ]
+/home/Hector/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_mxor32_seed.rel ]
+/home/Hector/cpctelera/cpctelera/tools/sdcc-3.5.5/bin/../share/sdcc/lib/z80/z80.lib
+                                          [ __sdcc_call_hl.rel ]
+/home/Hector/cpctelera/cpctelera/tools/sdcc-3.5.5/bin/../share/sdcc/lib/z80/z80.lib
+                                          [ strlen.rel ]
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 11.
+
+User Base Address Definitions
+
+_CODE = 0x4000
+_DATA = 0x0000
+
+

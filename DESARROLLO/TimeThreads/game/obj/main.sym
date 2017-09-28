@@ -1,0 +1,60 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 1.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  2710 L
+    .__.ABS.                                                    =  0000 G
+    .__.CPU.                                                    =  0000 L
+    .__.H$L.                                                    =  0000 L
+  0 ___str_0                                                       004C R
+  0 ___str_1                                                       0055 R
+  0 ___str_2                                                       005D R
+  0 ___str_3                                                       01E6 R
+  0 ___str_4                                                       01EE R
+  0 ___str_5                                                       01FC R
+  0 _cambiaEstado                                                  00D8 GR
+    _cpct_disableFirmware                                          **** GX
+    _cpct_drawSprite                                               **** GX
+    _cpct_drawStringM0                                             **** GX
+    _cpct_etm_setTileset2x4                                        **** GX
+    _cpct_isKeyPressed                                             **** GX
+    _cpct_memset                                                   **** GX
+    _cpct_scanKeyboard_f                                           **** GX
+    _cpct_setPALColour                                             **** GX
+    _cpct_setPalette                                               **** GX
+    _cpct_setVideoMode                                             **** GX
+    _cpct_waitVSYNC                                                **** GX
+    _ejecutar_jugador                                              **** GX
+  1 _estados                                                       0000 GR
+  0 _fin                                                           006A GR
+    _g_async                                                       **** GX
+    _g_palette                                                     **** GX
+    _g_tileset                                                     **** GX
+    _get_X                                                         **** GX
+    _get_mapa                                                      **** GX
+    _get_vida                                                      **** GX
+  0 _inicializar                                                   00B2 GR
+    _inicializar_borracho                                          **** GX
+    _inicializar_jugador                                           **** GX
+  0 _main                                                          012D GR
+  0 _muerteJug                                                     0095 GR
+  0 _presenta                                                      0000 GR
+  0 _teclado                                                       00E1 GR
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
+Hexadecimal [16-Bits]
+
+Area Table
+
+   0 _CODE                                      size  211   flags    0
+   1 _DATA                                      size    1   flags    0
+   2 _INITIALIZED                               size    0   flags    0
+   3 _DABS                                      size    0   flags    8
+   4 _HOME                                      size    0   flags    0
+   5 _GSINIT                                    size    0   flags    0
+   6 _GSFINAL                                   size    0   flags    0
+   7 _INITIALIZER                               size    0   flags    0
+   8 _CABS                                      size    0   flags    8
+

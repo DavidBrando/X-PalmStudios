@@ -1,0 +1,2490 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.5.5 #9498 (CYGWIN)
+                              4 ;--------------------------------------------------------
+                              5 	.module jugador
+                              6 	.optsdcc -mz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _ini_estado
+                             12 	.globl _get_vida
+                             13 	.globl _fin
+                             14 	.globl _sobreSuelo
+                             15 	.globl _get_BX
+                             16 	.globl _mata_enemigo
+                             17 	.globl _dibujarMapa
+                             18 	.globl _sprintf
+                             19 	.globl _cpct_etm_drawTileBox2x4
+                             20 	.globl _cpct_getScreenPtr
+                             21 	.globl _cpct_waitVSYNC
+                             22 	.globl _cpct_drawStringM0
+                             23 	.globl _cpct_hflipSpriteM0
+                             24 	.globl _cpct_drawSpriteMaskedAlignedTable
+                             25 	.globl _cpct_get2Bits
+                             26 	.globl _cpct_isAnyKeyPressed
+                             27 	.globl _cpct_isKeyPressed
+                             28 	.globl _cpct_scanKeyboard_if
+                             29 	.globl _Jy
+                             30 	.globl _o
+                             31 	.globl _mapaCU
+                             32 	.globl _EMirar
+                             33 	.globl _cuchillo
+                             34 	.globl _EEstados
+                             35 	.globl _prota
+                             36 	.globl _q
+                             37 	.globl _num_mapa
+                             38 	.globl _map
+                             39 	.globl _g_tablaSalto
+                             40 	.globl _mapas
+                             41 	.globl _anim_salto
+                             42 	.globl _anim_andar
+                             43 	.globl _g_frames
+                             44 	.globl _dibujarProta
+                             45 	.globl _borrarProta
+                             46 	.globl _borrarCuchillo
+                             47 	.globl _redibujarProta
+                             48 	.globl _moverCuchillo
+                             49 	.globl _dibujarCuchillo
+                             50 	.globl _avanzarMapa
+                             51 	.globl _retrocederMapa
+                             52 	.globl _redibujarCuchillo
+                             53 	.globl _obtenerTilePtr
+                             54 	.globl _girarFrame
+                             55 	.globl _asignarFrame
+                             56 	.globl _ini_preSalto
+                             57 	.globl _ini_salto
+                             58 	.globl _ini_andar
+                             59 	.globl _ini_quieto
+                             60 	.globl _ini_caer
+                             61 	.globl _caer
+                             62 	.globl _cayendo_entrar
+                             63 	.globl _ajustarAlSuelo
+                             64 	.globl _imprimirMuni
+                             65 	.globl _imprimirVida
+                             66 	.globl _atacar
+                             67 	.globl _estatico
+                             68 	.globl _compruebaTeclas
+                             69 	.globl _selectSprite
+                             70 	.globl _descender
+                             71 	.globl _cayendo
+                             72 	.globl _ascender
+                             73 	.globl _saltando
+                             74 	.globl _saltar_ani
+                             75 	.globl _finsalto
+                             76 	.globl _andar_ani
+                             77 	.globl _moverIzquierda
+                             78 	.globl _moverDerecha
+                             79 	.globl _moverIzq2
+                             80 	.globl _moverDer2
+                             81 	.globl _ante_salto
+                             82 	.globl _saltar
+                             83 	.globl _andar
+                             84 	.globl _cambiarEstado
+                             85 	.globl _imprimeHUD
+                             86 	.globl _restaVida
+                             87 	.globl _inicializar_cuchillo
+                             88 	.globl _inicializar_jugador
+                             89 	.globl _muerteCaida
+                             90 	.globl _get_X
+                             91 	.globl _get_Y
+                             92 	.globl _get_CX
+                             93 	.globl _get_CY
+                             94 	.globl _get_mapa
+                             95 	.globl _get_tip_mapa
+                             96 	.globl _ejecutar_jugador
+                             97 ;--------------------------------------------------------
+                             98 ; special function registers
+                             99 ;--------------------------------------------------------
+                            100 ;--------------------------------------------------------
+                            101 ; ram data
+                            102 ;--------------------------------------------------------
+                            103 	.area _DATA
+   0000                     104 _map::
+   0000                     105 	.ds 2
+   0002                     106 _num_mapa::
+   0002                     107 	.ds 1
+   0003                     108 _q::
+   0003                     109 	.ds 1
+   0004                     110 _prota::
+   0004                     111 	.ds 14
+   0012                     112 _EEstados::
+   0012                     113 	.ds 1
+   0013                     114 _cuchillo::
+   0013                     115 	.ds 12
+   001F                     116 _EMirar::
+   001F                     117 	.ds 1
+   0020                     118 _mapaCU::
+   0020                     119 	.ds 2
+   0022                     120 _o::
+   0022                     121 	.ds 1
+   0023                     122 _Jy::
+   0023                     123 	.ds 1
+                            124 ;--------------------------------------------------------
+                            125 ; ram data
+                            126 ;--------------------------------------------------------
+                            127 	.area _INITIALIZED
+                            128 ;--------------------------------------------------------
+                            129 ; absolute external ram data
+                            130 ;--------------------------------------------------------
+                            131 	.area _DABS (ABS)
+                            132 ;--------------------------------------------------------
+                            133 ; global & static initialisations
+                            134 ;--------------------------------------------------------
+                            135 	.area _HOME
+                            136 	.area _GSINIT
+                            137 	.area _GSFINAL
+                            138 	.area _GSINIT
+                            139 ;--------------------------------------------------------
+                            140 ; Home
+                            141 ;--------------------------------------------------------
+                            142 	.area _HOME
+                            143 	.area _HOME
+                            144 ;--------------------------------------------------------
+                            145 ; code
+                            146 ;--------------------------------------------------------
+                            147 	.area _CODE
+                            148 ;src/jugador/jugador.c:26: cpctm_createTransparentMaskTable (a,0x100, M0, 0);
+                            149 ;	---------------------------------
+                            150 ; Function dummy_cpct_transparentMaskTable0M0_container
+                            151 ; ---------------------------------
+   0000                     152 _dummy_cpct_transparentMaskTable0M0_container::
+                            153 	.area _a_ (ABS) 
+   0100                     154 	.org 0x100 
+   0100                     155 	 _a::
+   0100 FF AA 55 00 AA AA   156 	.db 0xFF, 0xAA, 0x55, 0x00, 0xAA, 0xAA, 0x00, 0x00 
+        00 00
+   0108 55 00 55 00 00 00   157 	.db 0x55, 0x00, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0110 AA AA 00 00 AA AA   158 	.db 0xAA, 0xAA, 0x00, 0x00, 0xAA, 0xAA, 0x00, 0x00 
+        00 00
+   0118 00 00 00 00 00 00   159 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0120 55 00 55 00 00 00   160 	.db 0x55, 0x00, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0128 55 00 55 00 00 00   161 	.db 0x55, 0x00, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0130 00 00 00 00 00 00   162 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0138 00 00 00 00 00 00   163 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0140 AA AA 00 00 AA AA   164 	.db 0xAA, 0xAA, 0x00, 0x00, 0xAA, 0xAA, 0x00, 0x00 
+        00 00
+   0148 00 00 00 00 00 00   165 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0150 AA AA 00 00 AA AA   166 	.db 0xAA, 0xAA, 0x00, 0x00, 0xAA, 0xAA, 0x00, 0x00 
+        00 00
+   0158 00 00 00 00 00 00   167 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0160 00 00 00 00 00 00   168 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0168 00 00 00 00 00 00   169 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0170 00 00 00 00 00 00   170 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0178 00 00 00 00 00 00   171 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0180 55 00 55 00 00 00   172 	.db 0x55, 0x00, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0188 55 00 55 00 00 00   173 	.db 0x55, 0x00, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0190 00 00 00 00 00 00   174 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   0198 00 00 00 00 00 00   175 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01A0 55 00 55 00 00 00   176 	.db 0x55, 0x00, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01A8 55 00 55 00 00 00   177 	.db 0x55, 0x00, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01B0 00 00 00 00 00 00   178 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01B8 00 00 00 00 00 00   179 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01C0 00 00 00 00 00 00   180 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01C8 00 00 00 00 00 00   181 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01D0 00 00 00 00 00 00   182 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01D8 00 00 00 00 00 00   183 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01E0 00 00 00 00 00 00   184 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01E8 00 00 00 00 00 00   185 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01F0 00 00 00 00 00 00   186 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+   01F8 00 00 00 00 00 00   187 	.db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 
+        00 00
+                            188 	.area _CSEG (REL, CON) 
+                            189 ;src/jugador/jugador.c:116: void dibujarProta()
+                            190 ;	---------------------------------
+                            191 ; Function dibujarProta
+                            192 ; ---------------------------------
+   0000                     193 _dibujarProta::
+                            194 ;src/jugador/jugador.c:119: u8* pvmem = cpct_getScreenPtr(CPCT_VMEM_START, prota.x, prota.y);
+   0000 21r05r00      [10]  195 	ld	hl, #_prota + 1
+   0003 56            [ 7]  196 	ld	d,(hl)
+   0004 21r04r00      [10]  197 	ld	hl, #_prota + 0
+   0007 46            [ 7]  198 	ld	b,(hl)
+   0008 D5            [11]  199 	push	de
+   0009 33            [ 6]  200 	inc	sp
+   000A C5            [11]  201 	push	bc
+   000B 33            [ 6]  202 	inc	sp
+   000C 21 00 C0      [10]  203 	ld	hl,#0xC000
+   000F E5            [11]  204 	push	hl
+   0010 CDr00r00      [17]  205 	call	_cpct_getScreenPtr
+   0013 EB            [ 4]  206 	ex	de,hl
+                            207 ;src/jugador/jugador.c:120: cpct_drawSpriteMaskedAlignedTable(prota.frame->sprite, pvmem, G_PERSONAJE_00_W,G_PERSONAJE_00_H,a);
+   0014 2Ar0Br00      [16]  208 	ld	hl, (#_prota + 7)
+   0017 23            [ 6]  209 	inc	hl
+   0018 4E            [ 7]  210 	ld	c,(hl)
+   0019 23            [ 6]  211 	inc	hl
+   001A 46            [ 7]  212 	ld	b,(hl)
+   001B 21r00r01      [10]  213 	ld	hl,#_a
+   001E E5            [11]  214 	push	hl
+   001F 21 10 20      [10]  215 	ld	hl,#0x2010
+   0022 E5            [11]  216 	push	hl
+   0023 D5            [11]  217 	push	de
+   0024 C5            [11]  218 	push	bc
+   0025 CDr00r00      [17]  219 	call	_cpct_drawSpriteMaskedAlignedTable
+   0028 C9            [10]  220 	ret
+   0029                     221 _g_frames:
+   0029 00                  222 	.db #0x00	; 0
+   002Ar00r00               223 	.dw _g_personaje_00
+   002C 00                  224 	.db #0x00	; 0
+   002Dr00r00               225 	.dw _g_personaje_01
+   002F 00                  226 	.db #0x00	; 0
+   0030r00r00               227 	.dw _g_personaje_02
+   0032 00                  228 	.db #0x00	; 0
+   0033r00r00               229 	.dw _g_personaje_03
+   0035 00                  230 	.db #0x00	; 0
+   0036r00r00               231 	.dw _g_personaje_04
+   0038 00                  232 	.db #0x00	; 0
+   0039r00r00               233 	.dw _g_personaje_05
+   003B 00                  234 	.db #0x00	; 0
+   003Cr00r00               235 	.dw _g_personaje_06
+   003E 00                  236 	.db #0x00	; 0
+   003Fr00r00               237 	.dw _g_personaje_07
+   0041 00                  238 	.db #0x00	; 0
+   0042r00r00               239 	.dw _g_personaje_08
+   0044 00                  240 	.db #0x00	; 0
+   0045r00r00               241 	.dw _g_personaje_09
+   0047 00                  242 	.db #0x00	; 0
+   0048r00r00               243 	.dw _g_personaje_10
+   004A 00                  244 	.db 0x00
+   004B 00                  245 	.db 0x00
+   004C 00                  246 	.db 0x00
+   004D                     247 _anim_andar:
+   004Dr2Cr00               248 	.dw (_g_frames + 3)
+   004Fr2Fr00               249 	.dw (_g_frames + 6)
+   0051r32r00               250 	.dw (_g_frames + 9)
+   0053r35r00               251 	.dw (_g_frames + 12)
+   0055r38r00               252 	.dw (_g_frames + 15)
+   0057                     253 _anim_salto:
+   0057r3Er00               254 	.dw (_g_frames + 21)
+   0059r41r00               255 	.dw (_g_frames + 24)
+   005Br44r00               256 	.dw (_g_frames + 27)
+   005Dr47r00               257 	.dw (_g_frames + 30)
+   005F                     258 _mapas:
+   005Fr00r00               259 	.dw _g_map1
+   0061r00r00               260 	.dw _g_map2
+   0063r00r00               261 	.dw _g_map3
+   0065r00r00               262 	.dw _g_map4
+   0067r00r00               263 	.dw _g_map5
+   0069r00r00               264 	.dw _g_map6
+   006Br00r00               265 	.dw _g_map7
+   006D                     266 _g_tablaSalto:
+   006D FF                  267 	.db #0xFF	; 255
+   006E FA                  268 	.db #0xFA	; 250
+   006F A9                  269 	.db #0xA9	; 169
+   0070 55                  270 	.db #0x55	; 85	'U'
+   0071 40                  271 	.db #0x40	; 64
+   0072 00                  272 	.db 0x00
+                            273 ;src/jugador/jugador.c:124: void borrarProta() {
+                            274 ;	---------------------------------
+                            275 ; Function borrarProta
+                            276 ; ---------------------------------
+   0073                     277 _borrarProta::
+   0073 DD E5         [15]  278 	push	ix
+   0075 DD 21 00 00   [14]  279 	ld	ix,#0
+   0079 DD 39         [15]  280 	add	ix,sp
+   007B F5            [11]  281 	push	af
+   007C 3B            [ 6]  282 	dec	sp
+                            283 ;src/jugador/jugador.c:125: u8 w = 3 + (prota.xp & 1);
+   007D 21r06r00      [10]  284 	ld	hl, #_prota + 2
+   0080 4E            [ 7]  285 	ld	c,(hl)
+   0081 79            [ 4]  286 	ld	a,c
+   0082 E6 01         [ 7]  287 	and	a, #0x01
+   0084 47            [ 4]  288 	ld	b,a
+   0085 04            [ 4]  289 	inc	b
+   0086 04            [ 4]  290 	inc	b
+   0087 04            [ 4]  291 	inc	b
+                            292 ;src/jugador/jugador.c:126: u8 h = 8 + (prota.yp & 3 ? 1 : 0);
+   0088 21r07r00      [10]  293 	ld	hl, #_prota + 3
+   008B 5E            [ 7]  294 	ld	e,(hl)
+   008C 7B            [ 4]  295 	ld	a,e
+   008D E6 03         [ 7]  296 	and	a, #0x03
+   008F 28 04         [12]  297 	jr	Z,00103$
+   0091 3E 01         [ 7]  298 	ld	a,#0x01
+   0093 18 02         [12]  299 	jr	00104$
+   0095                     300 00103$:
+   0095 3E 00         [ 7]  301 	ld	a,#0x00
+   0097                     302 00104$:
+   0097 C6 08         [ 7]  303 	add	a, #0x08
+   0099 DD 77 FD      [19]  304 	ld	-3 (ix),a
+                            305 ;src/jugador/jugador.c:127: cpct_etm_drawTileBox2x4(prota.xp / 2, (prota.yp-ORIGEN_MAPA_Y) / 4, w, h, 40, ORIGEN_MAPA, map);
+   009C FD 2Ar00r00   [20]  306 	ld	iy,(_map)
+   00A0 16 00         [ 7]  307 	ld	d,#0x00
+   00A2 7B            [ 4]  308 	ld	a,e
+   00A3 C6 BC         [ 7]  309 	add	a,#0xBC
+   00A5 DD 77 FE      [19]  310 	ld	-2 (ix),a
+   00A8 7A            [ 4]  311 	ld	a,d
+   00A9 CE FF         [ 7]  312 	adc	a,#0xFF
+   00AB DD 77 FF      [19]  313 	ld	-1 (ix),a
+   00AE DD 6E FE      [19]  314 	ld	l,-2 (ix)
+   00B1 DD 66 FF      [19]  315 	ld	h,-1 (ix)
+   00B4 DD CB FF 7E   [20]  316 	bit	7, -1 (ix)
+   00B8 28 04         [12]  317 	jr	Z,00105$
+   00BA 21 BF FF      [10]  318 	ld	hl,#0xFFBF
+   00BD 19            [11]  319 	add	hl,de
+   00BE                     320 00105$:
+   00BE CB 2C         [ 8]  321 	sra	h
+   00C0 CB 1D         [ 8]  322 	rr	l
+   00C2 CB 2C         [ 8]  323 	sra	h
+   00C4 CB 1D         [ 8]  324 	rr	l
+   00C6 55            [ 4]  325 	ld	d,l
+   00C7 CB 39         [ 8]  326 	srl	c
+   00C9 FD E5         [15]  327 	push	iy
+   00CB 21 80 E2      [10]  328 	ld	hl,#0xE280
+   00CE E5            [11]  329 	push	hl
+   00CF 3E 28         [ 7]  330 	ld	a,#0x28
+   00D1 F5            [11]  331 	push	af
+   00D2 33            [ 6]  332 	inc	sp
+   00D3 DD 7E FD      [19]  333 	ld	a,-3 (ix)
+   00D6 F5            [11]  334 	push	af
+   00D7 33            [ 6]  335 	inc	sp
+   00D8 C5            [11]  336 	push	bc
+   00D9 33            [ 6]  337 	inc	sp
+   00DA D5            [11]  338 	push	de
+   00DB 33            [ 6]  339 	inc	sp
+   00DC 79            [ 4]  340 	ld	a,c
+   00DD F5            [11]  341 	push	af
+   00DE 33            [ 6]  342 	inc	sp
+   00DF CDr00r00      [17]  343 	call	_cpct_etm_drawTileBox2x4
+   00E2 DD F9         [10]  344 	ld	sp, ix
+   00E4 DD E1         [14]  345 	pop	ix
+   00E6 C9            [10]  346 	ret
+                            347 ;src/jugador/jugador.c:131: void borrarCuchillo() {
+                            348 ;	---------------------------------
+                            349 ; Function borrarCuchillo
+                            350 ; ---------------------------------
+   00E7                     351 _borrarCuchillo::
+   00E7 DD E5         [15]  352 	push	ix
+   00E9 DD 21 00 00   [14]  353 	ld	ix,#0
+   00ED DD 39         [15]  354 	add	ix,sp
+   00EF F5            [11]  355 	push	af
+   00F0 3B            [ 6]  356 	dec	sp
+                            357 ;src/jugador/jugador.c:132: u8 w = 2 + (cuchillo.xp & 1);
+   00F1 21r15r00      [10]  358 	ld	hl, #_cuchillo + 2
+   00F4 4E            [ 7]  359 	ld	c,(hl)
+   00F5 79            [ 4]  360 	ld	a,c
+   00F6 E6 01         [ 7]  361 	and	a, #0x01
+   00F8 47            [ 4]  362 	ld	b,a
+   00F9 04            [ 4]  363 	inc	b
+   00FA 04            [ 4]  364 	inc	b
+                            365 ;src/jugador/jugador.c:133: u8 h = 1 + (cuchillo.yp & 3 ? 1 : 0);
+   00FB 21r16r00      [10]  366 	ld	hl, #_cuchillo + 3
+   00FE 5E            [ 7]  367 	ld	e,(hl)
+   00FF 7B            [ 4]  368 	ld	a,e
+   0100 E6 03         [ 7]  369 	and	a, #0x03
+   0102 28 04         [12]  370 	jr	Z,00103$
+   0104 3E 01         [ 7]  371 	ld	a,#0x01
+   0106 18 02         [12]  372 	jr	00104$
+   0108                     373 00103$:
+   0108 3E 00         [ 7]  374 	ld	a,#0x00
+   010A                     375 00104$:
+   010A 3C            [ 4]  376 	inc	a
+   010B DD 77 FD      [19]  377 	ld	-3 (ix),a
+                            378 ;src/jugador/jugador.c:134: cpct_etm_drawTileBox2x4(cuchillo.xp / 2, (cuchillo.yp-ORIGEN_MAPA_Y) / 4, w, h, 40, ORIGEN_MAPA, map);
+   010E FD 2Ar00r00   [20]  379 	ld	iy,(_map)
+   0112 16 00         [ 7]  380 	ld	d,#0x00
+   0114 7B            [ 4]  381 	ld	a,e
+   0115 C6 BC         [ 7]  382 	add	a,#0xBC
+   0117 DD 77 FE      [19]  383 	ld	-2 (ix),a
+   011A 7A            [ 4]  384 	ld	a,d
+   011B CE FF         [ 7]  385 	adc	a,#0xFF
+   011D DD 77 FF      [19]  386 	ld	-1 (ix),a
+   0120 DD 6E FE      [19]  387 	ld	l,-2 (ix)
+   0123 DD 66 FF      [19]  388 	ld	h,-1 (ix)
+   0126 DD CB FF 7E   [20]  389 	bit	7, -1 (ix)
+   012A 28 04         [12]  390 	jr	Z,00105$
+   012C 21 BF FF      [10]  391 	ld	hl,#0xFFBF
+   012F 19            [11]  392 	add	hl,de
+   0130                     393 00105$:
+   0130 CB 2C         [ 8]  394 	sra	h
+   0132 CB 1D         [ 8]  395 	rr	l
+   0134 CB 2C         [ 8]  396 	sra	h
+   0136 CB 1D         [ 8]  397 	rr	l
+   0138 55            [ 4]  398 	ld	d,l
+   0139 CB 39         [ 8]  399 	srl	c
+   013B FD E5         [15]  400 	push	iy
+   013D 21 80 E2      [10]  401 	ld	hl,#0xE280
+   0140 E5            [11]  402 	push	hl
+   0141 3E 28         [ 7]  403 	ld	a,#0x28
+   0143 F5            [11]  404 	push	af
+   0144 33            [ 6]  405 	inc	sp
+   0145 DD 7E FD      [19]  406 	ld	a,-3 (ix)
+   0148 F5            [11]  407 	push	af
+   0149 33            [ 6]  408 	inc	sp
+   014A C5            [11]  409 	push	bc
+   014B 33            [ 6]  410 	inc	sp
+   014C D5            [11]  411 	push	de
+   014D 33            [ 6]  412 	inc	sp
+   014E 79            [ 4]  413 	ld	a,c
+   014F F5            [11]  414 	push	af
+   0150 33            [ 6]  415 	inc	sp
+   0151 CDr00r00      [17]  416 	call	_cpct_etm_drawTileBox2x4
+   0154 DD F9         [10]  417 	ld	sp, ix
+   0156 DD E1         [14]  418 	pop	ix
+   0158 C9            [10]  419 	ret
+                            420 ;src/jugador/jugador.c:138: void redibujarProta(){
+                            421 ;	---------------------------------
+                            422 ; Function redibujarProta
+                            423 ; ---------------------------------
+   0159                     424 _redibujarProta::
+                            425 ;src/jugador/jugador.c:139: borrarProta();
+   0159 CDr73r00      [17]  426 	call	_borrarProta
+                            427 ;src/jugador/jugador.c:140: prota.xp = prota.x;
+   015C 01r06r00      [10]  428 	ld	bc,#_prota + 2
+   015F 3Ar04r00      [13]  429 	ld	a, (#_prota + 0)
+   0162 02            [ 7]  430 	ld	(bc),a
+                            431 ;src/jugador/jugador.c:141: prota.yp = prota.y;
+   0163 01r07r00      [10]  432 	ld	bc,#_prota + 3
+   0166 3Ar05r00      [13]  433 	ld	a, (#_prota + 1)
+   0169 02            [ 7]  434 	ld	(bc),a
+                            435 ;src/jugador/jugador.c:142: dibujarProta();
+   016A C3r00r00      [10]  436 	jp  _dibujarProta
+                            437 ;src/jugador/jugador.c:146: void moverCuchillo(){
+                            438 ;	---------------------------------
+                            439 ; Function moverCuchillo
+                            440 ; ---------------------------------
+   016D                     441 _moverCuchillo::
+                            442 ;src/jugador/jugador.c:148: if(cuchillo.lanzandoDerecha == SI)
+   016D 01r13r00      [10]  443 	ld	bc,#_cuchillo+0
+   0170 21r1Ar00      [10]  444 	ld	hl, #(_cuchillo + 0x0007) + 0
+   0173 6E            [ 7]  445 	ld	l,(hl)
+                            446 ;src/jugador/jugador.c:152: cuchillo.mover = SI;        
+   0174 79            [ 4]  447 	ld	a,c
+   0175 C6 06         [ 7]  448 	add	a, #0x06
+   0177 5F            [ 4]  449 	ld	e,a
+   0178 78            [ 4]  450 	ld	a,b
+   0179 CE 00         [ 7]  451 	adc	a, #0x00
+   017B 57            [ 4]  452 	ld	d,a
+                            453 ;src/jugador/jugador.c:148: if(cuchillo.lanzandoDerecha == SI)
+   017C 7D            [ 4]  454 	ld	a,l
+   017D 3D            [ 4]  455 	dec	a
+   017E 20 17         [12]  456 	jr	NZ,00110$
+                            457 ;src/jugador/jugador.c:150: if(cuchillo.x <= LIMITE_DERECHO_CUCHILLO-2){
+   0180 0A            [ 7]  458 	ld	a,(bc)
+   0181 6F            [ 4]  459 	ld	l,a
+   0182 3E 4A         [ 7]  460 	ld	a,#0x4A
+   0184 95            [ 4]  461 	sub	a, l
+   0185 38 08         [12]  462 	jr	C,00102$
+                            463 ;src/jugador/jugador.c:151: cuchillo.x+=2;
+   0187 7D            [ 4]  464 	ld	a,l
+   0188 C6 02         [ 7]  465 	add	a, #0x02
+   018A 02            [ 7]  466 	ld	(bc),a
+                            467 ;src/jugador/jugador.c:152: cuchillo.mover = SI;        
+   018B 3E 01         [ 7]  468 	ld	a,#0x01
+   018D 12            [ 7]  469 	ld	(de),a
+   018E C9            [10]  470 	ret
+   018F                     471 00102$:
+                            472 ;src/jugador/jugador.c:156: cuchillo.lanzandoDerecha = NO;
+   018F 21r1Ar00      [10]  473 	ld	hl,#(_cuchillo + 0x0007)
+   0192 36 00         [10]  474 	ld	(hl),#0x00
+                            475 ;src/jugador/jugador.c:157: cuchillo.mover = NO;
+   0194 AF            [ 4]  476 	xor	a, a
+   0195 12            [ 7]  477 	ld	(de),a
+   0196 C9            [10]  478 	ret
+   0197                     479 00110$:
+                            480 ;src/jugador/jugador.c:163: if(cuchillo.lanzandoDerecha == NO)
+   0197 7D            [ 4]  481 	ld	a,l
+   0198 B7            [ 4]  482 	or	a, a
+   0199 C0            [11]  483 	ret	NZ
+                            484 ;src/jugador/jugador.c:164: if(cuchillo.x >= 2){
+   019A 0A            [ 7]  485 	ld	a,(bc)
+   019B 6F            [ 4]  486 	ld	l,a
+   019C D6 02         [ 7]  487 	sub	a, #0x02
+   019E 38 08         [12]  488 	jr	C,00105$
+                            489 ;src/jugador/jugador.c:165: cuchillo.x-=2;
+   01A0 7D            [ 4]  490 	ld	a,l
+   01A1 C6 FE         [ 7]  491 	add	a,#0xFE
+   01A3 02            [ 7]  492 	ld	(bc),a
+                            493 ;src/jugador/jugador.c:166: cuchillo.mover = SI;
+   01A4 3E 01         [ 7]  494 	ld	a,#0x01
+   01A6 12            [ 7]  495 	ld	(de),a
+   01A7 C9            [10]  496 	ret
+   01A8                     497 00105$:
+                            498 ;src/jugador/jugador.c:169: cuchillo.mover=NO;
+   01A8 AF            [ 4]  499 	xor	a, a
+   01A9 12            [ 7]  500 	ld	(de),a
+   01AA C9            [10]  501 	ret
+                            502 ;src/jugador/jugador.c:176: void dibujarCuchillo(){
+                            503 ;	---------------------------------
+                            504 ; Function dibujarCuchillo
+                            505 ; ---------------------------------
+   01AB                     506 _dibujarCuchillo::
+                            507 ;src/jugador/jugador.c:177: u8* pvmem2= cpct_getScreenPtr(CPCT_VMEM_START, cuchillo.x, cuchillo.y); //puntero a la memoria de video con la posicion del prota
+   01AB 21r14r00      [10]  508 	ld	hl, #_cuchillo + 1
+   01AE 56            [ 7]  509 	ld	d,(hl)
+   01AF 21r13r00      [10]  510 	ld	hl, #_cuchillo + 0
+   01B2 46            [ 7]  511 	ld	b,(hl)
+   01B3 D5            [11]  512 	push	de
+   01B4 33            [ 6]  513 	inc	sp
+   01B5 C5            [11]  514 	push	bc
+   01B6 33            [ 6]  515 	inc	sp
+   01B7 21 00 C0      [10]  516 	ld	hl,#0xC000
+   01BA E5            [11]  517 	push	hl
+   01BB CDr00r00      [17]  518 	call	_cpct_getScreenPtr
+   01BE 5D            [ 4]  519 	ld	e,l
+   01BF 54            [ 4]  520 	ld	d,h
+                            521 ;src/jugador/jugador.c:179: cpct_drawSpriteMaskedAlignedTable (cuchillo.sprite, pvmem2, G_CUCHILLO_W, G_CUCHILLO_H, a);
+   01C0 ED 4Br17r00   [20]  522 	ld	bc, (#_cuchillo + 4)
+   01C4 21r00r01      [10]  523 	ld	hl,#_a
+   01C7 E5            [11]  524 	push	hl
+   01C8 21 04 04      [10]  525 	ld	hl,#0x0404
+   01CB E5            [11]  526 	push	hl
+   01CC D5            [11]  527 	push	de
+   01CD C5            [11]  528 	push	bc
+   01CE CDr00r00      [17]  529 	call	_cpct_drawSpriteMaskedAlignedTable
+   01D1 C9            [10]  530 	ret
+                            531 ;src/jugador/jugador.c:184: void avanzarMapa() {
+                            532 ;	---------------------------------
+                            533 ; Function avanzarMapa
+                            534 ; ---------------------------------
+   01D2                     535 _avanzarMapa::
+                            536 ;src/jugador/jugador.c:186: if (num_mapa < NUM_MAPAS-1) {
+   01D2 3Ar02r00      [13]  537 	ld	a,(#_num_mapa + 0)
+   01D5 D6 06         [ 7]  538 	sub	a, #0x06
+   01D7 D0            [11]  539 	ret	NC
+                            540 ;src/jugador/jugador.c:187: map = mapas[++num_mapa];
+   01D8 01r5Fr00      [10]  541 	ld	bc,#_mapas+0
+   01DB 21r02r00      [10]  542 	ld	hl, #_num_mapa+0
+   01DE 34            [11]  543 	inc	(hl)
+   01DF FD 21r02r00   [14]  544 	ld	iy,#_num_mapa
+   01E3 FD 6E 00      [19]  545 	ld	l,0 (iy)
+   01E6 26 00         [ 7]  546 	ld	h,#0x00
+   01E8 29            [11]  547 	add	hl, hl
+   01E9 09            [11]  548 	add	hl,bc
+   01EA 7E            [ 7]  549 	ld	a,(hl)
+   01EB FD 21r00r00   [14]  550 	ld	iy,#_map
+   01EF FD 77 00      [19]  551 	ld	0 (iy),a
+   01F2 23            [ 6]  552 	inc	hl
+   01F3 7E            [ 7]  553 	ld	a,(hl)
+   01F4 32r01r00      [13]  554 	ld	(#_map + 1),a
+                            555 ;src/jugador/jugador.c:188: prota.x = prota.xp = 0;
+   01F7 21r06r00      [10]  556 	ld	hl,#(_prota + 0x0002)
+   01FA 36 00         [10]  557 	ld	(hl),#0x00
+   01FC 21r04r00      [10]  558 	ld	hl,#_prota
+   01FF 36 00         [10]  559 	ld	(hl),#0x00
+                            560 ;src/jugador/jugador.c:189: prota.mover = SI;
+   0201 21r0Ar00      [10]  561 	ld	hl,#(_prota + 0x0006)
+   0204 36 01         [10]  562 	ld	(hl),#0x01
+                            563 ;src/jugador/jugador.c:190: inicializar_cuchillo(map);
+   0206 2Ar00r00      [16]  564 	ld	hl,(_map)
+   0209 E5            [11]  565 	push	hl
+   020A CDr8Dr09      [17]  566 	call	_inicializar_cuchillo
+   020D F1            [10]  567 	pop	af
+                            568 ;src/jugador/jugador.c:191: dibujarMapa(map);
+   020E 2Ar00r00      [16]  569 	ld	hl,(_map)
+   0211 E5            [11]  570 	push	hl
+   0212 CDr00r00      [17]  571 	call	_dibujarMapa
+   0215 F1            [10]  572 	pop	af
+   0216 C9            [10]  573 	ret
+                            574 ;src/jugador/jugador.c:195: void retrocederMapa() {
+                            575 ;	---------------------------------
+                            576 ; Function retrocederMapa
+                            577 ; ---------------------------------
+   0217                     578 _retrocederMapa::
+                            579 ;src/jugador/jugador.c:196: if (num_mapa > 0) {
+   0217 3Ar02r00      [13]  580 	ld	a,(#_num_mapa + 0)
+   021A B7            [ 4]  581 	or	a, a
+   021B C8            [11]  582 	ret	Z
+                            583 ;src/jugador/jugador.c:197: map = mapas[--num_mapa];
+   021C 01r5Fr00      [10]  584 	ld	bc,#_mapas+0
+   021F 21r02r00      [10]  585 	ld	hl, #_num_mapa+0
+   0222 35            [11]  586 	dec	(hl)
+   0223 FD 21r02r00   [14]  587 	ld	iy,#_num_mapa
+   0227 FD 6E 00      [19]  588 	ld	l,0 (iy)
+   022A 26 00         [ 7]  589 	ld	h,#0x00
+   022C 29            [11]  590 	add	hl, hl
+   022D 09            [11]  591 	add	hl,bc
+   022E 7E            [ 7]  592 	ld	a,(hl)
+   022F FD 21r00r00   [14]  593 	ld	iy,#_map
+   0233 FD 77 00      [19]  594 	ld	0 (iy),a
+   0236 23            [ 6]  595 	inc	hl
+   0237 7E            [ 7]  596 	ld	a,(hl)
+   0238 32r01r00      [13]  597 	ld	(#_map + 1),a
+                            598 ;src/jugador/jugador.c:198: prota.x = prota.xp = ANCHO_PANTALLA - G_PERSONAJE_00_W;
+   023B 21r06r00      [10]  599 	ld	hl,#(_prota + 0x0002)
+   023E 36 40         [10]  600 	ld	(hl),#0x40
+   0240 21r04r00      [10]  601 	ld	hl,#_prota
+   0243 36 40         [10]  602 	ld	(hl),#0x40
+                            603 ;src/jugador/jugador.c:199: prota.mover = SI;
+   0245 21r0Ar00      [10]  604 	ld	hl,#(_prota + 0x0006)
+   0248 36 01         [10]  605 	ld	(hl),#0x01
+                            606 ;src/jugador/jugador.c:200: inicializar_cuchillo(map);
+   024A 2Ar00r00      [16]  607 	ld	hl,(_map)
+   024D E5            [11]  608 	push	hl
+   024E CDr8Dr09      [17]  609 	call	_inicializar_cuchillo
+   0251 F1            [10]  610 	pop	af
+                            611 ;src/jugador/jugador.c:201: dibujarMapa(map);
+   0252 2Ar00r00      [16]  612 	ld	hl,(_map)
+   0255 E5            [11]  613 	push	hl
+   0256 CDr00r00      [17]  614 	call	_dibujarMapa
+   0259 F1            [10]  615 	pop	af
+   025A C9            [10]  616 	ret
+                            617 ;src/jugador/jugador.c:206: void redibujarCuchillo(){
+                            618 ;	---------------------------------
+                            619 ; Function redibujarCuchillo
+                            620 ; ---------------------------------
+   025B                     621 _redibujarCuchillo::
+                            622 ;src/jugador/jugador.c:207: borrarCuchillo();
+   025B CDrE7r00      [17]  623 	call	_borrarCuchillo
+                            624 ;src/jugador/jugador.c:208: cuchillo.xp = cuchillo.x;
+   025E 01r15r00      [10]  625 	ld	bc,#_cuchillo + 2
+   0261 3Ar13r00      [13]  626 	ld	a, (#_cuchillo + 0)
+   0264 02            [ 7]  627 	ld	(bc),a
+                            628 ;src/jugador/jugador.c:209: cuchillo.yp = cuchillo.y;
+   0265 01r16r00      [10]  629 	ld	bc,#_cuchillo + 3
+   0268 3Ar14r00      [13]  630 	ld	a, (#_cuchillo + 1)
+   026B 02            [ 7]  631 	ld	(bc),a
+                            632 ;src/jugador/jugador.c:210: dibujarCuchillo();
+   026C C3rABr01      [10]  633 	jp  _dibujarCuchillo
+                            634 ;src/jugador/jugador.c:214: u8* obtenerTilePtr(u8 x, u8 y) {
+                            635 ;	---------------------------------
+                            636 ; Function obtenerTilePtr
+                            637 ; ---------------------------------
+   026F                     638 _obtenerTilePtr::
+   026F DD E5         [15]  639 	push	ix
+   0271 DD 21 00 00   [14]  640 	ld	ix,#0
+   0275 DD 39         [15]  641 	add	ix,sp
+                            642 ;src/jugador/jugador.c:215: return map + (y-ORIGEN_MAPA_Y)/4*g_map1_W + x/2;
+   0277 DD 4E 05      [19]  643 	ld	c,5 (ix)
+   027A 06 00         [ 7]  644 	ld	b,#0x00
+   027C 79            [ 4]  645 	ld	a,c
+   027D C6 BC         [ 7]  646 	add	a,#0xBC
+   027F 5F            [ 4]  647 	ld	e,a
+   0280 78            [ 4]  648 	ld	a,b
+   0281 CE FF         [ 7]  649 	adc	a,#0xFF
+   0283 57            [ 4]  650 	ld	d,a
+   0284 6B            [ 4]  651 	ld	l, e
+   0285 62            [ 4]  652 	ld	h, d
+   0286 CB 7A         [ 8]  653 	bit	7, d
+   0288 28 04         [12]  654 	jr	Z,00103$
+   028A 21 BF FF      [10]  655 	ld	hl,#0xFFBF
+   028D 09            [11]  656 	add	hl,bc
+   028E                     657 00103$:
+   028E CB 2C         [ 8]  658 	sra	h
+   0290 CB 1D         [ 8]  659 	rr	l
+   0292 CB 2C         [ 8]  660 	sra	h
+   0294 CB 1D         [ 8]  661 	rr	l
+   0296 4D            [ 4]  662 	ld	c, l
+   0297 44            [ 4]  663 	ld	b, h
+   0298 29            [11]  664 	add	hl, hl
+   0299 29            [11]  665 	add	hl, hl
+   029A 09            [11]  666 	add	hl, bc
+   029B 29            [11]  667 	add	hl, hl
+   029C 29            [11]  668 	add	hl, hl
+   029D 29            [11]  669 	add	hl, hl
+   029E 4D            [ 4]  670 	ld	c,l
+   029F 44            [ 4]  671 	ld	b,h
+   02A0 2Ar00r00      [16]  672 	ld	hl,(_map)
+   02A3 09            [11]  673 	add	hl,bc
+   02A4 DD 4E 04      [19]  674 	ld	c,4 (ix)
+   02A7 CB 39         [ 8]  675 	srl	c
+   02A9 59            [ 4]  676 	ld	e,c
+   02AA 16 00         [ 7]  677 	ld	d,#0x00
+   02AC 19            [11]  678 	add	hl,de
+   02AD DD E1         [14]  679 	pop	ix
+   02AF C9            [10]  680 	ret
+                            681 ;src/jugador/jugador.c:218: void girarFrame() {
+                            682 ;	---------------------------------
+                            683 ; Function girarFrame
+                            684 ; ---------------------------------
+   02B0                     685 _girarFrame::
+                            686 ;src/jugador/jugador.c:219: TFrame* f = prota.frame;
+   02B0 ED 4Br0Br00   [20]  687 	ld	bc, (#_prota + 7)
+                            688 ;src/jugador/jugador.c:220: if (f->mira != prota.mira) {
+   02B4 0A            [ 7]  689 	ld	a,(bc)
+   02B5 5F            [ 4]  690 	ld	e,a
+   02B6 21r0Dr00      [10]  691 	ld	hl, #(_prota + 0x0009) + 0
+   02B9 56            [ 7]  692 	ld	d,(hl)
+   02BA 7B            [ 4]  693 	ld	a,e
+   02BB 92            [ 4]  694 	sub	a, d
+   02BC C8            [11]  695 	ret	Z
+                            696 ;src/jugador/jugador.c:221: cpct_hflipSpriteM0(G_PERSONAJE_00_W, G_PERSONAJE_00_H, f->sprite);
+   02BD 69            [ 4]  697 	ld	l, c
+   02BE 60            [ 4]  698 	ld	h, b
+   02BF 23            [ 6]  699 	inc	hl
+   02C0 5E            [ 7]  700 	ld	e,(hl)
+   02C1 23            [ 6]  701 	inc	hl
+   02C2 56            [ 7]  702 	ld	d,(hl)
+   02C3 C5            [11]  703 	push	bc
+   02C4 D5            [11]  704 	push	de
+   02C5 21 10 20      [10]  705 	ld	hl,#0x2010
+   02C8 E5            [11]  706 	push	hl
+   02C9 CDr00r00      [17]  707 	call	_cpct_hflipSpriteM0
+   02CC C1            [10]  708 	pop	bc
+                            709 ;src/jugador/jugador.c:222: f->mira = prota.mira;
+   02CD 3Ar0Dr00      [13]  710 	ld	a, (#(_prota + 0x0009) + 0)
+   02D0 02            [ 7]  711 	ld	(bc),a
+   02D1 C9            [10]  712 	ret
+                            713 ;src/jugador/jugador.c:228: void asignarFrame(TFrame **animacion) {
+                            714 ;	---------------------------------
+                            715 ; Function asignarFrame
+                            716 ; ---------------------------------
+   02D2                     717 _asignarFrame::
+   02D2 DD E5         [15]  718 	push	ix
+   02D4 DD 21 00 00   [14]  719 	ld	ix,#0
+   02D8 DD 39         [15]  720 	add	ix,sp
+                            721 ;src/jugador/jugador.c:229: prota.frame = animacion[prota.nframe / 4];
+   02DA 21r0Er00      [10]  722 	ld	hl, #_prota + 10
+   02DD 6E            [ 7]  723 	ld	l,(hl)
+   02DE CB 3D         [ 8]  724 	srl	l
+   02E0 CB 3D         [ 8]  725 	srl	l
+   02E2 26 00         [ 7]  726 	ld	h,#0x00
+   02E4 29            [11]  727 	add	hl, hl
+   02E5 4D            [ 4]  728 	ld	c, l
+   02E6 44            [ 4]  729 	ld	b, h
+   02E7 DD 6E 04      [19]  730 	ld	l,4 (ix)
+   02EA DD 66 05      [19]  731 	ld	h,5 (ix)
+   02ED 09            [11]  732 	add	hl,bc
+   02EE 4E            [ 7]  733 	ld	c,(hl)
+   02EF 23            [ 6]  734 	inc	hl
+   02F0 46            [ 7]  735 	ld	b,(hl)
+   02F1 ED 43r0Br00   [20]  736 	ld	((_prota + 0x0007)), bc
+   02F5 DD E1         [14]  737 	pop	ix
+   02F7 C9            [10]  738 	ret
+                            739 ;src/jugador/jugador.c:232: void ini_preSalto()
+                            740 ;	---------------------------------
+                            741 ; Function ini_preSalto
+                            742 ; ---------------------------------
+   02F8                     743 _ini_preSalto::
+                            744 ;src/jugador/jugador.c:234: prota.nframe = 0;
+   02F8 21r0Er00      [10]  745 	ld	hl,#(_prota + 0x000a)
+   02FB 36 00         [10]  746 	ld	(hl),#0x00
+                            747 ;src/jugador/jugador.c:235: prota.estado = ST_salto;
+   02FD 21r0Fr00      [10]  748 	ld	hl,#(_prota + 0x000b)
+   0300 36 02         [10]  749 	ld	(hl),#0x02
+                            750 ;src/jugador/jugador.c:236: prota.mover  = SI;
+   0302 21r0Ar00      [10]  751 	ld	hl,#(_prota + 0x0006)
+   0305 36 01         [10]  752 	ld	(hl),#0x01
+   0307 C9            [10]  753 	ret
+                            754 ;src/jugador/jugador.c:240: void ini_salto()
+                            755 ;	---------------------------------
+                            756 ; Function ini_salto
+                            757 ; ---------------------------------
+   0308                     758 _ini_salto::
+                            759 ;src/jugador/jugador.c:243: prota.estado = ST_saltando;
+   0308 21r0Fr00      [10]  760 	ld	hl,#(_prota + 0x000b)
+   030B 36 03         [10]  761 	ld	(hl),#0x03
+                            762 ;src/jugador/jugador.c:244: prota.mover  = SI;
+   030D 21r0Ar00      [10]  763 	ld	hl,#(_prota + 0x0006)
+   0310 36 01         [10]  764 	ld	(hl),#0x01
+                            765 ;src/jugador/jugador.c:245: prota.salto = 0;
+   0312 21r10r00      [10]  766 	ld	hl,#(_prota + 0x000c)
+   0315 36 00         [10]  767 	ld	(hl),#0x00
+   0317 C9            [10]  768 	ret
+                            769 ;src/jugador/jugador.c:248: void ini_andar(u8 direccion)
+                            770 ;	---------------------------------
+                            771 ; Function ini_andar
+                            772 ; ---------------------------------
+   0318                     773 _ini_andar::
+                            774 ;src/jugador/jugador.c:250: prota.nframe=0;
+   0318 21r0Er00      [10]  775 	ld	hl,#(_prota + 0x000a)
+   031B 36 00         [10]  776 	ld	(hl),#0x00
+                            777 ;src/jugador/jugador.c:251: prota.estado=ST_andando;
+   031D 21r0Fr00      [10]  778 	ld	hl,#(_prota + 0x000b)
+   0320 36 01         [10]  779 	ld	(hl),#0x01
+                            780 ;src/jugador/jugador.c:252: prota.mira = direccion;
+   0322 21r0Dr00      [10]  781 	ld	hl,#(_prota + 0x0009)
+   0325 FD 21 02 00   [14]  782 	ld	iy,#2
+   0329 FD 39         [15]  783 	add	iy,sp
+   032B FD 7E 00      [19]  784 	ld	a,0 (iy)
+   032E 77            [ 7]  785 	ld	(hl),a
+                            786 ;src/jugador/jugador.c:253: prota.mover=SI;
+   032F 21r0Ar00      [10]  787 	ld	hl,#(_prota + 0x0006)
+   0332 36 01         [10]  788 	ld	(hl),#0x01
+   0334 C9            [10]  789 	ret
+                            790 ;src/jugador/jugador.c:256: void ini_quieto()
+                            791 ;	---------------------------------
+                            792 ; Function ini_quieto
+                            793 ; ---------------------------------
+   0335                     794 _ini_quieto::
+                            795 ;src/jugador/jugador.c:258: prota.estado = ST_quieto;
+   0335 21r0Fr00      [10]  796 	ld	hl,#(_prota + 0x000b)
+   0338 36 00         [10]  797 	ld	(hl),#0x00
+                            798 ;src/jugador/jugador.c:259: prota.mover  = SI;
+   033A 21r0Ar00      [10]  799 	ld	hl,#(_prota + 0x0006)
+   033D 36 01         [10]  800 	ld	(hl),#0x01
+   033F C9            [10]  801 	ret
+                            802 ;src/jugador/jugador.c:262: void ini_caer() {
+                            803 ;	---------------------------------
+                            804 ; Function ini_caer
+                            805 ; ---------------------------------
+   0340                     806 _ini_caer::
+                            807 ;src/jugador/jugador.c:263: prota.nframe = 0;
+   0340 21r0Er00      [10]  808 	ld	hl,#(_prota + 0x000a)
+   0343 36 00         [10]  809 	ld	(hl),#0x00
+                            810 ;src/jugador/jugador.c:264: prota.estado = ST_caer;
+   0345 21r0Fr00      [10]  811 	ld	hl,#(_prota + 0x000b)
+   0348 36 05         [10]  812 	ld	(hl),#0x05
+                            813 ;src/jugador/jugador.c:265: prota.mover  = SI;
+   034A 21r0Ar00      [10]  814 	ld	hl,#(_prota + 0x0006)
+   034D 36 01         [10]  815 	ld	(hl),#0x01
+   034F C9            [10]  816 	ret
+                            817 ;src/jugador/jugador.c:268: void caer() {
+                            818 ;	---------------------------------
+                            819 ; Function caer
+                            820 ; ---------------------------------
+   0350                     821 _caer::
+                            822 ;src/jugador/jugador.c:269: prota.mover = SI;
+   0350 21r0Ar00      [10]  823 	ld	hl,#(_prota + 0x0006)
+   0353 36 01         [10]  824 	ld	(hl),#0x01
+                            825 ;src/jugador/jugador.c:270: ini_quieto();      
+   0355 C3r35r03      [10]  826 	jp  _ini_quieto
+                            827 ;src/jugador/jugador.c:273: void cayendo_entrar() {
+                            828 ;	---------------------------------
+                            829 ; Function cayendo_entrar
+                            830 ; ---------------------------------
+   0358                     831 _cayendo_entrar::
+                            832 ;src/jugador/jugador.c:274: prota.estado = ST_cayendo;
+   0358 21r0Fr00      [10]  833 	ld	hl,#(_prota + 0x000b)
+   035B 36 04         [10]  834 	ld	(hl),#0x04
+                            835 ;src/jugador/jugador.c:275: prota.mover  = SI;
+   035D 21r0Ar00      [10]  836 	ld	hl,#(_prota + 0x0006)
+   0360 36 01         [10]  837 	ld	(hl),#0x01
+                            838 ;src/jugador/jugador.c:276: prota.salto  = PASOS_SALTO - 3;
+   0362 21r10r00      [10]  839 	ld	hl,#(_prota + 0x000c)
+   0365 36 11         [10]  840 	ld	(hl),#0x11
+   0367 C9            [10]  841 	ret
+                            842 ;src/jugador/jugador.c:279: void ajustarAlSuelo() {
+                            843 ;	---------------------------------
+                            844 ; Function ajustarAlSuelo
+                            845 ; ---------------------------------
+   0368                     846 _ajustarAlSuelo::
+                            847 ;src/jugador/jugador.c:281: prota.y = (prota.y & 0b11111100);
+   0368 01r05r00      [10]  848 	ld	bc,#_prota+1
+   036B 0A            [ 7]  849 	ld	a,(bc)
+   036C E6 FC         [ 7]  850 	and	a, #0xFC
+   036E 02            [ 7]  851 	ld	(bc),a
+   036F C9            [10]  852 	ret
+                            853 ;src/jugador/jugador.c:286: u8 sobreSuelo() {
+                            854 ;	---------------------------------
+                            855 ; Function sobreSuelo
+                            856 ; ---------------------------------
+   0370                     857 _sobreSuelo::
+                            858 ;src/jugador/jugador.c:288: u8* tileSuelo = obtenerTilePtr(prota.x+2, prota.y +32);
+   0370 3Ar05r00      [13]  859 	ld	a, (#_prota + 1)
+   0373 C6 20         [ 7]  860 	add	a, #0x20
+   0375 47            [ 4]  861 	ld	b,a
+   0376 3Ar04r00      [13]  862 	ld	a, (#_prota + 0)
+   0379 C6 02         [ 7]  863 	add	a, #0x02
+   037B C5            [11]  864 	push	bc
+   037C 33            [ 6]  865 	inc	sp
+   037D F5            [11]  866 	push	af
+   037E 33            [ 6]  867 	inc	sp
+   037F CDr6Fr02      [17]  868 	call	_obtenerTilePtr
+   0382 F1            [10]  869 	pop	af
+                            870 ;src/jugador/jugador.c:290: if (*tileSuelo==13)
+   0383 7E            [ 7]  871 	ld	a,(hl)
+   0384 D6 0D         [ 7]  872 	sub	a, #0x0D
+   0386 20 03         [12]  873 	jr	NZ,00102$
+                            874 ;src/jugador/jugador.c:292: return 1;
+   0388 2E 01         [ 7]  875 	ld	l,#0x01
+   038A C9            [10]  876 	ret
+   038B                     877 00102$:
+                            878 ;src/jugador/jugador.c:294: return 0;
+   038B 2E 00         [ 7]  879 	ld	l,#0x00
+   038D C9            [10]  880 	ret
+                            881 ;src/jugador/jugador.c:297: void imprimirMuni()
+                            882 ;	---------------------------------
+                            883 ; Function imprimirMuni
+                            884 ; ---------------------------------
+   038E                     885 _imprimirMuni::
+   038E DD E5         [15]  886 	push	ix
+   0390 3B            [ 6]  887 	dec	sp
+                            888 ;src/jugador/jugador.c:300: sprintf(str, "%2u", cuchillo.municion);
+   0391 21r1Cr00      [10]  889 	ld	hl,#_cuchillo+9
+   0394 5E            [ 7]  890 	ld	e,(hl)
+   0395 16 00         [ 7]  891 	ld	d,#0x00
+   0397 21 00 00      [10]  892 	ld	hl,#0x0000
+   039A 39            [11]  893 	add	hl,sp
+   039B E5            [11]  894 	push	hl
+   039C D5            [11]  895 	push	de
+   039D 11rC9r03      [10]  896 	ld	de,#___str_0
+   03A0 D5            [11]  897 	push	de
+   03A1 E5            [11]  898 	push	hl
+   03A2 CDr00r00      [17]  899 	call	_sprintf
+   03A5 21 06 00      [10]  900 	ld	hl,#6
+   03A8 39            [11]  901 	add	hl,sp
+   03A9 F9            [ 6]  902 	ld	sp,hl
+   03AA 21 19 00      [10]  903 	ld	hl,#0x0019
+   03AD E5            [11]  904 	push	hl
+   03AE 21 00 C0      [10]  905 	ld	hl,#0xC000
+   03B1 E5            [11]  906 	push	hl
+   03B2 CDr00r00      [17]  907 	call	_cpct_getScreenPtr
+   03B5 EB            [ 4]  908 	ex	de,hl
+   03B6 C1            [10]  909 	pop	bc
+   03B7 21 04 00      [10]  910 	ld	hl,#0x0004
+   03BA E5            [11]  911 	push	hl
+   03BB D5            [11]  912 	push	de
+   03BC C5            [11]  913 	push	bc
+   03BD CDr00r00      [17]  914 	call	_cpct_drawStringM0
+   03C0 21 06 00      [10]  915 	ld	hl,#6
+   03C3 39            [11]  916 	add	hl,sp
+   03C4 F9            [ 6]  917 	ld	sp,hl
+   03C5 33            [ 6]  918 	inc	sp
+   03C6 DD E1         [14]  919 	pop	ix
+   03C8 C9            [10]  920 	ret
+   03C9                     921 ___str_0:
+   03C9 25 32 75            922 	.ascii "%2u"
+   03CC 00                  923 	.db 0x00
+                            924 ;src/jugador/jugador.c:303: void imprimirVida()
+                            925 ;	---------------------------------
+                            926 ; Function imprimirVida
+                            927 ; ---------------------------------
+   03CD                     928 _imprimirVida::
+   03CD DD E5         [15]  929 	push	ix
+   03CF 3B            [ 6]  930 	dec	sp
+                            931 ;src/jugador/jugador.c:306: sprintf(str, "%2u", prota.vida);
+   03D0 21r11r00      [10]  932 	ld	hl,#_prota+13
+   03D3 5E            [ 7]  933 	ld	e,(hl)
+   03D4 16 00         [ 7]  934 	ld	d,#0x00
+   03D6 21 00 00      [10]  935 	ld	hl,#0x0000
+   03D9 39            [11]  936 	add	hl,sp
+   03DA E5            [11]  937 	push	hl
+   03DB D5            [11]  938 	push	de
+   03DC 11r08r04      [10]  939 	ld	de,#___str_1
+   03DF D5            [11]  940 	push	de
+   03E0 E5            [11]  941 	push	hl
+   03E1 CDr00r00      [17]  942 	call	_sprintf
+   03E4 21 06 00      [10]  943 	ld	hl,#6
+   03E7 39            [11]  944 	add	hl,sp
+   03E8 F9            [ 6]  945 	ld	sp,hl
+   03E9 21 19 0A      [10]  946 	ld	hl,#0x0A19
+   03EC E5            [11]  947 	push	hl
+   03ED 21 00 C0      [10]  948 	ld	hl,#0xC000
+   03F0 E5            [11]  949 	push	hl
+   03F1 CDr00r00      [17]  950 	call	_cpct_getScreenPtr
+   03F4 EB            [ 4]  951 	ex	de,hl
+   03F5 C1            [10]  952 	pop	bc
+   03F6 21 04 00      [10]  953 	ld	hl,#0x0004
+   03F9 E5            [11]  954 	push	hl
+   03FA D5            [11]  955 	push	de
+   03FB C5            [11]  956 	push	bc
+   03FC CDr00r00      [17]  957 	call	_cpct_drawStringM0
+   03FF 21 06 00      [10]  958 	ld	hl,#6
+   0402 39            [11]  959 	add	hl,sp
+   0403 F9            [ 6]  960 	ld	sp,hl
+   0404 33            [ 6]  961 	inc	sp
+   0405 DD E1         [14]  962 	pop	ix
+   0407 C9            [10]  963 	ret
+   0408                     964 ___str_1:
+   0408 25 32 75            965 	.ascii "%2u"
+   040B 00                  966 	.db 0x00
+                            967 ;src/jugador/jugador.c:312: void atacar(){
+                            968 ;	---------------------------------
+                            969 ; Function atacar
+                            970 ; ---------------------------------
+   040C                     971 _atacar::
+                            972 ;src/jugador/jugador.c:313: cuchillo.y = prota.y+10;
+   040C 01r14r00      [10]  973 	ld	bc,#_cuchillo + 1
+   040F 3Ar05r00      [13]  974 	ld	a, (#_prota + 1)
+   0412 C6 0A         [ 7]  975 	add	a, #0x0A
+   0414 02            [ 7]  976 	ld	(bc),a
+                            977 ;src/jugador/jugador.c:314: cuchillo.mover=SI;
+   0415 21r19r00      [10]  978 	ld	hl,#(_cuchillo + 0x0006)
+   0418 36 01         [10]  979 	ld	(hl),#0x01
+                            980 ;src/jugador/jugador.c:315: if(cuchillo.mira != prota.mira){
+   041A 01r1Br00      [10]  981 	ld	bc,#_cuchillo + 8
+   041D 0A            [ 7]  982 	ld	a,(bc)
+   041E 57            [ 4]  983 	ld	d,a
+   041F 21r0Dr00      [10]  984 	ld	hl, #(_prota + 0x0009) + 0
+   0422 5E            [ 7]  985 	ld	e,(hl)
+   0423 7A            [ 4]  986 	ld	a,d
+   0424 93            [ 4]  987 	sub	a, e
+   0425 28 0D         [12]  988 	jr	Z,00102$
+                            989 ;src/jugador/jugador.c:316: cuchillo.mira = prota.mira;
+   0427 7B            [ 4]  990 	ld	a,e
+   0428 02            [ 7]  991 	ld	(bc),a
+                            992 ;src/jugador/jugador.c:317: cpct_hflipSpriteM0(G_CUCHILLO_W, G_CUCHILLO_H, cuchillo.sprite);
+   0429 2Ar17r00      [16]  993 	ld	hl, (#_cuchillo + 4)
+   042C E5            [11]  994 	push	hl
+   042D 21 04 04      [10]  995 	ld	hl,#0x0404
+   0430 E5            [11]  996 	push	hl
+   0431 CDr00r00      [17]  997 	call	_cpct_hflipSpriteM0
+   0434                     998 00102$:
+                            999 ;src/jugador/jugador.c:320: if(prota.mira == M_derecha){
+   0434 3Ar0Dr00      [13] 1000 	ld	a, (#(_prota + 0x0009) + 0)
+                           1001 ;src/jugador/jugador.c:321: cuchillo.x = prota.x+5; 
+   0437 21r04r00      [10] 1002 	ld	hl, #_prota + 0
+   043A 4E            [ 7] 1003 	ld	c,(hl)
+                           1004 ;src/jugador/jugador.c:320: if(prota.mira == M_derecha){
+   043B B7            [ 4] 1005 	or	a, a
+   043C 20 0D         [12] 1006 	jr	NZ,00104$
+                           1007 ;src/jugador/jugador.c:321: cuchillo.x = prota.x+5; 
+   043E 79            [ 4] 1008 	ld	a,c
+   043F C6 05         [ 7] 1009 	add	a, #0x05
+   0441 32r13r00      [13] 1010 	ld	(#_cuchillo),a
+                           1011 ;src/jugador/jugador.c:322: cuchillo.lanzandoDerecha = SI;
+   0444 21r1Ar00      [10] 1012 	ld	hl,#(_cuchillo + 0x0007)
+   0447 36 01         [10] 1013 	ld	(hl),#0x01
+   0449 18 06         [12] 1014 	jr	00105$
+   044B                    1015 00104$:
+                           1016 ;src/jugador/jugador.c:325: cuchillo.x = prota.x-5; 
+   044B 79            [ 4] 1017 	ld	a,c
+   044C C6 FB         [ 7] 1018 	add	a,#0xFB
+   044E 32r13r00      [13] 1019 	ld	(#_cuchillo),a
+   0451                    1020 00105$:
+                           1021 ;src/jugador/jugador.c:327: if(cuchillo.municion!=0)
+   0451 01r1Cr00      [10] 1022 	ld	bc,#_cuchillo + 9
+   0454 0A            [ 7] 1023 	ld	a,(bc)
+   0455 B7            [ 4] 1024 	or	a, a
+   0456 C8            [11] 1025 	ret	Z
+                           1026 ;src/jugador/jugador.c:329: cuchillo.municion--;
+   0457 C6 FF         [ 7] 1027 	add	a,#0xFF
+   0459 02            [ 7] 1028 	ld	(bc),a
+                           1029 ;src/jugador/jugador.c:330: imprimirMuni();
+   045A CDr8Er03      [17] 1030 	call	_imprimirMuni
+   045D C9            [10] 1031 	ret
+                           1032 ;src/jugador/jugador.c:336: void estatico() {
+                           1033 ;	---------------------------------
+                           1034 ; Function estatico
+                           1035 ; ---------------------------------
+   045E                    1036 _estatico::
+                           1037 ;src/jugador/jugador.c:339: u8 k = compruebaTeclas(keys, 4);
+   045E 3E 04         [ 7] 1038 	ld	a,#0x04
+   0460 F5            [11] 1039 	push	af
+   0461 33            [ 6] 1040 	inc	sp
+   0462 21rABr04      [10] 1041 	ld	hl,#_estatico_keys_1_141
+   0465 E5            [11] 1042 	push	hl
+   0466 CDrB3r04      [17] 1043 	call	_compruebaTeclas
+   0469 F1            [10] 1044 	pop	af
+   046A 33            [ 6] 1045 	inc	sp
+   046B 5D            [ 4] 1046 	ld	e,l
+                           1047 ;src/jugador/jugador.c:340: switch(k) {
+   046C 3E 04         [ 7] 1048 	ld	a,#0x04
+   046E 93            [ 4] 1049 	sub	a, e
+   046F D8            [11] 1050 	ret	C
+   0470 16 00         [ 7] 1051 	ld	d,#0x00
+   0472 21r78r04      [10] 1052 	ld	hl,#00129$
+   0475 19            [11] 1053 	add	hl,de
+   0476 19            [11] 1054 	add	hl,de
+                           1055 ;src/jugador/jugador.c:341: case 0:  break; // Nada que hacer
+                           1056 ;src/jugador/jugador.c:342: case 1: ini_preSalto(); break;
+   0477 E9            [ 4] 1057 	jp	(hl)
+   0478                    1058 00129$:
+   0478 18 30         [12] 1059 	jr	00111$
+   047A 18 08         [12] 1060 	jr	00102$
+   047C 18 09         [12] 1061 	jr	00103$
+   047E 18 0F         [12] 1062 	jr	00104$
+   0480 18 16         [12] 1063 	jr	00105$
+   0482 18 26         [12] 1064 	jr	00111$
+   0484                    1065 00102$:
+   0484 C3rF8r02      [10] 1066 	jp  _ini_preSalto
+                           1067 ;src/jugador/jugador.c:343: case 2: ini_andar(M_derecha);   break;
+   0487                    1068 00103$:
+   0487 AF            [ 4] 1069 	xor	a, a
+   0488 F5            [11] 1070 	push	af
+   0489 33            [ 6] 1071 	inc	sp
+   048A CDr18r03      [17] 1072 	call	_ini_andar
+   048D 33            [ 6] 1073 	inc	sp
+   048E C9            [10] 1074 	ret
+                           1075 ;src/jugador/jugador.c:344: case 3: ini_andar(M_izquierda); break;
+   048F                    1076 00104$:
+   048F 3E 01         [ 7] 1077 	ld	a,#0x01
+   0491 F5            [11] 1078 	push	af
+   0492 33            [ 6] 1079 	inc	sp
+   0493 CDr18r03      [17] 1080 	call	_ini_andar
+   0496 33            [ 6] 1081 	inc	sp
+   0497 C9            [10] 1082 	ret
+                           1083 ;src/jugador/jugador.c:345: case 4: 
+   0498                    1084 00105$:
+                           1085 ;src/jugador/jugador.c:346: if(cuchillo.lanzandoDerecha==NO && cuchillo.mover==NO && cuchillo.municion!=0)
+   0498 3Ar1Ar00      [13] 1086 	ld	a, (#_cuchillo + 7)
+   049B B7            [ 4] 1087 	or	a, a
+   049C C0            [11] 1088 	ret	NZ
+   049D 3Ar19r00      [13] 1089 	ld	a, (#_cuchillo + 6)
+   04A0 B7            [ 4] 1090 	or	a, a
+   04A1 C0            [11] 1091 	ret	NZ
+   04A2 3Ar1Cr00      [13] 1092 	ld	a, (#_cuchillo + 9)
+   04A5 B7            [ 4] 1093 	or	a, a
+   04A6 C8            [11] 1094 	ret	Z
+                           1095 ;src/jugador/jugador.c:348: atacar();
+   04A7 CDr0Cr04      [17] 1096 	call	_atacar
+                           1097 ;src/jugador/jugador.c:351: }
+   04AA                    1098 00111$:
+   04AA C9            [10] 1099 	ret
+   04AB                    1100 _estatico_keys_1_141:
+   04AB 00 01              1101 	.dw #0x0100
+   04AD 00 02              1102 	.dw #0x0200
+   04AF 01 01              1103 	.dw #0x0101
+   04B1 05 80              1104 	.dw #0x8005
+                           1105 ;src/jugador/jugador.c:354: u8 compruebaTeclas(const cpct_keyID* k, u8 numk) {
+                           1106 ;	---------------------------------
+                           1107 ; Function compruebaTeclas
+                           1108 ; ---------------------------------
+   04B3                    1109 _compruebaTeclas::
+   04B3 DD E5         [15] 1110 	push	ix
+   04B5 DD 21 00 00   [14] 1111 	ld	ix,#0
+   04B9 DD 39         [15] 1112 	add	ix,sp
+                           1113 ;src/jugador/jugador.c:356: cpct_scanKeyboard_if();
+   04BB CDr00r00      [17] 1114 	call	_cpct_scanKeyboard_if
+                           1115 ;src/jugador/jugador.c:357: if (cpct_isAnyKeyPressed()) {
+   04BE CDr00r00      [17] 1116 	call	_cpct_isAnyKeyPressed
+   04C1 7D            [ 4] 1117 	ld	a,l
+   04C2 B7            [ 4] 1118 	or	a, a
+   04C3 28 29         [12] 1119 	jr	Z,00105$
+                           1120 ;src/jugador/jugador.c:358: for(i=1; i <= numk; i++, k++) {
+   04C5 01 01 01      [10] 1121 	ld	bc,#0x0101
+   04C8 DD 5E 04      [19] 1122 	ld	e,4 (ix)
+   04CB DD 56 05      [19] 1123 	ld	d,5 (ix)
+   04CE                    1124 00107$:
+   04CE DD 7E 06      [19] 1125 	ld	a,6 (ix)
+   04D1 90            [ 4] 1126 	sub	a, b
+   04D2 38 1A         [12] 1127 	jr	C,00105$
+                           1128 ;src/jugador/jugador.c:359: if (cpct_isKeyPressed(*k))
+   04D4 6B            [ 4] 1129 	ld	l, e
+   04D5 62            [ 4] 1130 	ld	h, d
+   04D6 7E            [ 7] 1131 	ld	a, (hl)
+   04D7 23            [ 6] 1132 	inc	hl
+   04D8 66            [ 7] 1133 	ld	h,(hl)
+   04D9 6F            [ 4] 1134 	ld	l,a
+   04DA C5            [11] 1135 	push	bc
+   04DB D5            [11] 1136 	push	de
+   04DC CDr00r00      [17] 1137 	call	_cpct_isKeyPressed
+   04DF D1            [10] 1138 	pop	de
+   04E0 C1            [10] 1139 	pop	bc
+   04E1 7D            [ 4] 1140 	ld	a,l
+   04E2 B7            [ 4] 1141 	or	a, a
+   04E3 28 03         [12] 1142 	jr	Z,00108$
+                           1143 ;src/jugador/jugador.c:360: return i;
+   04E5 69            [ 4] 1144 	ld	l,c
+   04E6 18 08         [12] 1145 	jr	00109$
+   04E8                    1146 00108$:
+                           1147 ;src/jugador/jugador.c:358: for(i=1; i <= numk; i++, k++) {
+   04E8 04            [ 4] 1148 	inc	b
+   04E9 48            [ 4] 1149 	ld	c,b
+   04EA 13            [ 6] 1150 	inc	de
+   04EB 13            [ 6] 1151 	inc	de
+   04EC 18 E0         [12] 1152 	jr	00107$
+   04EE                    1153 00105$:
+                           1154 ;src/jugador/jugador.c:363: return 0;
+   04EE 2E 00         [ 7] 1155 	ld	l,#0x00
+   04F0                    1156 00109$:
+   04F0 DD E1         [14] 1157 	pop	ix
+   04F2 C9            [10] 1158 	ret
+                           1159 ;src/jugador/jugador.c:367: void selectSprite()
+                           1160 ;	---------------------------------
+                           1161 ; Function selectSprite
+                           1162 ; ---------------------------------
+   04F3                    1163 _selectSprite::
+                           1164 ;src/jugador/jugador.c:369: switch(prota.estado)
+   04F3 21r0Fr00      [10] 1165 	ld	hl, #_prota + 11
+   04F6 5E            [ 7] 1166 	ld	e,(hl)
+   04F7 3E 02         [ 7] 1167 	ld	a,#0x02
+   04F9 93            [ 4] 1168 	sub	a, e
+   04FA DArB0r02      [10] 1169 	jp	C,_girarFrame
+   04FD 16 00         [ 7] 1170 	ld	d,#0x00
+   04FF 21r05r05      [10] 1171 	ld	hl,#00111$
+   0502 19            [11] 1172 	add	hl,de
+   0503 19            [11] 1173 	add	hl,de
+                           1174 ;src/jugador/jugador.c:371: case ST_quieto: {
+   0504 E9            [ 4] 1175 	jp	(hl)
+   0505                    1176 00111$:
+   0505 18 04         [12] 1177 	jr	00101$
+   0507 18 0B         [12] 1178 	jr	00102$
+   0509 18 14         [12] 1179 	jr	00103$
+   050B                    1180 00101$:
+                           1181 ;src/jugador/jugador.c:372: prota.frame = &g_frames[0];
+   050B 21r29r00      [10] 1182 	ld	hl,#_g_frames
+   050E 22r0Br00      [16] 1183 	ld	((_prota + 0x0007)), hl
+                           1184 ;src/jugador/jugador.c:373: break;
+   0511 C3rB0r02      [10] 1185 	jp	_girarFrame
+                           1186 ;src/jugador/jugador.c:376: case ST_andando: {
+   0514                    1187 00102$:
+                           1188 ;src/jugador/jugador.c:377: asignarFrame(anim_andar);
+   0514 21r4Dr00      [10] 1189 	ld	hl,#_anim_andar
+   0517 E5            [11] 1190 	push	hl
+   0518 CDrD2r02      [17] 1191 	call	_asignarFrame
+   051B F1            [10] 1192 	pop	af
+                           1193 ;src/jugador/jugador.c:380: break;
+   051C C3rB0r02      [10] 1194 	jp	_girarFrame
+                           1195 ;src/jugador/jugador.c:383: case ST_salto:{ 
+   051F                    1196 00103$:
+                           1197 ;src/jugador/jugador.c:384: asignarFrame(anim_salto);   
+   051F 21r57r00      [10] 1198 	ld	hl,#_anim_salto
+   0522 E5            [11] 1199 	push	hl
+   0523 CDrD2r02      [17] 1200 	call	_asignarFrame
+   0526 F1            [10] 1201 	pop	af
+                           1202 ;src/jugador/jugador.c:386: }
+                           1203 ;src/jugador/jugador.c:387: girarFrame();	
+   0527 C3rB0r02      [10] 1204 	jp  _girarFrame
+                           1205 ;src/jugador/jugador.c:390: void descender() {
+                           1206 ;	---------------------------------
+                           1207 ; Function descender
+                           1208 ; ---------------------------------
+   052A                    1209 _descender::
+                           1210 ;src/jugador/jugador.c:391: prota.y += cpct_get2Bits(g_tablaSalto, prota.salto);
+   052A 21r05r00      [10] 1211 	ld	hl, #(_prota + 0x0001) + 0
+   052D 4E            [ 7] 1212 	ld	c,(hl)
+   052E 21r10r00      [10] 1213 	ld	hl, #(_prota + 0x000c) + 0
+   0531 5E            [ 7] 1214 	ld	e,(hl)
+   0532 16 00         [ 7] 1215 	ld	d,#0x00
+   0534 C5            [11] 1216 	push	bc
+   0535 D5            [11] 1217 	push	de
+   0536 21r6Dr00      [10] 1218 	ld	hl,#_g_tablaSalto
+   0539 E5            [11] 1219 	push	hl
+   053A CDr00r00      [17] 1220 	call	_cpct_get2Bits
+   053D C1            [10] 1221 	pop	bc
+   053E 79            [ 4] 1222 	ld	a,c
+   053F 85            [ 4] 1223 	add	a, l
+   0540 32r05r00      [13] 1224 	ld	(#(_prota + 0x0001)),a
+                           1225 ;src/jugador/jugador.c:392: if (prota.salto > 1)
+   0543 21r10r00      [10] 1226 	ld	hl, #(_prota + 0x000c) + 0
+   0546 4E            [ 7] 1227 	ld	c,(hl)
+   0547 3E 01         [ 7] 1228 	ld	a,#0x01
+   0549 91            [ 4] 1229 	sub	a, c
+   054A D0            [11] 1230 	ret	NC
+                           1231 ;src/jugador/jugador.c:393: prota.salto--;
+   054B 0D            [ 4] 1232 	dec	c
+   054C 21r10r00      [10] 1233 	ld	hl,#(_prota + 0x000c)
+   054F 71            [ 7] 1234 	ld	(hl),c
+   0550 C9            [10] 1235 	ret
+                           1236 ;src/jugador/jugador.c:396: void cayendo() {
+                           1237 ;	---------------------------------
+                           1238 ; Function cayendo
+                           1239 ; ---------------------------------
+   0551                    1240 _cayendo::
+                           1241 ;src/jugador/jugador.c:398: u8 k = compruebaTeclas(keys, 2);
+   0551 3E 02         [ 7] 1242 	ld	a,#0x02
+   0553 F5            [11] 1243 	push	af
+   0554 33            [ 6] 1244 	inc	sp
+   0555 21r92r05      [10] 1245 	ld	hl,#_cayendo_keys_1_154
+   0558 E5            [11] 1246 	push	hl
+   0559 CDrB3r04      [17] 1247 	call	_compruebaTeclas
+   055C F1            [10] 1248 	pop	af
+   055D 33            [ 6] 1249 	inc	sp
+   055E 5D            [ 4] 1250 	ld	e,l
+                           1251 ;src/jugador/jugador.c:399: switch(k) {
+   055F 3E 02         [ 7] 1252 	ld	a,#0x02
+   0561 93            [ 4] 1253 	sub	a, e
+   0562 38 18         [12] 1254 	jr	C,00104$
+   0564 16 00         [ 7] 1255 	ld	d,#0x00
+   0566 21r6Cr05      [10] 1256 	ld	hl,#00117$
+   0569 19            [11] 1257 	add	hl,de
+   056A 19            [11] 1258 	add	hl,de
+                           1259 ;src/jugador/jugador.c:400: case 0: break; // Nada que hacer
+                           1260 ;src/jugador/jugador.c:401: case 1: moverDer2();  break;
+   056B E9            [ 4] 1261 	jp	(hl)
+   056C                    1262 00117$:
+   056C 18 0E         [12] 1263 	jr	00104$
+   056E 18 04         [12] 1264 	jr	00102$
+   0570 18 07         [12] 1265 	jr	00103$
+   0572 18 08         [12] 1266 	jr	00104$
+   0574                    1267 00102$:
+   0574 CDrDCr07      [17] 1268 	call	_moverDer2
+   0577 18 03         [12] 1269 	jr	00104$
+                           1270 ;src/jugador/jugador.c:402: case 2: moverIzq2(); break;
+   0579                    1271 00103$:
+   0579 CDrBBr07      [17] 1272 	call	_moverIzq2
+                           1273 ;src/jugador/jugador.c:403: }
+   057C                    1274 00104$:
+                           1275 ;src/jugador/jugador.c:405: descender();
+   057C CDr2Ar05      [17] 1276 	call	_descender
+                           1277 ;src/jugador/jugador.c:407: if (sobreSuelo()) {
+   057F CDr70r03      [17] 1278 	call	_sobreSuelo
+   0582 7D            [ 4] 1279 	ld	a,l
+   0583 B7            [ 4] 1280 	or	a, a
+   0584 28 06         [12] 1281 	jr	Z,00106$
+                           1282 ;src/jugador/jugador.c:408: ajustarAlSuelo();
+   0586 CDr68r03      [17] 1283 	call	_ajustarAlSuelo
+                           1284 ;src/jugador/jugador.c:409: ini_caer();
+   0589 CDr40r03      [17] 1285 	call	_ini_caer
+   058C                    1286 00106$:
+                           1287 ;src/jugador/jugador.c:412: prota.mover=SI;
+   058C 21r0Ar00      [10] 1288 	ld	hl,#(_prota + 0x0006)
+   058F 36 01         [10] 1289 	ld	(hl),#0x01
+   0591 C9            [10] 1290 	ret
+   0592                    1291 _cayendo_keys_1_154:
+   0592 00 02              1292 	.dw #0x0200
+   0594 01 01              1293 	.dw #0x0101
+                           1294 ;src/jugador/jugador.c:415: void ascender() {
+                           1295 ;	---------------------------------
+                           1296 ; Function ascender
+                           1297 ; ---------------------------------
+   0596                    1298 _ascender::
+                           1299 ;src/jugador/jugador.c:416: prota.y -= cpct_get2Bits(g_tablaSalto, prota.salto);
+   0596 21r05r00      [10] 1300 	ld	hl, #(_prota + 0x0001) + 0
+   0599 4E            [ 7] 1301 	ld	c,(hl)
+   059A 21r10r00      [10] 1302 	ld	hl, #(_prota + 0x000c) + 0
+   059D 5E            [ 7] 1303 	ld	e,(hl)
+   059E 16 00         [ 7] 1304 	ld	d,#0x00
+   05A0 C5            [11] 1305 	push	bc
+   05A1 D5            [11] 1306 	push	de
+   05A2 21r6Dr00      [10] 1307 	ld	hl,#_g_tablaSalto
+   05A5 E5            [11] 1308 	push	hl
+   05A6 CDr00r00      [17] 1309 	call	_cpct_get2Bits
+   05A9 C1            [10] 1310 	pop	bc
+   05AA 79            [ 4] 1311 	ld	a,c
+   05AB 95            [ 4] 1312 	sub	a, l
+   05AC 4F            [ 4] 1313 	ld	c,a
+   05AD 21r05r00      [10] 1314 	ld	hl,#(_prota + 0x0001)
+   05B0 71            [ 7] 1315 	ld	(hl),c
+                           1316 ;src/jugador/jugador.c:417: if (prota.y < ORIGEN_MAPA_Y)
+   05B1 79            [ 4] 1317 	ld	a,c
+   05B2 D6 44         [ 7] 1318 	sub	a, #0x44
+   05B4 30 02         [12] 1319 	jr	NC,00102$
+                           1320 ;src/jugador/jugador.c:418: prota.y = ORIGEN_MAPA_Y;
+   05B6 36 44         [10] 1321 	ld	(hl),#0x44
+   05B8                    1322 00102$:
+                           1323 ;src/jugador/jugador.c:419: if (++prota.salto == PASOS_SALTO)
+   05B8 3Ar10r00      [13] 1324 	ld	a, (#(_prota + 0x000c) + 0)
+   05BB 3C            [ 4] 1325 	inc	a
+   05BC 32r10r00      [13] 1326 	ld	(#(_prota + 0x000c)),a
+   05BF D6 14         [ 7] 1327 	sub	a, #0x14
+   05C1 C0            [11] 1328 	ret	NZ
+                           1329 ;src/jugador/jugador.c:420: cayendo_entrar();
+   05C2 CDr58r03      [17] 1330 	call	_cayendo_entrar
+   05C5 C9            [10] 1331 	ret
+                           1332 ;src/jugador/jugador.c:424: void saltando()
+                           1333 ;	---------------------------------
+                           1334 ; Function saltando
+                           1335 ; ---------------------------------
+   05C6                    1336 _saltando::
+                           1337 ;src/jugador/jugador.c:427: if (!cpct_isKeyPressed(Key_CursorUp)) {
+   05C6 21 00 01      [10] 1338 	ld	hl,#0x0100
+   05C9 CDr00r00      [17] 1339 	call	_cpct_isKeyPressed
+   05CC 7D            [ 4] 1340 	ld	a,l
+   05CD B7            [ 4] 1341 	or	a, a
+                           1342 ;src/jugador/jugador.c:428: cayendo_entrar();
+   05CE CAr58r03      [10] 1343 	jp	Z,_cayendo_entrar
+                           1344 ;src/jugador/jugador.c:431: u8 k = compruebaTeclas(keys, 2);
+   05D1 3E 02         [ 7] 1345 	ld	a,#0x02
+   05D3 F5            [11] 1346 	push	af
+   05D4 33            [ 6] 1347 	inc	sp
+   05D5 21r05r06      [10] 1348 	ld	hl,#_saltando_keys_2_160
+   05D8 E5            [11] 1349 	push	hl
+   05D9 CDrB3r04      [17] 1350 	call	_compruebaTeclas
+   05DC F1            [10] 1351 	pop	af
+   05DD 33            [ 6] 1352 	inc	sp
+   05DE 5D            [ 4] 1353 	ld	e,l
+                           1354 ;src/jugador/jugador.c:432: switch(k) {
+   05DF 3E 02         [ 7] 1355 	ld	a,#0x02
+   05E1 93            [ 4] 1356 	sub	a, e
+   05E2 38 18         [12] 1357 	jr	C,00104$
+   05E4 16 00         [ 7] 1358 	ld	d,#0x00
+   05E6 21rECr05      [10] 1359 	ld	hl,#00118$
+   05E9 19            [11] 1360 	add	hl,de
+   05EA 19            [11] 1361 	add	hl,de
+                           1362 ;src/jugador/jugador.c:433: case 0: break;
+                           1363 ;src/jugador/jugador.c:434: case 1: moverDer2();   break;
+   05EB E9            [ 4] 1364 	jp	(hl)
+   05EC                    1365 00118$:
+   05EC 18 0E         [12] 1366 	jr	00104$
+   05EE 18 04         [12] 1367 	jr	00102$
+   05F0 18 07         [12] 1368 	jr	00103$
+   05F2 18 08         [12] 1369 	jr	00104$
+   05F4                    1370 00102$:
+   05F4 CDrDCr07      [17] 1371 	call	_moverDer2
+   05F7 18 03         [12] 1372 	jr	00104$
+                           1373 ;src/jugador/jugador.c:435: case 2: moverIzq2(); break;
+   05F9                    1374 00103$:
+   05F9 CDrBBr07      [17] 1375 	call	_moverIzq2
+                           1376 ;src/jugador/jugador.c:436: }
+   05FC                    1377 00104$:
+                           1378 ;src/jugador/jugador.c:437: ascender();
+   05FC CDr96r05      [17] 1379 	call	_ascender
+                           1380 ;src/jugador/jugador.c:438: prota.mover = SI;
+   05FF 21r0Ar00      [10] 1381 	ld	hl,#(_prota + 0x0006)
+   0602 36 01         [10] 1382 	ld	(hl),#0x01
+   0604 C9            [10] 1383 	ret
+   0605                    1384 _saltando_keys_2_160:
+   0605 00 02              1385 	.dw #0x0200
+   0607 01 01              1386 	.dw #0x0101
+                           1387 ;src/jugador/jugador.c:443: void saltar_ani()
+                           1388 ;	---------------------------------
+                           1389 ; Function saltar_ani
+                           1390 ; ---------------------------------
+   0609                    1391 _saltar_ani::
+                           1392 ;src/jugador/jugador.c:445: while(++prota.nframe == 4*4)
+   0609                    1393 00103$:
+   0609 01r0Er00      [10] 1394 	ld	bc,#_prota + 10
+   060C 0A            [ 7] 1395 	ld	a,(bc)
+   060D 3C            [ 4] 1396 	inc	a
+   060E 02            [ 7] 1397 	ld	(bc),a
+   060F D6 10         [ 7] 1398 	sub	a, #0x10
+   0611 C0            [11] 1399 	ret	NZ
+                           1400 ;src/jugador/jugador.c:447: prota.nframe = 0;
+   0612 AF            [ 4] 1401 	xor	a, a
+   0613 02            [ 7] 1402 	ld	(bc),a
+                           1403 ;src/jugador/jugador.c:449: if(prota.frame==&g_frames[10])
+   0614 ED 4Br0Br00   [20] 1404 	ld	bc, (#_prota + 7)
+   0618 79            [ 4] 1405 	ld	a,c
+   0619 D6r47         [ 7] 1406 	sub	a, #<((_g_frames + 0x001e))
+   061B 20 EC         [12] 1407 	jr	NZ,00103$
+   061D 78            [ 4] 1408 	ld	a,b
+   061E D6s00         [ 7] 1409 	sub	a, #>((_g_frames + 0x001e))
+   0620 20 E7         [12] 1410 	jr	NZ,00103$
+                           1411 ;src/jugador/jugador.c:451: prota.estado=ST_sal_salto;
+   0622 21r0Fr00      [10] 1412 	ld	hl,#(_prota + 0x000b)
+   0625 36 06         [10] 1413 	ld	(hl),#0x06
+   0627 18 E0         [12] 1414 	jr	00103$
+                           1415 ;src/jugador/jugador.c:458: void finsalto()
+                           1416 ;	---------------------------------
+                           1417 ; Function finsalto
+                           1418 ; ---------------------------------
+   0629                    1419 _finsalto::
+                           1420 ;src/jugador/jugador.c:460: if (!cpct_isKeyPressed(Key_CursorUp)) {
+   0629 21 00 01      [10] 1421 	ld	hl,#0x0100
+   062C CDr00r00      [17] 1422 	call	_cpct_isKeyPressed
+   062F 7D            [ 4] 1423 	ld	a,l
+   0630 B7            [ 4] 1424 	or	a, a
+                           1425 ;src/jugador/jugador.c:461: cayendo_entrar();
+   0631 CAr58r03      [10] 1426 	jp	Z,_cayendo_entrar
+                           1427 ;src/jugador/jugador.c:464: u8 k = compruebaTeclas(keys, 2);
+   0634 3E 02         [ 7] 1428 	ld	a,#0x02
+   0636 F5            [11] 1429 	push	af
+   0637 33            [ 6] 1430 	inc	sp
+   0638 21r68r06      [10] 1431 	ld	hl,#_finsalto_keys_2_167
+   063B E5            [11] 1432 	push	hl
+   063C CDrB3r04      [17] 1433 	call	_compruebaTeclas
+   063F F1            [10] 1434 	pop	af
+   0640 33            [ 6] 1435 	inc	sp
+   0641 5D            [ 4] 1436 	ld	e,l
+                           1437 ;src/jugador/jugador.c:465: switch(k) {
+   0642 3E 02         [ 7] 1438 	ld	a,#0x02
+   0644 93            [ 4] 1439 	sub	a, e
+   0645 38 18         [12] 1440 	jr	C,00104$
+   0647 16 00         [ 7] 1441 	ld	d,#0x00
+   0649 21r4Fr06      [10] 1442 	ld	hl,#00118$
+   064C 19            [11] 1443 	add	hl,de
+   064D 19            [11] 1444 	add	hl,de
+                           1445 ;src/jugador/jugador.c:466: case 0: break;
+                           1446 ;src/jugador/jugador.c:467: case 1: moverDerecha();   break;
+   064E E9            [ 4] 1447 	jp	(hl)
+   064F                    1448 00118$:
+   064F 18 0E         [12] 1449 	jr	00104$
+   0651 18 04         [12] 1450 	jr	00102$
+   0653 18 07         [12] 1451 	jr	00103$
+   0655 18 08         [12] 1452 	jr	00104$
+   0657                    1453 00102$:
+   0657 CDr18r07      [17] 1454 	call	_moverDerecha
+   065A 18 03         [12] 1455 	jr	00104$
+                           1456 ;src/jugador/jugador.c:468: case 2: moverIzquierda(); break;
+   065C                    1457 00103$:
+   065C CDr85r06      [17] 1458 	call	_moverIzquierda
+                           1459 ;src/jugador/jugador.c:469: }
+   065F                    1460 00104$:
+                           1461 ;src/jugador/jugador.c:470: saltando();
+   065F CDrC6r05      [17] 1462 	call	_saltando
+                           1463 ;src/jugador/jugador.c:471: prota.mover = SI;
+   0662 21r0Ar00      [10] 1464 	ld	hl,#(_prota + 0x0006)
+   0665 36 01         [10] 1465 	ld	(hl),#0x01
+   0667 C9            [10] 1466 	ret
+   0668                    1467 _finsalto_keys_2_167:
+   0668 00 02              1468 	.dw #0x0200
+   066A 01 01              1469 	.dw #0x0101
+                           1470 ;src/jugador/jugador.c:476: void andar_ani(u8 direccion)
+                           1471 ;	---------------------------------
+                           1472 ; Function andar_ani
+                           1473 ; ---------------------------------
+   066C                    1474 _andar_ani::
+                           1475 ;src/jugador/jugador.c:478: prota.mira  = direccion;
+   066C 21r0Dr00      [10] 1476 	ld	hl,#(_prota + 0x0009)
+   066F FD 21 02 00   [14] 1477 	ld	iy,#2
+   0673 FD 39         [15] 1478 	add	iy,sp
+   0675 FD 7E 00      [19] 1479 	ld	a,0 (iy)
+   0678 77            [ 7] 1480 	ld	(hl),a
+                           1481 ;src/jugador/jugador.c:479: if(++prota.nframe == 5*4)
+   0679 01r0Er00      [10] 1482 	ld	bc,#_prota + 10
+   067C 0A            [ 7] 1483 	ld	a,(bc)
+   067D 3C            [ 4] 1484 	inc	a
+   067E 02            [ 7] 1485 	ld	(bc),a
+   067F D6 14         [ 7] 1486 	sub	a, #0x14
+   0681 C0            [11] 1487 	ret	NZ
+                           1488 ;src/jugador/jugador.c:480: prota.nframe = 0;
+   0682 AF            [ 4] 1489 	xor	a, a
+   0683 02            [ 7] 1490 	ld	(bc),a
+   0684 C9            [10] 1491 	ret
+                           1492 ;src/jugador/jugador.c:486: void moverIzquierda()
+                           1493 ;	---------------------------------
+                           1494 ; Function moverIzquierda
+                           1495 ; ---------------------------------
+   0685                    1496 _moverIzquierda::
+   0685 DD E5         [15] 1497 	push	ix
+   0687 DD 21 00 00   [14] 1498 	ld	ix,#0
+   068B DD 39         [15] 1499 	add	ix,sp
+   068D F5            [11] 1500 	push	af
+   068E F5            [11] 1501 	push	af
+   068F 3B            [ 6] 1502 	dec	sp
+                           1503 ;src/jugador/jugador.c:488: u8 x = get_BX() + G_PERSONAJE_00_W+2;
+   0690 CDr00r00      [17] 1504 	call	_get_BX
+   0693 7D            [ 4] 1505 	ld	a,l
+   0694 C6 12         [ 7] 1506 	add	a, #0x12
+   0696 DD 77 FD      [19] 1507 	ld	-3 (ix),a
+                           1508 ;src/jugador/jugador.c:489: u8 j= alive();
+   0699 CDr00r00      [17] 1509 	call	_alive
+   069C DD 75 FC      [19] 1510 	ld	-4 (ix),l
+                           1511 ;src/jugador/jugador.c:490: u8 y =get_BY();
+   069F CDr00r00      [17] 1512 	call	_get_BY
+   06A2 DD 75 FB      [19] 1513 	ld	-5 (ix),l
+                           1514 ;src/jugador/jugador.c:492: if(prota.x > 0)
+   06A5 01r04r00      [10] 1515 	ld	bc,#_prota+0
+   06A8 0A            [ 7] 1516 	ld	a,(bc)
+   06A9 5F            [ 4] 1517 	ld	e,a
+   06AA B7            [ 4] 1518 	or	a, a
+   06AB 28 55         [12] 1519 	jr	Z,00112$
+                           1520 ;src/jugador/jugador.c:494: if(((prota.x>x || prota.x<x) && (prota.x > x || prota.x < x-G_PERSONAJE_00_W+3)) || prota.y<132|| y==0||j==1){
+   06AD DD 7E FD      [19] 1521 	ld	a,-3 (ix)
+   06B0 93            [ 4] 1522 	sub	a, e
+   06B1 3E 00         [ 7] 1523 	ld	a,#0x00
+   06B3 17            [ 4] 1524 	rla
+   06B4 57            [ 4] 1525 	ld	d,a
+   06B5 B7            [ 4] 1526 	or	a, a
+   06B6 20 06         [12] 1527 	jr	NZ,00105$
+   06B8 7B            [ 4] 1528 	ld	a,e
+   06B9 DD 96 FD      [19] 1529 	sub	a, -3 (ix)
+   06BC 30 26         [12] 1530 	jr	NC,00106$
+   06BE                    1531 00105$:
+   06BE 7A            [ 4] 1532 	ld	a,d
+   06BF B7            [ 4] 1533 	or	a, a
+   06C0 20 35         [12] 1534 	jr	NZ,00101$
+   06C2 DD 6E FD      [19] 1535 	ld	l,-3 (ix)
+   06C5 26 00         [ 7] 1536 	ld	h,#0x00
+   06C7 D5            [11] 1537 	push	de
+   06C8 11 F3 FF      [10] 1538 	ld	de,#0xFFF3
+   06CB 19            [11] 1539 	add	hl, de
+   06CC D1            [10] 1540 	pop	de
+   06CD DD 73 FE      [19] 1541 	ld	-2 (ix),e
+   06D0 DD 36 FF 00   [19] 1542 	ld	-1 (ix),#0x00
+   06D4 DD 7E FE      [19] 1543 	ld	a,-2 (ix)
+   06D7 95            [ 4] 1544 	sub	a, l
+   06D8 DD 7E FF      [19] 1545 	ld	a,-1 (ix)
+   06DB 9C            [ 4] 1546 	sbc	a, h
+   06DC E2rE1r06      [10] 1547 	jp	PO, 00140$
+   06DF EE 80         [ 7] 1548 	xor	a, #0x80
+   06E1                    1549 00140$:
+   06E1 FArF7r06      [10] 1550 	jp	M,00101$
+   06E4                    1551 00106$:
+   06E4 3Ar05r00      [13] 1552 	ld	a,(#_prota+1)
+   06E7 D6 84         [ 7] 1553 	sub	a, #0x84
+   06E9 38 0C         [12] 1554 	jr	C,00101$
+   06EB DD 7E FB      [19] 1555 	ld	a,-5 (ix)
+   06EE B7            [ 4] 1556 	or	a, a
+   06EF 28 06         [12] 1557 	jr	Z,00101$
+   06F1 DD 7E FC      [19] 1558 	ld	a,-4 (ix)
+   06F4 3D            [ 4] 1559 	dec	a
+   06F5 20 1C         [12] 1560 	jr	NZ,00114$
+   06F7                    1561 00101$:
+                           1562 ;src/jugador/jugador.c:495: prota.x-=2;
+   06F7 1D            [ 4] 1563 	dec	e
+   06F8 1D            [ 4] 1564 	dec	e
+   06F9 7B            [ 4] 1565 	ld	a,e
+   06FA 02            [ 7] 1566 	ld	(bc),a
+                           1567 ;src/jugador/jugador.c:496: prota.mira = M_izquierda;
+   06FB 21r0Dr00      [10] 1568 	ld	hl,#(_prota + 0x0009)
+   06FE 36 01         [10] 1569 	ld	(hl),#0x01
+   0700 18 11         [12] 1570 	jr	00114$
+   0702                    1571 00112$:
+                           1572 ;src/jugador/jugador.c:500: if(map!=g_map1)
+   0702 3Ar00r00      [13] 1573 	ld	a,(#_map + 0)
+   0705 D6r00         [ 7] 1574 	sub	a, #<(_g_map1)
+   0707 20 07         [12] 1575 	jr	NZ,00143$
+   0709 3Ar01r00      [13] 1576 	ld	a,(#_map + 1)
+   070C D6s00         [ 7] 1577 	sub	a, #>(_g_map1)
+   070E 28 03         [12] 1578 	jr	Z,00114$
+   0710                    1579 00143$:
+                           1580 ;src/jugador/jugador.c:502: retrocederMapa();
+   0710 CDr17r02      [17] 1581 	call	_retrocederMapa
+   0713                    1582 00114$:
+   0713 DD F9         [10] 1583 	ld	sp, ix
+   0715 DD E1         [14] 1584 	pop	ix
+   0717 C9            [10] 1585 	ret
+                           1586 ;src/jugador/jugador.c:509: void moverDerecha()
+                           1587 ;	---------------------------------
+                           1588 ; Function moverDerecha
+                           1589 ; ---------------------------------
+   0718                    1590 _moverDerecha::
+   0718 DD E5         [15] 1591 	push	ix
+   071A DD 21 00 00   [14] 1592 	ld	ix,#0
+   071E DD 39         [15] 1593 	add	ix,sp
+   0720 21 FA FF      [10] 1594 	ld	hl,#-6
+   0723 39            [11] 1595 	add	hl,sp
+   0724 F9            [ 6] 1596 	ld	sp,hl
+                           1597 ;src/jugador/jugador.c:511: u8 x =get_BX() - 6;
+   0725 CDr00r00      [17] 1598 	call	_get_BX
+   0728 7D            [ 4] 1599 	ld	a,l
+   0729 C6 FA         [ 7] 1600 	add	a,#0xFA
+   072B DD 77 FC      [19] 1601 	ld	-4 (ix),a
+                           1602 ;src/jugador/jugador.c:512: u8 j= alive();
+   072E CDr00r00      [17] 1603 	call	_alive
+   0731 DD 75 FA      [19] 1604 	ld	-6 (ix),l
+                           1605 ;src/jugador/jugador.c:513: u8 y =get_BY();
+   0734 CDr00r00      [17] 1606 	call	_get_BY
+   0737 DD 75 FB      [19] 1607 	ld	-5 (ix),l
+                           1608 ;src/jugador/jugador.c:515: if (prota.x + G_PERSONAJE_00_W < ANCHO_PANTALLA) 
+   073A 3Ar04r00      [13] 1609 	ld	a,(#_prota + 0)
+   073D DD 77 FF      [19] 1610 	ld	-1 (ix), a
+   0740 DD 77 FD      [19] 1611 	ld	-3 (ix),a
+   0743 DD 36 FE 00   [19] 1612 	ld	-2 (ix),#0x00
+   0747 DD 7E FD      [19] 1613 	ld	a,-3 (ix)
+   074A C6 10         [ 7] 1614 	add	a, #0x10
+   074C 4F            [ 4] 1615 	ld	c,a
+   074D DD 7E FE      [19] 1616 	ld	a,-2 (ix)
+   0750 CE 00         [ 7] 1617 	adc	a, #0x00
+   0752 47            [ 4] 1618 	ld	b,a
+   0753 79            [ 4] 1619 	ld	a,c
+   0754 D6 50         [ 7] 1620 	sub	a, #0x50
+   0756 78            [ 4] 1621 	ld	a,b
+   0757 17            [ 4] 1622 	rla
+   0758 3F            [ 4] 1623 	ccf
+   0759 1F            [ 4] 1624 	rra
+   075A DE 80         [ 7] 1625 	sbc	a, #0x80
+   075C 30 55         [12] 1626 	jr	NC,00110$
+                           1627 ;src/jugador/jugador.c:517: if(((prota.x<x || prota.x>x ) && (prota.x<x || prota.x > x + G_PERSONAJE_00_W ))|| prota.y<132 || y==0||j==1){
+   075E DD 7E FF      [19] 1628 	ld	a,-1 (ix)
+   0761 DD 96 FC      [19] 1629 	sub	a, -4 (ix)
+   0764 3E 00         [ 7] 1630 	ld	a,#0x00
+   0766 17            [ 4] 1631 	rla
+   0767 4F            [ 4] 1632 	ld	c,a
+   0768 B7            [ 4] 1633 	or	a, a
+   0769 20 08         [12] 1634 	jr	NZ,00105$
+   076B DD 7E FC      [19] 1635 	ld	a,-4 (ix)
+   076E DD 96 FF      [19] 1636 	sub	a, -1 (ix)
+   0771 30 1D         [12] 1637 	jr	NC,00106$
+   0773                    1638 00105$:
+   0773 79            [ 4] 1639 	ld	a,c
+   0774 B7            [ 4] 1640 	or	a, a
+   0775 20 2C         [12] 1641 	jr	NZ,00101$
+   0777 DD 4E FC      [19] 1642 	ld	c,-4 (ix)
+   077A 06 00         [ 7] 1643 	ld	b,#0x00
+   077C 21 10 00      [10] 1644 	ld	hl,#0x0010
+   077F 09            [11] 1645 	add	hl,bc
+   0780 7D            [ 4] 1646 	ld	a,l
+   0781 DD 96 FD      [19] 1647 	sub	a, -3 (ix)
+   0784 7C            [ 4] 1648 	ld	a,h
+   0785 DD 9E FE      [19] 1649 	sbc	a, -2 (ix)
+   0788 E2r8Dr07      [10] 1650 	jp	PO, 00134$
+   078B EE 80         [ 7] 1651 	xor	a, #0x80
+   078D                    1652 00134$:
+   078D FArA3r07      [10] 1653 	jp	M,00101$
+   0790                    1654 00106$:
+   0790 3Ar05r00      [13] 1655 	ld	a,(#_prota+1)
+   0793 D6 84         [ 7] 1656 	sub	a, #0x84
+   0795 38 0C         [12] 1657 	jr	C,00101$
+   0797 DD 7E FB      [19] 1658 	ld	a,-5 (ix)
+   079A B7            [ 4] 1659 	or	a, a
+   079B 28 06         [12] 1660 	jr	Z,00101$
+   079D DD 7E FA      [19] 1661 	ld	a,-6 (ix)
+   07A0 3D            [ 4] 1662 	dec	a
+   07A1 20 13         [12] 1663 	jr	NZ,00112$
+   07A3                    1664 00101$:
+                           1665 ;src/jugador/jugador.c:518: prota.x+=2;
+   07A3 DD 4E FF      [19] 1666 	ld	c,-1 (ix)
+   07A6 0C            [ 4] 1667 	inc	c
+   07A7 0C            [ 4] 1668 	inc	c
+   07A8 21r04r00      [10] 1669 	ld	hl,#_prota
+   07AB 71            [ 7] 1670 	ld	(hl),c
+                           1671 ;src/jugador/jugador.c:519: prota.mira = M_derecha;
+   07AC 21r0Dr00      [10] 1672 	ld	hl,#(_prota + 0x0009)
+   07AF 36 00         [10] 1673 	ld	(hl),#0x00
+   07B1 18 03         [12] 1674 	jr	00112$
+   07B3                    1675 00110$:
+                           1676 ;src/jugador/jugador.c:523: avanzarMapa();
+   07B3 CDrD2r01      [17] 1677 	call	_avanzarMapa
+   07B6                    1678 00112$:
+   07B6 DD F9         [10] 1679 	ld	sp, ix
+   07B8 DD E1         [14] 1680 	pop	ix
+   07BA C9            [10] 1681 	ret
+                           1682 ;src/jugador/jugador.c:527: void moverIzq2()
+                           1683 ;	---------------------------------
+                           1684 ; Function moverIzq2
+                           1685 ; ---------------------------------
+   07BB                    1686 _moverIzq2::
+                           1687 ;src/jugador/jugador.c:529: if(prota.x > 0)
+   07BB 01r04r00      [10] 1688 	ld	bc,#_prota+0
+   07BE 0A            [ 7] 1689 	ld	a,(bc)
+   07BF B7            [ 4] 1690 	or	a, a
+   07C0 28 09         [12] 1691 	jr	Z,00104$
+                           1692 ;src/jugador/jugador.c:531: prota.x--;
+   07C2 C6 FF         [ 7] 1693 	add	a,#0xFF
+   07C4 02            [ 7] 1694 	ld	(bc),a
+                           1695 ;src/jugador/jugador.c:532: prota.mira = M_izquierda;
+   07C5 21r0Dr00      [10] 1696 	ld	hl,#(_prota + 0x0009)
+   07C8 36 01         [10] 1697 	ld	(hl),#0x01
+   07CA C9            [10] 1698 	ret
+   07CB                    1699 00104$:
+                           1700 ;src/jugador/jugador.c:536: if(map!=g_map1)
+   07CB 3Ar00r00      [13] 1701 	ld	a,(#_map + 0)
+   07CE D6r00         [ 7] 1702 	sub	a, #<(_g_map1)
+   07D0 C2r17r02      [10] 1703 	jp	NZ,_retrocederMapa
+   07D3 3Ar01r00      [13] 1704 	ld	a,(#_map + 1)
+   07D6 D6s00         [ 7] 1705 	sub	a, #>(_g_map1)
+   07D8 C8            [11] 1706 	ret	Z
+                           1707 ;src/jugador/jugador.c:538: retrocederMapa();
+   07D9 C3r17r02      [10] 1708 	jp  _retrocederMapa
+                           1709 ;src/jugador/jugador.c:543: void moverDer2()
+                           1710 ;	---------------------------------
+                           1711 ; Function moverDer2
+                           1712 ; ---------------------------------
+   07DC                    1713 _moverDer2::
+                           1714 ;src/jugador/jugador.c:546: if (prota.x + G_PERSONAJE_00_W < ANCHO_PANTALLA) 
+   07DC 21r04r00      [10] 1715 	ld	hl, #_prota + 0
+   07DF 4E            [ 7] 1716 	ld	c,(hl)
+   07E0 59            [ 4] 1717 	ld	e,c
+   07E1 16 00         [ 7] 1718 	ld	d,#0x00
+   07E3 21 10 00      [10] 1719 	ld	hl,#0x0010
+   07E6 19            [11] 1720 	add	hl,de
+   07E7 11 50 80      [10] 1721 	ld	de, #0x8050
+   07EA 29            [11] 1722 	add	hl, hl
+   07EB 3F            [ 4] 1723 	ccf
+   07EC CB 1C         [ 8] 1724 	rr	h
+   07EE CB 1D         [ 8] 1725 	rr	l
+   07F0 ED 52         [15] 1726 	sbc	hl, de
+   07F2 D2rD2r01      [10] 1727 	jp	NC,_avanzarMapa
+                           1728 ;src/jugador/jugador.c:548: prota.x++;
+   07F5 0C            [ 4] 1729 	inc	c
+   07F6 21r04r00      [10] 1730 	ld	hl,#_prota
+   07F9 71            [ 7] 1731 	ld	(hl),c
+                           1732 ;src/jugador/jugador.c:549: prota.mira = M_derecha;
+   07FA 21r0Dr00      [10] 1733 	ld	hl,#(_prota + 0x0009)
+   07FD 36 00         [10] 1734 	ld	(hl),#0x00
+   07FF C9            [10] 1735 	ret
+                           1736 ;src/jugador/jugador.c:552: avanzarMapa();
+   0800 C3rD2r01      [10] 1737 	jp  _avanzarMapa
+                           1738 ;src/jugador/jugador.c:557: void ante_salto()
+                           1739 ;	---------------------------------
+                           1740 ; Function ante_salto
+                           1741 ; ---------------------------------
+   0803                    1742 _ante_salto::
+                           1743 ;src/jugador/jugador.c:559: while (++prota.nframe == 4*4)
+   0803                    1744 00101$:
+   0803 01r0Er00      [10] 1745 	ld	bc,#_prota+10
+   0806 0A            [ 7] 1746 	ld	a,(bc)
+   0807 3C            [ 4] 1747 	inc	a
+   0808 02            [ 7] 1748 	ld	(bc),a
+   0809 D6 10         [ 7] 1749 	sub	a, #0x10
+   080B C0            [11] 1750 	ret	NZ
+                           1751 ;src/jugador/jugador.c:560: ini_salto();
+   080C CDr08r03      [17] 1752 	call	_ini_salto
+   080F 18 F2         [12] 1753 	jr	00101$
+                           1754 ;src/jugador/jugador.c:565: void saltar()
+                           1755 ;	---------------------------------
+                           1756 ; Function saltar
+                           1757 ; ---------------------------------
+   0811                    1758 _saltar::
+                           1759 ;src/jugador/jugador.c:568: u8 k = compruebaTeclas(keys, 1);
+   0811 3E 01         [ 7] 1760 	ld	a,#0x01
+   0813 F5            [11] 1761 	push	af
+   0814 33            [ 6] 1762 	inc	sp
+   0815 21r35r08      [10] 1763 	ld	hl,#_saltar_keys_1_188
+   0818 E5            [11] 1764 	push	hl
+   0819 CDrB3r04      [17] 1765 	call	_compruebaTeclas
+   081C F1            [10] 1766 	pop	af
+   081D 33            [ 6] 1767 	inc	sp
+                           1768 ;src/jugador/jugador.c:569: switch(k) {
+   081E 7D            [ 4] 1769 	ld	a,l
+   081F B7            [ 4] 1770 	or	a, a
+   0820 28 05         [12] 1771 	jr	Z,00101$
+   0822 2D            [ 4] 1772 	dec	l
+   0823 28 07         [12] 1773 	jr	Z,00102$
+   0825 18 08         [12] 1774 	jr	00103$
+                           1775 ;src/jugador/jugador.c:570: case 0: ini_quieto(); break; 
+   0827                    1776 00101$:
+   0827 CDr35r03      [17] 1777 	call	_ini_quieto
+   082A 18 03         [12] 1778 	jr	00103$
+                           1779 ;src/jugador/jugador.c:571: case 1: ante_salto(); break;
+   082C                    1780 00102$:
+   082C CDr03r08      [17] 1781 	call	_ante_salto
+                           1782 ;src/jugador/jugador.c:572: }
+   082F                    1783 00103$:
+                           1784 ;src/jugador/jugador.c:573: prota.mover = SI;
+   082F 21r0Ar00      [10] 1785 	ld	hl,#(_prota + 0x0006)
+   0832 36 01         [10] 1786 	ld	(hl),#0x01
+   0834 C9            [10] 1787 	ret
+   0835                    1788 _saltar_keys_1_188:
+   0835 00 01              1789 	.dw #0x0100
+                           1790 ;src/jugador/jugador.c:579: void andar()
+                           1791 ;	---------------------------------
+                           1792 ; Function andar
+                           1793 ; ---------------------------------
+   0837                    1794 _andar::
+                           1795 ;src/jugador/jugador.c:582: u8 k = compruebaTeclas(keys, 3);
+   0837 3E 03         [ 7] 1796 	ld	a,#0x03
+   0839 F5            [11] 1797 	push	af
+   083A 33            [ 6] 1798 	inc	sp
+   083B 21r89r08      [10] 1799 	ld	hl,#_andar_keys_1_190
+   083E E5            [11] 1800 	push	hl
+   083F CDrB3r04      [17] 1801 	call	_compruebaTeclas
+   0842 F1            [10] 1802 	pop	af
+   0843 33            [ 6] 1803 	inc	sp
+   0844 5D            [ 4] 1804 	ld	e,l
+                           1805 ;src/jugador/jugador.c:583: switch(k) {
+   0845 3E 03         [ 7] 1806 	ld	a,#0x03
+   0847 93            [ 4] 1807 	sub	a, e
+   0848 38 31         [12] 1808 	jr	C,00105$
+   084A 16 00         [ 7] 1809 	ld	d,#0x00
+   084C 21r52r08      [10] 1810 	ld	hl,#00118$
+   084F 19            [11] 1811 	add	hl,de
+   0850 19            [11] 1812 	add	hl,de
+                           1813 ;src/jugador/jugador.c:584: case 0:  ini_quieto();   break;
+   0851 E9            [ 4] 1814 	jp	(hl)
+   0852                    1815 00118$:
+   0852 18 06         [12] 1816 	jr	00101$
+   0854 18 09         [12] 1817 	jr	00102$
+   0856 18 0C         [12] 1818 	jr	00103$
+   0858 18 16         [12] 1819 	jr	00104$
+   085A                    1820 00101$:
+   085A CDr35r03      [17] 1821 	call	_ini_quieto
+   085D 18 1C         [12] 1822 	jr	00105$
+                           1823 ;src/jugador/jugador.c:585: case 1:  saltar(); break;
+   085F                    1824 00102$:
+   085F CDr11r08      [17] 1825 	call	_saltar
+   0862 18 17         [12] 1826 	jr	00105$
+                           1827 ;src/jugador/jugador.c:586: case 2: moverDerecha();   andar_ani(M_derecha);  break;
+   0864                    1828 00103$:
+   0864 CDr18r07      [17] 1829 	call	_moverDerecha
+   0867 AF            [ 4] 1830 	xor	a, a
+   0868 F5            [11] 1831 	push	af
+   0869 33            [ 6] 1832 	inc	sp
+   086A CDr6Cr06      [17] 1833 	call	_andar_ani
+   086D 33            [ 6] 1834 	inc	sp
+   086E 18 0B         [12] 1835 	jr	00105$
+                           1836 ;src/jugador/jugador.c:587: case 3: moverIzquierda(); andar_ani(M_izquierda); break;
+   0870                    1837 00104$:
+   0870 CDr85r06      [17] 1838 	call	_moverIzquierda
+   0873 3E 01         [ 7] 1839 	ld	a,#0x01
+   0875 F5            [11] 1840 	push	af
+   0876 33            [ 6] 1841 	inc	sp
+   0877 CDr6Cr06      [17] 1842 	call	_andar_ani
+   087A 33            [ 6] 1843 	inc	sp
+                           1844 ;src/jugador/jugador.c:588: }
+   087B                    1845 00105$:
+                           1846 ;src/jugador/jugador.c:589: prota.mover=SI;
+   087B 21r0Ar00      [10] 1847 	ld	hl,#(_prota + 0x0006)
+   087E 36 01         [10] 1848 	ld	(hl),#0x01
+                           1849 ;src/jugador/jugador.c:590: if (!sobreSuelo())
+   0880 CDr70r03      [17] 1850 	call	_sobreSuelo
+   0883 7D            [ 4] 1851 	ld	a,l
+   0884 B7            [ 4] 1852 	or	a, a
+   0885 C0            [11] 1853 	ret	NZ
+                           1854 ;src/jugador/jugador.c:591: cayendo_entrar();
+   0886 C3r58r03      [10] 1855 	jp  _cayendo_entrar
+   0889                    1856 _andar_keys_1_190:
+   0889 00 01              1857 	.dw #0x0100
+   088B 00 02              1858 	.dw #0x0200
+   088D 01 01              1859 	.dw #0x0101
+                           1860 ;src/jugador/jugador.c:597: void cambiarEstado()
+                           1861 ;	---------------------------------
+                           1862 ; Function cambiarEstado
+                           1863 ; ---------------------------------
+   088F                    1864 _cambiarEstado::
+                           1865 ;src/jugador/jugador.c:599: switch(prota.estado) {
+   088F 21r0Fr00      [10] 1866 	ld	hl, #(_prota + 0x000b) + 0
+   0892 5E            [ 7] 1867 	ld	e,(hl)
+   0893 3E 06         [ 7] 1868 	ld	a,#0x06
+   0895 93            [ 4] 1869 	sub	a, e
+   0896 D8            [11] 1870 	ret	C
+   0897 16 00         [ 7] 1871 	ld	d,#0x00
+   0899 21r9Fr08      [10] 1872 	ld	hl,#00115$
+   089C 19            [11] 1873 	add	hl,de
+   089D 19            [11] 1874 	add	hl,de
+                           1875 ;src/jugador/jugador.c:600: case ST_quieto:      estatico();      break;
+   089E E9            [ 4] 1876 	jp	(hl)
+   089F                    1877 00115$:
+   089F 18 0C         [12] 1878 	jr	00101$
+   08A1 18 0D         [12] 1879 	jr	00102$
+   08A3 18 0E         [12] 1880 	jr	00103$
+   08A5 18 0F         [12] 1881 	jr	00104$
+   08A7 18 13         [12] 1882 	jr	00106$
+   08A9 18 14         [12] 1883 	jr	00107$
+   08AB 18 0C         [12] 1884 	jr	00105$
+   08AD                    1885 00101$:
+   08AD C3r5Er04      [10] 1886 	jp  _estatico
+                           1887 ;src/jugador/jugador.c:601: case ST_andando:  andar(); break;
+   08B0                    1888 00102$:
+   08B0 C3r37r08      [10] 1889 	jp  _andar
+                           1890 ;src/jugador/jugador.c:602: case ST_salto:   saltar();   break;
+   08B3                    1891 00103$:
+   08B3 C3r11r08      [10] 1892 	jp  _saltar
+                           1893 ;src/jugador/jugador.c:603: case ST_saltando: saltando(); break;
+   08B6                    1894 00104$:
+   08B6 C3rC6r05      [10] 1895 	jp  _saltando
+                           1896 ;src/jugador/jugador.c:604: case ST_sal_salto: finsalto(); break;
+   08B9                    1897 00105$:
+   08B9 C3r29r06      [10] 1898 	jp  _finsalto
+                           1899 ;src/jugador/jugador.c:605: case ST_cayendo:     cayendo();     break;
+   08BC                    1900 00106$:
+   08BC C3r51r05      [10] 1901 	jp  _cayendo
+                           1902 ;src/jugador/jugador.c:606: case ST_caer: caer(); break;  
+   08BF                    1903 00107$:
+                           1904 ;src/jugador/jugador.c:607: }
+   08BF C3r50r03      [10] 1905 	jp  _caer
+                           1906 ;src/jugador/jugador.c:610: void imprimeHUD()
+                           1907 ;	---------------------------------
+                           1908 ; Function imprimeHUD
+                           1909 ; ---------------------------------
+   08C2                    1910 _imprimeHUD::
+   08C2 DD E5         [15] 1911 	push	ix
+   08C4 DD 21 00 00   [14] 1912 	ld	ix,#0
+   08C8 DD 39         [15] 1913 	add	ix,sp
+   08CA F5            [11] 1914 	push	af
+                           1915 ;src/jugador/jugador.c:613: cpct_drawStringM0 ("Balas:", POS_MUNI, 4, 0);
+   08CB 21 00 00      [10] 1916 	ld	hl,#0x0000
+   08CE E5            [11] 1917 	push	hl
+   08CF 26 C0         [ 7] 1918 	ld	h, #0xC0
+   08D1 E5            [11] 1919 	push	hl
+   08D2 CDr00r00      [17] 1920 	call	_cpct_getScreenPtr
+   08D5 4D            [ 4] 1921 	ld	c,l
+   08D6 44            [ 4] 1922 	ld	b,h
+   08D7 21 04 00      [10] 1923 	ld	hl,#0x0004
+   08DA E5            [11] 1924 	push	hl
+   08DB C5            [11] 1925 	push	bc
+   08DC 21r74r09      [10] 1926 	ld	hl,#___str_2
+   08DF E5            [11] 1927 	push	hl
+   08E0 CDr00r00      [17] 1928 	call	_cpct_drawStringM0
+   08E3 21 06 00      [10] 1929 	ld	hl,#6
+   08E6 39            [11] 1930 	add	hl,sp
+   08E7 F9            [ 6] 1931 	ld	sp,hl
+                           1932 ;src/jugador/jugador.c:614: cpct_drawStringM0 ("Vidas:", POS_VIDA, 4, 0);
+   08E8 21 00 0A      [10] 1933 	ld	hl,#0x0A00
+   08EB E5            [11] 1934 	push	hl
+   08EC 26 C0         [ 7] 1935 	ld	h, #0xC0
+   08EE E5            [11] 1936 	push	hl
+   08EF CDr00r00      [17] 1937 	call	_cpct_getScreenPtr
+   08F2 4D            [ 4] 1938 	ld	c,l
+   08F3 44            [ 4] 1939 	ld	b,h
+   08F4 21 04 00      [10] 1940 	ld	hl,#0x0004
+   08F7 E5            [11] 1941 	push	hl
+   08F8 C5            [11] 1942 	push	bc
+   08F9 21r7Br09      [10] 1943 	ld	hl,#___str_3
+   08FC E5            [11] 1944 	push	hl
+   08FD CDr00r00      [17] 1945 	call	_cpct_drawStringM0
+   0900 21 06 00      [10] 1946 	ld	hl,#6
+   0903 39            [11] 1947 	add	hl,sp
+   0904 F9            [ 6] 1948 	ld	sp,hl
+                           1949 ;src/jugador/jugador.c:615: sprintf(str, "%u", cuchillo.municion);
+   0905 21r1Cr00      [10] 1950 	ld	hl,#_cuchillo+9
+   0908 5E            [ 7] 1951 	ld	e,(hl)
+   0909 16 00         [ 7] 1952 	ld	d,#0x00
+   090B 21 00 00      [10] 1953 	ld	hl,#0x0000
+   090E 39            [11] 1954 	add	hl,sp
+   090F E5            [11] 1955 	push	hl
+   0910 D5            [11] 1956 	push	de
+   0911 11r82r09      [10] 1957 	ld	de,#___str_4
+   0914 D5            [11] 1958 	push	de
+   0915 E5            [11] 1959 	push	hl
+   0916 CDr00r00      [17] 1960 	call	_sprintf
+   0919 21 06 00      [10] 1961 	ld	hl,#6
+   091C 39            [11] 1962 	add	hl,sp
+   091D F9            [ 6] 1963 	ld	sp,hl
+   091E 21 19 00      [10] 1964 	ld	hl,#0x0019
+   0921 E5            [11] 1965 	push	hl
+   0922 21 00 C0      [10] 1966 	ld	hl,#0xC000
+   0925 E5            [11] 1967 	push	hl
+   0926 CDr00r00      [17] 1968 	call	_cpct_getScreenPtr
+   0929 C1            [10] 1969 	pop	bc
+   092A E5            [11] 1970 	push	hl
+   092B FD E1         [14] 1971 	pop	iy
+   092D 59            [ 4] 1972 	ld	e, c
+   092E 50            [ 4] 1973 	ld	d, b
+   092F C5            [11] 1974 	push	bc
+   0930 21 04 00      [10] 1975 	ld	hl,#0x0004
+   0933 E5            [11] 1976 	push	hl
+   0934 FD E5         [15] 1977 	push	iy
+   0936 D5            [11] 1978 	push	de
+   0937 CDr00r00      [17] 1979 	call	_cpct_drawStringM0
+   093A 21 06 00      [10] 1980 	ld	hl,#6
+   093D 39            [11] 1981 	add	hl,sp
+   093E F9            [ 6] 1982 	ld	sp,hl
+   093F C1            [10] 1983 	pop	bc
+                           1984 ;src/jugador/jugador.c:617: sprintf(str, "%u", 1);
+   0940 59            [ 4] 1985 	ld	e, c
+   0941 50            [ 4] 1986 	ld	d, b
+   0942 C5            [11] 1987 	push	bc
+   0943 21 01 00      [10] 1988 	ld	hl,#0x0001
+   0946 E5            [11] 1989 	push	hl
+   0947 21r82r09      [10] 1990 	ld	hl,#___str_4
+   094A E5            [11] 1991 	push	hl
+   094B D5            [11] 1992 	push	de
+   094C CDr00r00      [17] 1993 	call	_sprintf
+   094F 21 06 00      [10] 1994 	ld	hl,#6
+   0952 39            [11] 1995 	add	hl,sp
+   0953 F9            [ 6] 1996 	ld	sp,hl
+   0954 21 19 0A      [10] 1997 	ld	hl,#0x0A19
+   0957 E5            [11] 1998 	push	hl
+   0958 21 00 C0      [10] 1999 	ld	hl,#0xC000
+   095B E5            [11] 2000 	push	hl
+   095C CDr00r00      [17] 2001 	call	_cpct_getScreenPtr
+   095F EB            [ 4] 2002 	ex	de,hl
+   0960 C1            [10] 2003 	pop	bc
+   0961 21 04 00      [10] 2004 	ld	hl,#0x0004
+   0964 E5            [11] 2005 	push	hl
+   0965 D5            [11] 2006 	push	de
+   0966 C5            [11] 2007 	push	bc
+   0967 CDr00r00      [17] 2008 	call	_cpct_drawStringM0
+   096A 21 06 00      [10] 2009 	ld	hl,#6
+   096D 39            [11] 2010 	add	hl,sp
+   096E F9            [ 6] 2011 	ld	sp,hl
+   096F DD F9         [10] 2012 	ld	sp, ix
+   0971 DD E1         [14] 2013 	pop	ix
+   0973 C9            [10] 2014 	ret
+   0974                    2015 ___str_2:
+   0974 42 61 6C 61 73 3A  2016 	.ascii "Balas:"
+   097A 00                 2017 	.db 0x00
+   097B                    2018 ___str_3:
+   097B 56 69 64 61 73 3A  2019 	.ascii "Vidas:"
+   0981 00                 2020 	.db 0x00
+   0982                    2021 ___str_4:
+   0982 25 75              2022 	.ascii "%u"
+   0984 00                 2023 	.db 0x00
+                           2024 ;src/jugador/jugador.c:622: void restaVida()
+                           2025 ;	---------------------------------
+                           2026 ; Function restaVida
+                           2027 ; ---------------------------------
+   0985                    2028 _restaVida::
+                           2029 ;src/jugador/jugador.c:625: prota.vida--;
+   0985 01r11r00      [10] 2030 	ld	bc,#_prota+13
+   0988 0A            [ 7] 2031 	ld	a,(bc)
+   0989 C6 FF         [ 7] 2032 	add	a,#0xFF
+   098B 02            [ 7] 2033 	ld	(bc),a
+   098C C9            [10] 2034 	ret
+                           2035 ;src/jugador/jugador.c:631: void inicializar_cuchillo(u8* mapacuchi)
+                           2036 ;	---------------------------------
+                           2037 ; Function inicializar_cuchillo
+                           2038 ; ---------------------------------
+   098D                    2039 _inicializar_cuchillo::
+   098D DD E5         [15] 2040 	push	ix
+   098F DD 21 00 00   [14] 2041 	ld	ix,#0
+   0993 DD 39         [15] 2042 	add	ix,sp
+                           2043 ;src/jugador/jugador.c:633: cuchillo.municion=10;
+   0995 21r1Cr00      [10] 2044 	ld	hl,#(_cuchillo + 0x0009)
+   0998 36 0A         [10] 2045 	ld	(hl),#0x0A
+                           2046 ;src/jugador/jugador.c:634: cuchillo.x =prota.x;
+   099A 3Ar04r00      [13] 2047 	ld	a, (#_prota + 0)
+   099D 32r13r00      [13] 2048 	ld	(#_cuchillo),a
+                           2049 ;src/jugador/jugador.c:635: cuchillo.y =prota.y;
+   09A0 01r14r00      [10] 2050 	ld	bc,#_cuchillo + 1
+   09A3 3Ar05r00      [13] 2051 	ld	a, (#(_prota + 0x0001) + 0)
+   09A6 02            [ 7] 2052 	ld	(bc),a
+                           2053 ;src/jugador/jugador.c:636: cuchillo.sprite = g_cuchillo;
+   09A7 21r00r00      [10] 2054 	ld	hl,#_g_cuchillo
+   09AA 22r17r00      [16] 2055 	ld	((_cuchillo + 0x0004)), hl
+                           2056 ;src/jugador/jugador.c:637: cuchillo.mover = NO;
+   09AD 21r19r00      [10] 2057 	ld	hl,#(_cuchillo + 0x0006)
+   09B0 36 00         [10] 2058 	ld	(hl),#0x00
+                           2059 ;src/jugador/jugador.c:638: cuchillo.lanzandoDerecha = NO;
+   09B2 21r1Ar00      [10] 2060 	ld	hl,#(_cuchillo + 0x0007)
+   09B5 36 00         [10] 2061 	ld	(hl),#0x00
+                           2062 ;src/jugador/jugador.c:639: cuchillo.mira = M_derecha;
+   09B7 21r1Br00      [10] 2063 	ld	hl,#(_cuchillo + 0x0008)
+   09BA 36 00         [10] 2064 	ld	(hl),#0x00
+                           2065 ;src/jugador/jugador.c:640: mapaCU=mapacuchi;
+   09BC DD 6E 04      [19] 2066 	ld	l,4 (ix)
+   09BF DD 66 05      [19] 2067 	ld	h,5 (ix)
+   09C2 22r20r00      [16] 2068 	ld	(_mapaCU),hl
+   09C5 DD E1         [14] 2069 	pop	ix
+   09C7 C9            [10] 2070 	ret
+                           2071 ;src/jugador/jugador.c:647: void inicializar_jugador()
+                           2072 ;	---------------------------------
+                           2073 ; Function inicializar_jugador
+                           2074 ; ---------------------------------
+   09C8                    2075 _inicializar_jugador::
+                           2076 ;src/jugador/jugador.c:649: prota.x = prota.xp = 20;
+   09C8 21r06r00      [10] 2077 	ld	hl,#(_prota + 0x0002)
+   09CB 36 14         [10] 2078 	ld	(hl),#0x14
+   09CD 21r04r00      [10] 2079 	ld	hl,#_prota
+   09D0 36 14         [10] 2080 	ld	(hl),#0x14
+                           2081 ;src/jugador/jugador.c:650: prota.y = prota.yp = 156;
+   09D2 21r07r00      [10] 2082 	ld	hl,#(_prota + 0x0003)
+   09D5 36 9C         [10] 2083 	ld	(hl),#0x9C
+   09D7 21r05r00      [10] 2084 	ld	hl,#(_prota + 0x0001)
+   09DA 36 9C         [10] 2085 	ld	(hl),#0x9C
+                           2086 ;src/jugador/jugador.c:651: prota.mover=NO;
+   09DC 21r0Ar00      [10] 2087 	ld	hl,#(_prota + 0x0006)
+   09DF 36 00         [10] 2088 	ld	(hl),#0x00
+                           2089 ;src/jugador/jugador.c:652: prota.nframe=0;
+   09E1 21r0Er00      [10] 2090 	ld	hl,#(_prota + 0x000a)
+   09E4 36 00         [10] 2091 	ld	(hl),#0x00
+                           2092 ;src/jugador/jugador.c:653: prota.estado=ST_quieto;
+   09E6 21r0Fr00      [10] 2093 	ld	hl,#(_prota + 0x000b)
+   09E9 36 00         [10] 2094 	ld	(hl),#0x00
+                           2095 ;src/jugador/jugador.c:654: prota.mira=M_derecha;
+   09EB 21r0Dr00      [10] 2096 	ld	hl,#(_prota + 0x0009)
+   09EE 36 00         [10] 2097 	ld	(hl),#0x00
+                           2098 ;src/jugador/jugador.c:655: prota.frame  = &g_frames[0];
+   09F0 21r29r00      [10] 2099 	ld	hl,#_g_frames
+   09F3 22r0Br00      [16] 2100 	ld	((_prota + 0x0007)), hl
+                           2101 ;src/jugador/jugador.c:656: prota.vida=100;
+   09F6 21r11r00      [10] 2102 	ld	hl,#(_prota + 0x000d)
+   09F9 36 64         [10] 2103 	ld	(hl),#0x64
+                           2104 ;src/jugador/jugador.c:657: map = g_map1;
+   09FB 21r00r00      [10] 2105 	ld	hl,#_g_map1+0
+   09FE 22r00r00      [16] 2106 	ld	(_map),hl
+                           2107 ;src/jugador/jugador.c:658: num_mapa=0;
+   0A01 21r02r00      [10] 2108 	ld	hl,#_num_mapa + 0
+   0A04 36 00         [10] 2109 	ld	(hl), #0x00
+                           2110 ;src/jugador/jugador.c:659: dibujarMapa(map);
+   0A06 2Ar00r00      [16] 2111 	ld	hl,(_map)
+   0A09 E5            [11] 2112 	push	hl
+   0A0A CDr00r00      [17] 2113 	call	_dibujarMapa
+   0A0D F1            [10] 2114 	pop	af
+                           2115 ;src/jugador/jugador.c:660: dibujarProta();
+   0A0E CDr00r00      [17] 2116 	call	_dibujarProta
+                           2117 ;src/jugador/jugador.c:661: inicializar_cuchillo(map);
+   0A11 2Ar00r00      [16] 2118 	ld	hl,(_map)
+   0A14 E5            [11] 2119 	push	hl
+   0A15 CDr8Dr09      [17] 2120 	call	_inicializar_cuchillo
+   0A18 F1            [10] 2121 	pop	af
+                           2122 ;src/jugador/jugador.c:662: o=0;
+   0A19 21r22r00      [10] 2123 	ld	hl,#_o + 0
+   0A1C 36 00         [10] 2124 	ld	(hl), #0x00
+                           2125 ;src/jugador/jugador.c:663: q=0;
+   0A1E 21r03r00      [10] 2126 	ld	hl,#_q + 0
+   0A21 36 00         [10] 2127 	ld	(hl), #0x00
+                           2128 ;src/jugador/jugador.c:664: imprimeHUD();
+   0A23 C3rC2r08      [10] 2129 	jp  _imprimeHUD
+                           2130 ;src/jugador/jugador.c:668: void muerteCaida()
+                           2131 ;	---------------------------------
+                           2132 ; Function muerteCaida
+                           2133 ; ---------------------------------
+   0A26                    2134 _muerteCaida::
+   0A26 DD E5         [15] 2135 	push	ix
+   0A28 DD 21 00 00   [14] 2136 	ld	ix,#0
+   0A2C DD 39         [15] 2137 	add	ix,sp
+   0A2E 21 FA FF      [10] 2138 	ld	hl,#-6
+   0A31 39            [11] 2139 	add	hl,sp
+   0A32 F9            [ 6] 2140 	ld	sp,hl
+                           2141 ;src/jugador/jugador.c:670: if(prota.x<40)
+   0A33 21r04r00      [10] 2142 	ld	hl,#_prota+0
+   0A36 4E            [ 7] 2143 	ld	c,(hl)
+                           2144 ;src/jugador/jugador.c:676: cpct_etm_drawTileBox2x4(prota.xp / 2, (prota.yp-ORIGEN_MAPA_Y) / 4, w, h, 40, ORIGEN_MAPA, map);
+   0A37 2Ar00r00      [16] 2145 	ld	hl,(_map)
+   0A3A DD 75 FE      [19] 2146 	ld	-2 (ix),l
+   0A3D DD 74 FF      [19] 2147 	ld	-1 (ix),h
+                           2148 ;src/jugador/jugador.c:670: if(prota.x<40)
+   0A40 79            [ 4] 2149 	ld	a,c
+   0A41 D6 28         [ 7] 2150 	sub	a, #0x28
+   0A43 D2rD5r0A      [10] 2151 	jp	NC,00108$
+                           2152 ;src/jugador/jugador.c:672: if(prota.y<180&&prota.y>170)
+   0A46 21r05r00      [10] 2153 	ld	hl, #(_prota + 0x0001) + 0
+   0A49 4E            [ 7] 2154 	ld	c,(hl)
+   0A4A 79            [ 4] 2155 	ld	a,c
+   0A4B D6 B4         [ 7] 2156 	sub	a, #0xB4
+   0A4D D2r5Er0B      [10] 2157 	jp	NC,00110$
+   0A50 3E AA         [ 7] 2158 	ld	a,#0xAA
+   0A52 91            [ 4] 2159 	sub	a, c
+   0A53 D2r5Er0B      [10] 2160 	jp	NC,00110$
+                           2161 ;src/jugador/jugador.c:674: u8 w = 3 + (prota.xp & 1);
+   0A56 3Ar06r00      [13] 2162 	ld	a,(#(_prota + 0x0002) + 0)
+   0A59 DD 77 FC      [19] 2163 	ld	-4 (ix), a
+   0A5C E6 01         [ 7] 2164 	and	a, #0x01
+   0A5E C6 03         [ 7] 2165 	add	a, #0x03
+   0A60 DD 77 FA      [19] 2166 	ld	-6 (ix),a
+                           2167 ;src/jugador/jugador.c:675: u8 h = 8 + (prota.yp & 3 ? 1 : 0);
+   0A63 3Ar07r00      [13] 2168 	ld	a,(#(_prota + 0x0003) + 0)
+   0A66 DD 77 FD      [19] 2169 	ld	-3 (ix), a
+   0A69 E6 03         [ 7] 2170 	and	a, #0x03
+   0A6B 28 04         [12] 2171 	jr	Z,00112$
+   0A6D 3E 01         [ 7] 2172 	ld	a,#0x01
+   0A6F 18 02         [12] 2173 	jr	00113$
+   0A71                    2174 00112$:
+   0A71 3E 00         [ 7] 2175 	ld	a,#0x00
+   0A73                    2176 00113$:
+   0A73 C6 08         [ 7] 2177 	add	a, #0x08
+   0A75 DD 77 FB      [19] 2178 	ld	-5 (ix),a
+                           2179 ;src/jugador/jugador.c:676: cpct_etm_drawTileBox2x4(prota.xp / 2, (prota.yp-ORIGEN_MAPA_Y) / 4, w, h, 40, ORIGEN_MAPA, map);
+   0A78 DD 4E FD      [19] 2180 	ld	c,-3 (ix)
+   0A7B 06 00         [ 7] 2181 	ld	b,#0x00
+   0A7D 79            [ 4] 2182 	ld	a,c
+   0A7E C6 BC         [ 7] 2183 	add	a,#0xBC
+   0A80 5F            [ 4] 2184 	ld	e,a
+   0A81 78            [ 4] 2185 	ld	a,b
+   0A82 CE FF         [ 7] 2186 	adc	a,#0xFF
+   0A84 57            [ 4] 2187 	ld	d,a
+   0A85 6B            [ 4] 2188 	ld	l, e
+   0A86 62            [ 4] 2189 	ld	h, d
+   0A87 CB 7A         [ 8] 2190 	bit	7, d
+   0A89 28 04         [12] 2191 	jr	Z,00114$
+   0A8B 21 BF FF      [10] 2192 	ld	hl,#0xFFBF
+   0A8E 09            [11] 2193 	add	hl,bc
+   0A8F                    2194 00114$:
+   0A8F 55            [ 4] 2195 	ld	d,l
+   0A90 CB 2C         [ 8] 2196 	sra	h
+   0A92 CB 1A         [ 8] 2197 	rr	d
+   0A94 CB 2C         [ 8] 2198 	sra	h
+   0A96 CB 1A         [ 8] 2199 	rr	d
+   0A98 DD 46 FC      [19] 2200 	ld	b,-4 (ix)
+   0A9B CB 38         [ 8] 2201 	srl	b
+   0A9D DD 6E FE      [19] 2202 	ld	l,-2 (ix)
+   0AA0 DD 66 FF      [19] 2203 	ld	h,-1 (ix)
+   0AA3 E5            [11] 2204 	push	hl
+   0AA4 21 80 E2      [10] 2205 	ld	hl,#0xE280
+   0AA7 E5            [11] 2206 	push	hl
+   0AA8 3E 28         [ 7] 2207 	ld	a,#0x28
+   0AAA F5            [11] 2208 	push	af
+   0AAB 33            [ 6] 2209 	inc	sp
+   0AAC DD 7E FB      [19] 2210 	ld	a,-5 (ix)
+   0AAF F5            [11] 2211 	push	af
+   0AB0 33            [ 6] 2212 	inc	sp
+   0AB1 DD 7E FA      [19] 2213 	ld	a,-6 (ix)
+   0AB4 F5            [11] 2214 	push	af
+   0AB5 33            [ 6] 2215 	inc	sp
+   0AB6 D5            [11] 2216 	push	de
+   0AB7 33            [ 6] 2217 	inc	sp
+   0AB8 C5            [11] 2218 	push	bc
+   0AB9 33            [ 6] 2219 	inc	sp
+   0ABA CDr00r00      [17] 2220 	call	_cpct_etm_drawTileBox2x4
+                           2221 ;src/jugador/jugador.c:678: prota.x=prota.xp=prota.x-10;
+   0ABD 3Ar04r00      [13] 2222 	ld	a, (#_prota + 0)
+   0AC0 C6 F6         [ 7] 2223 	add	a,#0xF6
+   0AC2 32r06r00      [13] 2224 	ld	(#(_prota + 0x0002)),a
+   0AC5 32r04r00      [13] 2225 	ld	(#_prota),a
+                           2226 ;src/jugador/jugador.c:679: prota.y=prota.yp=156;
+   0AC8 21r07r00      [10] 2227 	ld	hl,#(_prota + 0x0003)
+   0ACB 36 9C         [10] 2228 	ld	(hl),#0x9C
+   0ACD 21r05r00      [10] 2229 	ld	hl,#(_prota + 0x0001)
+   0AD0 36 9C         [10] 2230 	ld	(hl),#0x9C
+   0AD2 C3r5Er0B      [10] 2231 	jp	00110$
+   0AD5                    2232 00108$:
+                           2233 ;src/jugador/jugador.c:684: if(prota.y<180&&prota.y>170)
+   0AD5 21r05r00      [10] 2234 	ld	hl, #(_prota + 0x0001) + 0
+   0AD8 4E            [ 7] 2235 	ld	c,(hl)
+   0AD9 79            [ 4] 2236 	ld	a,c
+   0ADA D6 B4         [ 7] 2237 	sub	a, #0xB4
+   0ADC D2r5Er0B      [10] 2238 	jp	NC,00110$
+   0ADF 3E AA         [ 7] 2239 	ld	a,#0xAA
+   0AE1 91            [ 4] 2240 	sub	a, c
+   0AE2 30 7A         [12] 2241 	jr	NC,00110$
+                           2242 ;src/jugador/jugador.c:686: u8 w = 3 + (prota.xp & 1);
+   0AE4 3Ar06r00      [13] 2243 	ld	a,(#(_prota + 0x0002) + 0)
+   0AE7 DD 77 FD      [19] 2244 	ld	-3 (ix), a
+   0AEA E6 01         [ 7] 2245 	and	a, #0x01
+   0AEC C6 03         [ 7] 2246 	add	a, #0x03
+   0AEE DD 77 FB      [19] 2247 	ld	-5 (ix),a
+                           2248 ;src/jugador/jugador.c:687: u8 h = 8 + (prota.yp & 3 ? 1 : 0);
+   0AF1 3Ar07r00      [13] 2249 	ld	a,(#(_prota + 0x0003) + 0)
+   0AF4 DD 77 FC      [19] 2250 	ld	-4 (ix), a
+   0AF7 E6 03         [ 7] 2251 	and	a, #0x03
+   0AF9 28 04         [12] 2252 	jr	Z,00115$
+   0AFB 3E 01         [ 7] 2253 	ld	a,#0x01
+   0AFD 18 02         [12] 2254 	jr	00116$
+   0AFF                    2255 00115$:
+   0AFF 3E 00         [ 7] 2256 	ld	a,#0x00
+   0B01                    2257 00116$:
+   0B01 C6 08         [ 7] 2258 	add	a, #0x08
+   0B03 DD 77 FA      [19] 2259 	ld	-6 (ix),a
+                           2260 ;src/jugador/jugador.c:688: cpct_etm_drawTileBox2x4(prota.xp / 2, (prota.yp-ORIGEN_MAPA_Y) / 4, w, h, 40, ORIGEN_MAPA, map);
+   0B06 DD 4E FC      [19] 2261 	ld	c,-4 (ix)
+   0B09 06 00         [ 7] 2262 	ld	b,#0x00
+   0B0B 79            [ 4] 2263 	ld	a,c
+   0B0C C6 BC         [ 7] 2264 	add	a,#0xBC
+   0B0E 5F            [ 4] 2265 	ld	e,a
+   0B0F 78            [ 4] 2266 	ld	a,b
+   0B10 CE FF         [ 7] 2267 	adc	a,#0xFF
+   0B12 57            [ 4] 2268 	ld	d,a
+   0B13 6B            [ 4] 2269 	ld	l, e
+   0B14 62            [ 4] 2270 	ld	h, d
+   0B15 CB 7A         [ 8] 2271 	bit	7, d
+   0B17 28 04         [12] 2272 	jr	Z,00117$
+   0B19 21 BF FF      [10] 2273 	ld	hl,#0xFFBF
+   0B1C 09            [11] 2274 	add	hl,bc
+   0B1D                    2275 00117$:
+   0B1D CB 2C         [ 8] 2276 	sra	h
+   0B1F CB 1D         [ 8] 2277 	rr	l
+   0B21 CB 2C         [ 8] 2278 	sra	h
+   0B23 CB 1D         [ 8] 2279 	rr	l
+   0B25 45            [ 4] 2280 	ld	b,l
+   0B26 DD 56 FD      [19] 2281 	ld	d,-3 (ix)
+   0B29 CB 3A         [ 8] 2282 	srl	d
+   0B2B DD 6E FE      [19] 2283 	ld	l,-2 (ix)
+   0B2E DD 66 FF      [19] 2284 	ld	h,-1 (ix)
+   0B31 E5            [11] 2285 	push	hl
+   0B32 21 80 E2      [10] 2286 	ld	hl,#0xE280
+   0B35 E5            [11] 2287 	push	hl
+   0B36 3E 28         [ 7] 2288 	ld	a,#0x28
+   0B38 F5            [11] 2289 	push	af
+   0B39 33            [ 6] 2290 	inc	sp
+   0B3A DD 7E FA      [19] 2291 	ld	a,-6 (ix)
+   0B3D F5            [11] 2292 	push	af
+   0B3E 33            [ 6] 2293 	inc	sp
+   0B3F DD 7E FB      [19] 2294 	ld	a,-5 (ix)
+   0B42 F5            [11] 2295 	push	af
+   0B43 33            [ 6] 2296 	inc	sp
+   0B44 4A            [ 4] 2297 	ld	c, d
+   0B45 C5            [11] 2298 	push	bc
+   0B46 CDr00r00      [17] 2299 	call	_cpct_etm_drawTileBox2x4
+                           2300 ;src/jugador/jugador.c:690: prota.x=prota.xp=prota.x-30;
+   0B49 3Ar04r00      [13] 2301 	ld	a, (#_prota + 0)
+   0B4C C6 E2         [ 7] 2302 	add	a,#0xE2
+   0B4E 32r06r00      [13] 2303 	ld	(#(_prota + 0x0002)),a
+   0B51 32r04r00      [13] 2304 	ld	(#_prota),a
+                           2305 ;src/jugador/jugador.c:691: prota.y=prota.yp=156;
+   0B54 21r07r00      [10] 2306 	ld	hl,#(_prota + 0x0003)
+   0B57 36 9C         [10] 2307 	ld	(hl),#0x9C
+   0B59 21r05r00      [10] 2308 	ld	hl,#(_prota + 0x0001)
+   0B5C 36 9C         [10] 2309 	ld	(hl),#0x9C
+   0B5E                    2310 00110$:
+   0B5E DD F9         [10] 2311 	ld	sp, ix
+   0B60 DD E1         [14] 2312 	pop	ix
+   0B62 C9            [10] 2313 	ret
+                           2314 ;src/jugador/jugador.c:697: u8 get_X()
+                           2315 ;	---------------------------------
+                           2316 ; Function get_X
+                           2317 ; ---------------------------------
+   0B63                    2318 _get_X::
+                           2319 ;src/jugador/jugador.c:699: return prota.x;
+   0B63 21r04r00      [10] 2320 	ld	hl, #_prota + 0
+   0B66 6E            [ 7] 2321 	ld	l,(hl)
+   0B67 C9            [10] 2322 	ret
+                           2323 ;src/jugador/jugador.c:702: u8 get_Y()
+                           2324 ;	---------------------------------
+                           2325 ; Function get_Y
+                           2326 ; ---------------------------------
+   0B68                    2327 _get_Y::
+                           2328 ;src/jugador/jugador.c:705: return prota.y;
+   0B68 21r05r00      [10] 2329 	ld	hl, #(_prota + 0x0001) + 0
+   0B6B 6E            [ 7] 2330 	ld	l,(hl)
+   0B6C C9            [10] 2331 	ret
+                           2332 ;src/jugador/jugador.c:709: u8 get_CX()
+                           2333 ;	---------------------------------
+                           2334 ; Function get_CX
+                           2335 ; ---------------------------------
+   0B6D                    2336 _get_CX::
+                           2337 ;src/jugador/jugador.c:711: return cuchillo.x;
+   0B6D 21r13r00      [10] 2338 	ld	hl, #_cuchillo + 0
+   0B70 6E            [ 7] 2339 	ld	l,(hl)
+   0B71 C9            [10] 2340 	ret
+                           2341 ;src/jugador/jugador.c:714: u8 get_CY()
+                           2342 ;	---------------------------------
+                           2343 ; Function get_CY
+                           2344 ; ---------------------------------
+   0B72                    2345 _get_CY::
+                           2346 ;src/jugador/jugador.c:717: return cuchillo.y;
+   0B72 21r14r00      [10] 2347 	ld	hl, #(_cuchillo + 0x0001) + 0
+   0B75 6E            [ 7] 2348 	ld	l,(hl)
+   0B76 C9            [10] 2349 	ret
+                           2350 ;src/jugador/jugador.c:720: u8 get_mapa()
+                           2351 ;	---------------------------------
+                           2352 ; Function get_mapa
+                           2353 ; ---------------------------------
+   0B77                    2354 _get_mapa::
+                           2355 ;src/jugador/jugador.c:722: return num_mapa;
+   0B77 FD 21r02r00   [14] 2356 	ld	iy,#_num_mapa
+   0B7B FD 6E 00      [19] 2357 	ld	l,0 (iy)
+   0B7E C9            [10] 2358 	ret
+                           2359 ;src/jugador/jugador.c:725: u8* get_tip_mapa()
+                           2360 ;	---------------------------------
+                           2361 ; Function get_tip_mapa
+                           2362 ; ---------------------------------
+   0B7F                    2363 _get_tip_mapa::
+                           2364 ;src/jugador/jugador.c:727: return map;
+   0B7F 2Ar00r00      [16] 2365 	ld	hl,(_map)
+   0B82 C9            [10] 2366 	ret
+                           2367 ;src/jugador/jugador.c:730: u8 get_vida()
+                           2368 ;	---------------------------------
+                           2369 ; Function get_vida
+                           2370 ; ---------------------------------
+   0B83                    2371 _get_vida::
+                           2372 ;src/jugador/jugador.c:732: return prota.vida;
+   0B83 21r11r00      [10] 2373 	ld	hl, #(_prota + 0x000d) + 0
+   0B86 6E            [ 7] 2374 	ld	l,(hl)
+   0B87 C9            [10] 2375 	ret
+                           2376 ;src/jugador/jugador.c:737: void ejecutar_jugador()
+                           2377 ;	---------------------------------
+                           2378 ; Function ejecutar_jugador
+                           2379 ; ---------------------------------
+   0B88                    2380 _ejecutar_jugador::
+                           2381 ;src/jugador/jugador.c:740: while(1) //bucle juego
+   0B88                    2382 00114$:
+                           2383 ;src/jugador/jugador.c:742: cambiarEstado();
+   0B88 CDr8Fr08      [17] 2384 	call	_cambiarEstado
+                           2385 ;src/jugador/jugador.c:744: o=fin();
+   0B8B CDr00r00      [17] 2386 	call	_fin
+   0B8E FD 21r22r00   [14] 2387 	ld	iy,#_o
+   0B92 FD 75 00      [19] 2388 	ld	0 (iy),l
+                           2389 ;src/jugador/jugador.c:745: if(o==1)
+   0B95 3Ar22r00      [13] 2390 	ld	a,(#_o + 0)
+   0B98 3D            [ 4] 2391 	dec	a
+   0B99 C8            [11] 2392 	ret	Z
+                           2393 ;src/jugador/jugador.c:750: q=muerteJug();
+   0B9A CDr00r00      [17] 2394 	call	_muerteJug
+   0B9D FD 21r03r00   [14] 2395 	ld	iy,#_q
+   0BA1 FD 75 00      [19] 2396 	ld	0 (iy),l
+                           2397 ;src/jugador/jugador.c:751: if(q==1)
+   0BA4 3Ar03r00      [13] 2398 	ld	a,(#_q + 0)
+   0BA7 3D            [ 4] 2399 	dec	a
+   0BA8 C8            [11] 2400 	ret	Z
+                           2401 ;src/jugador/jugador.c:756: if(prota.mover)
+   0BA9 3Ar0Ar00      [13] 2402 	ld	a, (#(_prota + 0x0006) + 0)
+   0BAC B7            [ 4] 2403 	or	a, a
+   0BAD 28 11         [12] 2404 	jr	Z,00106$
+                           2405 ;src/jugador/jugador.c:757: {	    muerteCaida();
+   0BAF CDr26r0A      [17] 2406 	call	_muerteCaida
+                           2407 ;src/jugador/jugador.c:758: selectSprite();
+   0BB2 CDrF3r04      [17] 2408 	call	_selectSprite
+                           2409 ;src/jugador/jugador.c:759: cpct_waitVSYNC(); 
+   0BB5 CDr00r00      [17] 2410 	call	_cpct_waitVSYNC
+                           2411 ;src/jugador/jugador.c:760: redibujarProta();
+   0BB8 CDr59r01      [17] 2412 	call	_redibujarProta
+                           2413 ;src/jugador/jugador.c:761: prota.mover=NO;
+   0BBB 21r0Ar00      [10] 2414 	ld	hl,#(_prota + 0x0006)
+   0BBE 36 00         [10] 2415 	ld	(hl),#0x00
+   0BC0                    2416 00106$:
+                           2417 ;src/jugador/jugador.c:764: if(cuchillo.mover){
+   0BC0 3Ar19r00      [13] 2418 	ld	a, (#(_cuchillo + 0x0006) + 0)
+   0BC3 B7            [ 4] 2419 	or	a, a
+   0BC4 28 15         [12] 2420 	jr	Z,00110$
+                           2421 ;src/jugador/jugador.c:766: moverCuchillo();
+   0BC6 CDr6Dr01      [17] 2422 	call	_moverCuchillo
+                           2423 ;src/jugador/jugador.c:768: cpct_waitVSYNC();
+   0BC9 CDr00r00      [17] 2424 	call	_cpct_waitVSYNC
+                           2425 ;src/jugador/jugador.c:769: redibujarCuchillo();
+   0BCC CDr5Br02      [17] 2426 	call	_redibujarCuchillo
+                           2427 ;src/jugador/jugador.c:770: imprimirMuni();
+   0BCF CDr8Er03      [17] 2428 	call	_imprimirMuni
+                           2429 ;src/jugador/jugador.c:771: if(!cuchillo.mover)
+   0BD2 3Ar19r00      [13] 2430 	ld	a, (#(_cuchillo + 0x0006) + 0)
+   0BD5 B7            [ 4] 2431 	or	a, a
+   0BD6 20 03         [12] 2432 	jr	NZ,00110$
+                           2433 ;src/jugador/jugador.c:772: borrarCuchillo();  
+   0BD8 CDrE7r00      [17] 2434 	call	_borrarCuchillo
+   0BDB                    2435 00110$:
+                           2436 ;src/jugador/jugador.c:774: mata_enemigo();
+   0BDB CDr00r00      [17] 2437 	call	_mata_enemigo
+                           2438 ;src/jugador/jugador.c:775: ini_estado();
+   0BDE CDr00r00      [17] 2439 	call	_ini_estado
+                           2440 ;src/jugador/jugador.c:777: if(prota.vida/5==0)
+   0BE1 21r11r00      [10] 2441 	ld	hl, #_prota + 13
+   0BE4 46            [ 7] 2442 	ld	b,(hl)
+   0BE5 3E 05         [ 7] 2443 	ld	a,#0x05
+   0BE7 F5            [11] 2444 	push	af
+   0BE8 33            [ 6] 2445 	inc	sp
+   0BE9 C5            [11] 2446 	push	bc
+   0BEA 33            [ 6] 2447 	inc	sp
+   0BEB CDr00r00      [17] 2448 	call	__divuchar
+   0BEE F1            [10] 2449 	pop	af
+   0BEF 7D            [ 4] 2450 	ld	a,l
+   0BF0 B7            [ 4] 2451 	or	a, a
+   0BF1 20 95         [12] 2452 	jr	NZ,00114$
+                           2453 ;src/jugador/jugador.c:779: imprimirVida();
+   0BF3 CDrCDr03      [17] 2454 	call	_imprimirVida
+   0BF6 18 90         [12] 2455 	jr	00114$
+                           2456 	.area _CODE
+                           2457 	.area _INITIALIZER
+                           2458 	.area _CABS (ABS)

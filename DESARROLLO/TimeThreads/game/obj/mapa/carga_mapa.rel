@@ -1,0 +1,37 @@
+XL2
+H 9 areas 8 global symbols
+M carga_mapa
+O -mz80
+S _cpct_etm_drawTileBox2x4 Ref0000
+S _cpct_etm_setTileset2x4 Ref0000
+S _g_map1 Ref0000
+S .__.ABS. Def0000
+S _g_tileset Ref0000
+A _CODE size 26 flags 0 addr 0
+S _inicializar_mapa Def0000
+S _dibujarMapa Def000F
+A _DATA size 2 flags 0 addr 0
+S _mapa Def0000
+A _INITIALIZED size 0 flags 0 addr 0
+A _DABS size 0 flags 8 addr 0
+A _HOME size 0 flags 0 addr 0
+A _GSINIT size 0 flags 0 addr 0
+A _GSFINAL size 0 flags 0 addr 0
+A _INITIALIZER size 0 flags 0 addr 0
+A _CABS size 0 flags 8 addr 0
+T 00 00
+R 00 00 01 00
+T 00 00
+R 00 00 01 00
+T 00 00
+R 00 00 00 00
+T 00 00 21 00 00 CD 00 00 21 00 00 22
+R 00 00 00 00 02 03 04 00 02 06 01 00 02 09 02 00
+T 0A 00 00 00 C3 0F 00
+R 00 00 00 00 00 02 01 00 00 05 00 00
+T 0F 00
+R 00 00 00 00
+T 0F 00 D1 C1 C5 D5 C5 21 80 E2 E5 21 21 28 E5 2E
+R 00 00 00 00
+T 1D 00 00 E5 AF F5 33 CD 00 00 C9
+R 00 00 00 00 02 08 00 00

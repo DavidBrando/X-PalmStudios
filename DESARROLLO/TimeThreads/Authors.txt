@@ -1,0 +1,38 @@
+AUTHORS: 
+Hector Medina Santamarina 
+Pablo Torregrosa Vera
+Samuel Navarro García
+
+
+Third Licenses: 
+For making the maps we used "Tiled"
+Link:http://www.mapeditor.org/ 
+
+We used CPCTelera as our game engine: 	Link: https://github.com/lronaldo/cpctelera
+Authors: 
+	*Project owner:
+		ronaldo / (Cheesetea, Fremos, ByteRealms)
+	*Awesome collaborators:
+		Augusto Ruiz / RetroWorks
+		Diego Freniche (@dfreniche)
+		Dardalorth / Fremos / Carlio
+		Fran Fernández / Pensando como Pollos (@ronsonmaria)
+		Stefano Beltran / ByteRealms
+		SunWay / Fremos / Carlio
+		Syx	
+	*Bitarrays idea and original implementation:
+		Alberto García García (Blitzman, albertgg93@gmail.com, @albertgarcia93)
+		Pablo Martínez González (pablo2093@gmail.com, @pablo_2093)
+	*Some original code and ideas for sprite drawing and firmware enabling/disabling:
+		Raúl Simarro (Artaburu / ESP Soft)
+	*Some makefile code and ideas:
+		Cpcitor
+	*Arkos player original code:
+		Targhan / Arkos
+	*Random number generation:
+		George Marsaglia
+	*Graphical assets:
+		José Manuel Íñiguez / Akaoni Studio
+		C-TOY
+		hassekf
+		SpinachChicken	

@@ -1,0 +1,160 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 1.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  2710 L
+    .__.ABS.                                                    =  0000 G
+    .__.CPU.                                                    =  0000 L
+    .__.H$L.                                                    =  0000 L
+  1 _EEstados                                                      0012 GR
+  1 _EMirar                                                        001F GR
+  1 _Jy                                                            0023 GR
+  9 ___str_0                                                       03C9 R
+  9 ___str_1                                                       0408 R
+  9 ___str_2                                                       0974 R
+  9 ___str_3                                                       097B R
+  9 ___str_4                                                       0982 R
+    __divuchar                                                     **** GX
+  8 _a                                                             0100 GR
+  9 _ajustarAlSuelo                                                0368 GR
+    _alive                                                         **** GX
+  9 _andar                                                         0837 GR
+  9 _andar_ani                                                     066C GR
+  9 _andar_keys_1_190                                              0889 R
+  9 _anim_andar                                                    004D GR
+  9 _anim_salto                                                    0057 GR
+  9 _ante_salto                                                    0803 GR
+  9 _ascender                                                      0596 GR
+  9 _asignarFrame                                                  02D2 GR
+  9 _atacar                                                        040C GR
+  9 _avanzarMapa                                                   01D2 GR
+  9 _borrarCuchillo                                                00E7 GR
+  9 _borrarProta                                                   0073 GR
+  9 _caer                                                          0350 GR
+  9 _cambiarEstado                                                 088F GR
+  9 _cayendo                                                       0551 GR
+  9 _cayendo_entrar                                                0358 GR
+  9 _cayendo_keys_1_154                                            0592 R
+  9 _compruebaTeclas                                               04B3 GR
+    _cpct_drawSpriteMaskedAlignedTable                             **** GX
+    _cpct_drawStringM0                                             **** GX
+    _cpct_etm_drawTileBox2x4                                       **** GX
+    _cpct_get2Bits                                                 **** GX
+    _cpct_getScreenPtr                                             **** GX
+    _cpct_hflipSpriteM0                                            **** GX
+    _cpct_isAnyKeyPressed                                          **** GX
+    _cpct_isKeyPressed                                             **** GX
+    _cpct_scanKeyboard_if                                          **** GX
+    _cpct_waitVSYNC                                                **** GX
+  1 _cuchillo                                                      0013 GR
+  9 _descender                                                     052A GR
+  9 _dibujarCuchillo                                               01AB GR
+    _dibujarMapa                                                   **** GX
+  9 _dibujarProta                                                  0000 GR
+  0 _dummy_cpct_transparentMaskTable0M0_container                  0000 GR
+  9 _ejecutar_jugador                                              0B88 GR
+  9 _estatico                                                      045E GR
+  9 _estatico_keys_1_141                                           04AB R
+    _fin                                                           **** GX
+  9 _finsalto                                                      0629 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+  9 _finsalto_keys_2_167                                           0668 R
+    _g_cuchillo                                                    **** GX
+  9 _g_frames                                                      0029 GR
+    _g_map1                                                        **** GX
+    _g_map2                                                        **** GX
+    _g_map3                                                        **** GX
+    _g_map4                                                        **** GX
+    _g_map5                                                        **** GX
+    _g_map6                                                        **** GX
+    _g_map7                                                        **** GX
+    _g_personaje_00                                                **** GX
+    _g_personaje_01                                                **** GX
+    _g_personaje_02                                                **** GX
+    _g_personaje_03                                                **** GX
+    _g_personaje_04                                                **** GX
+    _g_personaje_05                                                **** GX
+    _g_personaje_06                                                **** GX
+    _g_personaje_07                                                **** GX
+    _g_personaje_08                                                **** GX
+    _g_personaje_09                                                **** GX
+    _g_personaje_10                                                **** GX
+  9 _g_tablaSalto                                                  006D GR
+    _get_BX                                                        **** GX
+    _get_BY                                                        **** GX
+  9 _get_CX                                                        0B6D GR
+  9 _get_CY                                                        0B72 GR
+  9 _get_X                                                         0B63 GR
+  9 _get_Y                                                         0B68 GR
+  9 _get_mapa                                                      0B77 GR
+  9 _get_tip_mapa                                                  0B7F GR
+  9 _get_vida                                                      0B83 GR
+  9 _girarFrame                                                    02B0 GR
+  9 _imprimeHUD                                                    08C2 GR
+  9 _imprimirMuni                                                  038E GR
+  9 _imprimirVida                                                  03CD GR
+  9 _ini_andar                                                     0318 GR
+  9 _ini_caer                                                      0340 GR
+    _ini_estado                                                    **** GX
+  9 _ini_preSalto                                                  02F8 GR
+  9 _ini_quieto                                                    0335 GR
+  9 _ini_salto                                                     0308 GR
+  9 _inicializar_cuchillo                                          098D GR
+  9 _inicializar_jugador                                           09C8 GR
+  1 _map                                                           0000 GR
+  1 _mapaCU                                                        0020 GR
+  9 _mapas                                                         005F GR
+    _mata_enemigo                                                  **** GX
+  9 _moverCuchillo                                                 016D GR
+  9 _moverDer2                                                     07DC GR
+  9 _moverDerecha                                                  0718 GR
+  9 _moverIzq2                                                     07BB GR
+  9 _moverIzquierda                                                0685 GR
+  9 _muerteCaida                                                   0A26 GR
+    _muerteJug                                                     **** GX
+  1 _num_mapa                                                      0002 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+  1 _o                                                             0022 GR
+  9 _obtenerTilePtr                                                026F GR
+  1 _prota                                                         0004 GR
+  1 _q                                                             0003 GR
+  9 _redibujarCuchillo                                             025B GR
+  9 _redibujarProta                                                0159 GR
+  9 _restaVida                                                     0985 GR
+  9 _retrocederMapa                                                0217 GR
+  9 _saltando                                                      05C6 GR
+  9 _saltando_keys_2_160                                           0605 R
+  9 _saltar                                                        0811 GR
+  9 _saltar_ani                                                    0609 GR
+  9 _saltar_keys_1_188                                             0835 R
+  9 _selectSprite                                                  04F3 GR
+  9 _sobreSuelo                                                    0370 GR
+    _sprintf                                                       **** GX
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 4.
+Hexadecimal [16-Bits]
+
+Area Table
+
+   0 _CODE                                      size    0   flags    0
+   1 _DATA                                      size   24   flags    0
+   2 _INITIALIZED                               size    0   flags    0
+   3 _DABS                                      size    0   flags    8
+   4 _HOME                                      size    0   flags    0
+   5 _GSINIT                                    size    0   flags    0
+   6 _GSFINAL                                   size    0   flags    0
+   7 _a_                                        size    0   flags    8
+   8 _a_0                                       size  100   flags    8
+   9 _CSEG                                      size  BF8   flags    0
+   A _INITIALIZER                               size    0   flags    0
+   B _CABS                                      size    0   flags    8
+

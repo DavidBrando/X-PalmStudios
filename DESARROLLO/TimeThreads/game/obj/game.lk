@@ -1,0 +1,28 @@
+-mjwx
+-i obj/game.ihx
+-b _CODE = 0x4000
+-b _DATA = 0x0000
+-u
+-k /home/Hector/cpctelera/cpctelera/tools/sdcc-3.5.5/bin/../share/sdcc/lib/z80
+-k /home/Hector/cpctelera/cpctelera/tools/sdcc-3.5.5/share/sdcc/lib/z80
+-l /home/Hector/cpctelera/cpctelera/cpctelera.lib
+-l z80
+obj/mapa/map7.rel
+obj/mapa/map6.rel
+obj/mapa/map5.rel
+obj/mapa/map4.rel
+obj/mapa/map3.rel
+obj/mapa/map2.rel
+obj/mapa/map1.rel
+obj/jugador/personaje.rel
+obj/main.rel
+obj/enemigo/enemigo.rel
+obj/enemigo/borracho.rel
+obj/jugador/jugador.rel
+obj/jugador/cuchillo.rel
+obj/mapa/carga_mapa.rel
+obj/tiles/cinta.rel
+obj/tiles/async.rel
+obj/tiles/tiles.rel
+
+-e

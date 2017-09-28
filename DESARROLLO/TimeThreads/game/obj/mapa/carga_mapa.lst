@@ -1,0 +1,86 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.5.5 #9498 (CYGWIN)
+                              4 ;--------------------------------------------------------
+                              5 	.module carga_mapa
+                              6 	.optsdcc -mz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _cpct_etm_setTileset2x4
+                             12 	.globl _cpct_etm_drawTileBox2x4
+                             13 	.globl _mapa
+                             14 	.globl _inicializar_mapa
+                             15 	.globl _dibujarMapa
+                             16 ;--------------------------------------------------------
+                             17 ; special function registers
+                             18 ;--------------------------------------------------------
+                             19 ;--------------------------------------------------------
+                             20 ; ram data
+                             21 ;--------------------------------------------------------
+                             22 	.area _DATA
+   0000                      23 _mapa::
+   0000                      24 	.ds 2
+                             25 ;--------------------------------------------------------
+                             26 ; ram data
+                             27 ;--------------------------------------------------------
+                             28 	.area _INITIALIZED
+                             29 ;--------------------------------------------------------
+                             30 ; absolute external ram data
+                             31 ;--------------------------------------------------------
+                             32 	.area _DABS (ABS)
+                             33 ;--------------------------------------------------------
+                             34 ; global & static initialisations
+                             35 ;--------------------------------------------------------
+                             36 	.area _HOME
+                             37 	.area _GSINIT
+                             38 	.area _GSFINAL
+                             39 	.area _GSINIT
+                             40 ;--------------------------------------------------------
+                             41 ; Home
+                             42 ;--------------------------------------------------------
+                             43 	.area _HOME
+                             44 	.area _HOME
+                             45 ;--------------------------------------------------------
+                             46 ; code
+                             47 ;--------------------------------------------------------
+                             48 	.area _CODE
+                             49 ;src/mapa/carga_mapa.c:7: void inicializar_mapa()
+                             50 ;	---------------------------------
+                             51 ; Function inicializar_mapa
+                             52 ; ---------------------------------
+   0000                      53 _inicializar_mapa::
+                             54 ;src/mapa/carga_mapa.c:11: cpct_etm_setTileset2x4(g_tileset);
+   0000 21r00r00      [10]   55 	ld	hl,#_g_tileset
+   0003 CDr00r00      [17]   56 	call	_cpct_etm_setTileset2x4
+                             57 ;src/mapa/carga_mapa.c:12: mapa = g_map1;
+   0006 21r00r00      [10]   58 	ld	hl,#_g_map1+0
+   0009 22r00r00      [16]   59 	ld	(_mapa),hl
+                             60 ;src/mapa/carga_mapa.c:13: dibujarMapa();
+   000C C3r0Fr00      [10]   61 	jp  _dibujarMapa
+                             62 ;src/mapa/carga_mapa.c:16: void dibujarMapa(u8* map)
+                             63 ;	---------------------------------
+                             64 ; Function dibujarMapa
+                             65 ; ---------------------------------
+   000F                      66 _dibujarMapa::
+                             67 ;src/mapa/carga_mapa.c:18: cpct_etm_drawTilemap2x4 (g_map1_W, g_map1_H, ORIGEN_MAPA, map);
+   000F D1            [10]   68 	pop	de
+   0010 C1            [10]   69 	pop	bc
+   0011 C5            [11]   70 	push	bc
+   0012 D5            [11]   71 	push	de
+   0013 C5            [11]   72 	push	bc
+   0014 21 80 E2      [10]   73 	ld	hl,#0xE280
+   0017 E5            [11]   74 	push	hl
+   0018 21 21 28      [10]   75 	ld	hl,#0x2821
+   001B E5            [11]   76 	push	hl
+   001C 2E 00         [ 7]   77 	ld	l, #0x00
+   001E E5            [11]   78 	push	hl
+   001F AF            [ 4]   79 	xor	a, a
+   0020 F5            [11]   80 	push	af
+   0021 33            [ 6]   81 	inc	sp
+   0022 CDr00r00      [17]   82 	call	_cpct_etm_drawTileBox2x4
+   0025 C9            [10]   83 	ret
+                             84 	.area _CODE
+                             85 	.area _INITIALIZER
+                             86 	.area _CABS (ABS)

@@ -1,0 +1,1330 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.5.5 #9498 (CYGWIN)
+                              4 ;--------------------------------------------------------
+                              5 	.module enemigo
+                              6 	.optsdcc -mz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _alive
+                             12 	.globl _reviveIA
+                             13 	.globl _get_BY
+                             14 	.globl _wait4UserKeypress
+                             15 	.globl _quitar_vida
+                             16 	.globl _asignarFrame2
+                             17 	.globl _get_tip_mapa
+                             18 	.globl _get_CY
+                             19 	.globl _get_CX
+                             20 	.globl _get_Y
+                             21 	.globl _get_X
+                             22 	.globl _restaVida
+                             23 	.globl _dibujarProta
+                             24 	.globl _cpct_etm_drawTileBox2x4
+                             25 	.globl _cpct_restoreState_mxor_u8
+                             26 	.globl _cpct_setSeed_mxor
+                             27 	.globl _cpct_getRandom_mxor_u8
+                             28 	.globl _cpct_getScreenPtr
+                             29 	.globl _cpct_waitVSYNC
+                             30 	.globl _cpct_hflipSpriteM0
+                             31 	.globl _cpct_drawSpriteMaskedAlignedTable
+                             32 	.globl _cpct_isAnyKeyPressed
+                             33 	.globl _cpct_isKeyPressed
+                             34 	.globl _cpct_scanKeyboard_f
+                             35 	.globl _c
+                             36 	.globl _j
+                             37 	.globl _ENMirar
+                             38 	.globl _e
+                             39 	.globl _mapaJug
+                             40 	.globl _pmapa
+                             41 	.globl _borracho
+                             42 	.globl _anim_golpear
+                             43 	.globl _anim_andar2
+                             44 	.globl _g_Frames
+                             45 	.globl _girarFrame2
+                             46 	.globl _seleccionarSpriteBorracho
+                             47 	.globl _dibujarBorracho
+                             48 	.globl _borrarBorracho
+                             49 	.globl _redibujarBorracho
+                             50 	.globl _andar_ani2
+                             51 	.globl _golpear_ani2
+                             52 	.globl _ini_andar2
+                             53 	.globl _izquierda
+                             54 	.globl _derecha
+                             55 	.globl _golpear
+                             56 	.globl _quietoENE
+                             57 	.globl _mata_enemigo
+                             58 	.globl _get_BX
+                             59 	.globl _IA
+                             60 	.globl _BOestado
+                             61 	.globl _ini_estado
+                             62 	.globl _inicializar_borracho
+                             63 ;--------------------------------------------------------
+                             64 ; special function registers
+                             65 ;--------------------------------------------------------
+                             66 ;--------------------------------------------------------
+                             67 ; ram data
+                             68 ;--------------------------------------------------------
+                             69 	.area _DATA
+   0000                      70 _borracho::
+   0000                      71 	.ds 13
+   000D                      72 _pmapa::
+   000D                      73 	.ds 2
+   000F                      74 _mapaJug::
+   000F                      75 	.ds 2
+   0011                      76 _e::
+   0011                      77 	.ds 1
+   0012                      78 _ENMirar::
+   0012                      79 	.ds 1
+   0013                      80 _j::
+   0013                      81 	.ds 1
+   0014                      82 _c::
+   0014                      83 	.ds 4
+                             84 ;--------------------------------------------------------
+                             85 ; ram data
+                             86 ;--------------------------------------------------------
+                             87 	.area _INITIALIZED
+                             88 ;--------------------------------------------------------
+                             89 ; absolute external ram data
+                             90 ;--------------------------------------------------------
+                             91 	.area _DABS (ABS)
+                             92 ;--------------------------------------------------------
+                             93 ; global & static initialisations
+                             94 ;--------------------------------------------------------
+                             95 	.area _HOME
+                             96 	.area _GSINIT
+                             97 	.area _GSFINAL
+                             98 	.area _GSINIT
+                             99 ;--------------------------------------------------------
+                            100 ; Home
+                            101 ;--------------------------------------------------------
+                            102 	.area _HOME
+                            103 	.area _HOME
+                            104 ;--------------------------------------------------------
+                            105 ; code
+                            106 ;--------------------------------------------------------
+                            107 	.area _CODE
+                            108 ;src/enemigo/enemigo.c:50: void asignarFrame2(Tframe **animacion) {
+                            109 ;	---------------------------------
+                            110 ; Function asignarFrame2
+                            111 ; ---------------------------------
+   0000                     112 _asignarFrame2::
+   0000 DD E5         [15]  113 	push	ix
+   0002 DD 21 00 00   [14]  114 	ld	ix,#0
+   0006 DD 39         [15]  115 	add	ix,sp
+                            116 ;src/enemigo/enemigo.c:51: borracho.frame = animacion[borracho.nframe / ANIM_PAUSA];
+   0008 21r0Ar00      [10]  117 	ld	hl, #_borracho + 10
+   000B 6E            [ 7]  118 	ld	l,(hl)
+   000C CB 3D         [ 8]  119 	srl	l
+   000E CB 3D         [ 8]  120 	srl	l
+   0010 26 00         [ 7]  121 	ld	h,#0x00
+   0012 29            [11]  122 	add	hl, hl
+   0013 4D            [ 4]  123 	ld	c, l
+   0014 44            [ 4]  124 	ld	b, h
+   0015 DD 6E 04      [19]  125 	ld	l,4 (ix)
+   0018 DD 66 05      [19]  126 	ld	h,5 (ix)
+   001B 09            [11]  127 	add	hl,bc
+   001C 4E            [ 7]  128 	ld	c,(hl)
+   001D 23            [ 6]  129 	inc	hl
+   001E 46            [ 7]  130 	ld	b,(hl)
+   001F ED 43r08r00   [20]  131 	ld	((_borracho + 0x0008)), bc
+   0023 DD E1         [14]  132 	pop	ix
+   0025 C9            [10]  133 	ret
+   0026                     134 _g_Frames:
+   0026 00                  135 	.db #0x00	; 0
+   0027r00r00               136 	.dw _g_borracho_0
+   0029 00                  137 	.db #0x00	; 0
+   002Ar00r00               138 	.dw _g_borracho_1
+   002C 00                  139 	.db #0x00	; 0
+   002Dr00r00               140 	.dw _g_borracho_2
+   002F 00                  141 	.db #0x00	; 0
+   0030r00r00               142 	.dw _g_borracho_3
+   0032 00                  143 	.db #0x00	; 0
+   0033r00r00               144 	.dw _g_borracho_4
+   0035 00                  145 	.db #0x00	; 0
+   0036r00r00               146 	.dw _g_borracho_5
+   0038 00                  147 	.db #0x00	; 0
+   0039r00r00               148 	.dw _g_borracho_6
+   003B 00                  149 	.db #0x00	; 0
+   003Cr00r00               150 	.dw _g_borracho_7
+   003E 00                  151 	.db 0x00
+   003F 00                  152 	.db 0x00
+   0040 00                  153 	.db 0x00
+   0041 00                  154 	.db 0x00
+   0042 00                  155 	.db 0x00
+   0043 00                  156 	.db 0x00
+   0044 00                  157 	.db 0x00
+   0045 00                  158 	.db 0x00
+   0046 00                  159 	.db 0x00
+   0047 00                  160 	.db 0x00
+   0048 00                  161 	.db 0x00
+   0049 00                  162 	.db 0x00
+   004A 00                  163 	.db 0x00
+   004B 00                  164 	.db 0x00
+   004C 00                  165 	.db 0x00
+   004D 00                  166 	.db 0x00
+   004E 00                  167 	.db 0x00
+   004F 00                  168 	.db 0x00
+   0050 00                  169 	.db 0x00
+   0051 00                  170 	.db 0x00
+   0052 00                  171 	.db 0x00
+   0053 00                  172 	.db 0x00
+   0054 00                  173 	.db 0x00
+   0055 00                  174 	.db 0x00
+   0056                     175 _anim_andar2:
+   0056r29r00               176 	.dw (_g_Frames + 3)
+   0058r2Cr00               177 	.dw (_g_Frames + 6)
+   005Ar2Fr00               178 	.dw (_g_Frames + 9)
+   005Cr32r00               179 	.dw (_g_Frames + 12)
+   005Er35r00               180 	.dw (_g_Frames + 15)
+   0060                     181 _anim_golpear:
+   0060r3Br00               182 	.dw (_g_Frames + 21)
+   0062r38r00               183 	.dw (_g_Frames + 18)
+                            184 ;src/enemigo/enemigo.c:55: void girarFrame2() {
+                            185 ;	---------------------------------
+                            186 ; Function girarFrame2
+                            187 ; ---------------------------------
+   0064                     188 _girarFrame2::
+                            189 ;src/enemigo/enemigo.c:56: Tframe* f = borracho.frame;
+   0064 ED 4Br08r00   [20]  190 	ld	bc, (#_borracho + 8)
+                            191 ;src/enemigo/enemigo.c:57: if (f->mira != borracho.mira) {
+   0068 0A            [ 7]  192 	ld	a,(bc)
+   0069 5F            [ 4]  193 	ld	e,a
+   006A 21r0Br00      [10]  194 	ld	hl, #(_borracho + 0x000b) + 0
+   006D 56            [ 7]  195 	ld	d,(hl)
+   006E 7B            [ 4]  196 	ld	a,e
+   006F 92            [ 4]  197 	sub	a, d
+   0070 C8            [11]  198 	ret	Z
+                            199 ;src/enemigo/enemigo.c:58: cpct_hflipSpriteM0(G_BORRACHO_0_W, G_BORRACHO_0_H, f->sprite);
+   0071 69            [ 4]  200 	ld	l, c
+   0072 60            [ 4]  201 	ld	h, b
+   0073 23            [ 6]  202 	inc	hl
+   0074 5E            [ 7]  203 	ld	e,(hl)
+   0075 23            [ 6]  204 	inc	hl
+   0076 56            [ 7]  205 	ld	d,(hl)
+   0077 C5            [11]  206 	push	bc
+   0078 D5            [11]  207 	push	de
+   0079 21 08 1B      [10]  208 	ld	hl,#0x1B08
+   007C E5            [11]  209 	push	hl
+   007D CDr00r00      [17]  210 	call	_cpct_hflipSpriteM0
+   0080 C1            [10]  211 	pop	bc
+                            212 ;src/enemigo/enemigo.c:59: f->mira = borracho.mira;
+   0081 3Ar0Br00      [13]  213 	ld	a, (#(_borracho + 0x000b) + 0)
+   0084 02            [ 7]  214 	ld	(bc),a
+   0085 C9            [10]  215 	ret
+                            216 ;src/enemigo/enemigo.c:63: void seleccionarSpriteBorracho() {
+                            217 ;	---------------------------------
+                            218 ; Function seleccionarSpriteBorracho
+                            219 ; ---------------------------------
+   0086                     220 _seleccionarSpriteBorracho::
+                            221 ;src/enemigo/enemigo.c:64: switch(borracho.estado) {
+   0086 21r07r00      [10]  222 	ld	hl, #_borracho + 7
+   0089 5E            [ 7]  223 	ld	e,(hl)
+   008A 3E 02         [ 7]  224 	ld	a,#0x02
+   008C 93            [ 4]  225 	sub	a, e
+   008D DAr64r00      [10]  226 	jp	C,_girarFrame2
+   0090 16 00         [ 7]  227 	ld	d,#0x00
+   0092 21r98r00      [10]  228 	ld	hl,#00111$
+   0095 19            [11]  229 	add	hl,de
+   0096 19            [11]  230 	add	hl,de
+                            231 ;src/enemigo/enemigo.c:65: case 0:      { borracho.frame = &g_Frames[0];  break; }
+   0097 E9            [ 4]  232 	jp	(hl)
+   0098                     233 00111$:
+   0098 18 04         [12]  234 	jr	00101$
+   009A 18 0B         [12]  235 	jr	00102$
+   009C 18 14         [12]  236 	jr	00103$
+   009E                     237 00101$:
+   009E 21r26r00      [10]  238 	ld	hl,#_g_Frames
+   00A1 22r08r00      [16]  239 	ld	((_borracho + 0x0008)), hl
+   00A4 C3r64r00      [10]  240 	jp	_girarFrame2
+                            241 ;src/enemigo/enemigo.c:66: case 1:     { asignarFrame2(anim_andar2);    break; }
+   00A7                     242 00102$:
+   00A7 21r56r00      [10]  243 	ld	hl,#_anim_andar2
+   00AA E5            [11]  244 	push	hl
+   00AB CDr00r00      [17]  245 	call	_asignarFrame2
+   00AE F1            [10]  246 	pop	af
+   00AF C3r64r00      [10]  247 	jp	_girarFrame2
+                            248 ;src/enemigo/enemigo.c:67: case 2:		{ asignarFrame2(anim_golpear);   break; }
+   00B2                     249 00103$:
+   00B2 21r60r00      [10]  250 	ld	hl,#_anim_golpear
+   00B5 E5            [11]  251 	push	hl
+   00B6 CDr00r00      [17]  252 	call	_asignarFrame2
+   00B9 F1            [10]  253 	pop	af
+                            254 ;src/enemigo/enemigo.c:68: }
+                            255 ;src/enemigo/enemigo.c:69: girarFrame2();
+   00BA C3r64r00      [10]  256 	jp  _girarFrame2
+                            257 ;src/enemigo/enemigo.c:72: void dibujarBorracho()
+                            258 ;	---------------------------------
+                            259 ; Function dibujarBorracho
+                            260 ; ---------------------------------
+   00BD                     261 _dibujarBorracho::
+                            262 ;src/enemigo/enemigo.c:74: u8* punte = cpct_getScreenPtr(CPCT_VMEM_START, borracho.x, borracho.y);
+   00BD 21r01r00      [10]  263 	ld	hl, #_borracho + 1
+   00C0 56            [ 7]  264 	ld	d,(hl)
+   00C1 21r00r00      [10]  265 	ld	hl, #_borracho + 0
+   00C4 46            [ 7]  266 	ld	b,(hl)
+   00C5 D5            [11]  267 	push	de
+   00C6 33            [ 6]  268 	inc	sp
+   00C7 C5            [11]  269 	push	bc
+   00C8 33            [ 6]  270 	inc	sp
+   00C9 21 00 C0      [10]  271 	ld	hl,#0xC000
+   00CC E5            [11]  272 	push	hl
+   00CD CDr00r00      [17]  273 	call	_cpct_getScreenPtr
+   00D0 5D            [ 4]  274 	ld	e,l
+   00D1 54            [ 4]  275 	ld	d,h
+                            276 ;src/enemigo/enemigo.c:75: cpct_drawSpriteMaskedAlignedTable(borracho.frame->sprite, punte, G_BORRACHO_0_W, G_BORRACHO_0_H, a);
+   00D2 2Ar08r00      [16]  277 	ld	hl, (#_borracho + 8)
+   00D5 23            [ 6]  278 	inc	hl
+   00D6 4E            [ 7]  279 	ld	c,(hl)
+   00D7 23            [ 6]  280 	inc	hl
+   00D8 46            [ 7]  281 	ld	b,(hl)
+   00D9 21r00r00      [10]  282 	ld	hl,#_a
+   00DC E5            [11]  283 	push	hl
+   00DD 21 08 1B      [10]  284 	ld	hl,#0x1B08
+   00E0 E5            [11]  285 	push	hl
+   00E1 D5            [11]  286 	push	de
+   00E2 C5            [11]  287 	push	bc
+   00E3 CDr00r00      [17]  288 	call	_cpct_drawSpriteMaskedAlignedTable
+   00E6 C9            [10]  289 	ret
+                            290 ;src/enemigo/enemigo.c:78: void borrarBorracho() {
+                            291 ;	---------------------------------
+                            292 ; Function borrarBorracho
+                            293 ; ---------------------------------
+   00E7                     294 _borrarBorracho::
+   00E7 DD E5         [15]  295 	push	ix
+   00E9 DD 21 00 00   [14]  296 	ld	ix,#0
+   00ED DD 39         [15]  297 	add	ix,sp
+   00EF F5            [11]  298 	push	af
+   00F0 3B            [ 6]  299 	dec	sp
+                            300 ;src/enemigo/enemigo.c:79: u8 w = 4 + (borracho.px & 1);
+   00F1 21r02r00      [10]  301 	ld	hl, #_borracho + 2
+   00F4 4E            [ 7]  302 	ld	c,(hl)
+   00F5 79            [ 4]  303 	ld	a,c
+   00F6 E6 01         [ 7]  304 	and	a, #0x01
+   00F8 47            [ 4]  305 	ld	b,a
+   00F9 04            [ 4]  306 	inc	b
+   00FA 04            [ 4]  307 	inc	b
+   00FB 04            [ 4]  308 	inc	b
+   00FC 04            [ 4]  309 	inc	b
+                            310 ;src/enemigo/enemigo.c:80: u8 h = 7 + (borracho.py & 3 ? 1 : 0);
+   00FD 21r03r00      [10]  311 	ld	hl, #_borracho + 3
+   0100 5E            [ 7]  312 	ld	e,(hl)
+   0101 7B            [ 4]  313 	ld	a,e
+   0102 E6 03         [ 7]  314 	and	a, #0x03
+   0104 28 04         [12]  315 	jr	Z,00103$
+   0106 3E 01         [ 7]  316 	ld	a,#0x01
+   0108 18 02         [12]  317 	jr	00104$
+   010A                     318 00103$:
+   010A 3E 00         [ 7]  319 	ld	a,#0x00
+   010C                     320 00104$:
+   010C C6 07         [ 7]  321 	add	a, #0x07
+   010E DD 77 FD      [19]  322 	ld	-3 (ix),a
+                            323 ;src/enemigo/enemigo.c:81: cpct_etm_drawTileBox2x4(borracho.px / 2, (borracho.py-ORIGEN_MAPA_Y) / 4, w, h, 40, ORIGEN_MAPA, pmapa);
+   0111 FD 2Ar0Dr00   [20]  324 	ld	iy,(_pmapa)
+   0115 16 00         [ 7]  325 	ld	d,#0x00
+   0117 7B            [ 4]  326 	ld	a,e
+   0118 C6 BC         [ 7]  327 	add	a,#0xBC
+   011A DD 77 FE      [19]  328 	ld	-2 (ix),a
+   011D 7A            [ 4]  329 	ld	a,d
+   011E CE FF         [ 7]  330 	adc	a,#0xFF
+   0120 DD 77 FF      [19]  331 	ld	-1 (ix),a
+   0123 DD 6E FE      [19]  332 	ld	l,-2 (ix)
+   0126 DD 66 FF      [19]  333 	ld	h,-1 (ix)
+   0129 DD CB FF 7E   [20]  334 	bit	7, -1 (ix)
+   012D 28 04         [12]  335 	jr	Z,00105$
+   012F 21 BF FF      [10]  336 	ld	hl,#0xFFBF
+   0132 19            [11]  337 	add	hl,de
+   0133                     338 00105$:
+   0133 CB 2C         [ 8]  339 	sra	h
+   0135 CB 1D         [ 8]  340 	rr	l
+   0137 CB 2C         [ 8]  341 	sra	h
+   0139 CB 1D         [ 8]  342 	rr	l
+   013B 55            [ 4]  343 	ld	d,l
+   013C CB 39         [ 8]  344 	srl	c
+   013E FD E5         [15]  345 	push	iy
+   0140 21 80 E2      [10]  346 	ld	hl,#0xE280
+   0143 E5            [11]  347 	push	hl
+   0144 3E 28         [ 7]  348 	ld	a,#0x28
+   0146 F5            [11]  349 	push	af
+   0147 33            [ 6]  350 	inc	sp
+   0148 DD 7E FD      [19]  351 	ld	a,-3 (ix)
+   014B F5            [11]  352 	push	af
+   014C 33            [ 6]  353 	inc	sp
+   014D C5            [11]  354 	push	bc
+   014E 33            [ 6]  355 	inc	sp
+   014F D5            [11]  356 	push	de
+   0150 33            [ 6]  357 	inc	sp
+   0151 79            [ 4]  358 	ld	a,c
+   0152 F5            [11]  359 	push	af
+   0153 33            [ 6]  360 	inc	sp
+   0154 CDr00r00      [17]  361 	call	_cpct_etm_drawTileBox2x4
+   0157 DD F9         [10]  362 	ld	sp, ix
+   0159 DD E1         [14]  363 	pop	ix
+   015B C9            [10]  364 	ret
+                            365 ;src/enemigo/enemigo.c:85: void redibujarBorracho() {
+                            366 ;	---------------------------------
+                            367 ; Function redibujarBorracho
+                            368 ; ---------------------------------
+   015C                     369 _redibujarBorracho::
+                            370 ;src/enemigo/enemigo.c:86: borrarBorracho();
+   015C CDrE7r00      [17]  371 	call	_borrarBorracho
+                            372 ;src/enemigo/enemigo.c:87: borracho.px = borracho.x;
+   015F 01r02r00      [10]  373 	ld	bc,#_borracho + 2
+   0162 3Ar00r00      [13]  374 	ld	a, (#_borracho + 0)
+   0165 02            [ 7]  375 	ld	(bc),a
+                            376 ;src/enemigo/enemigo.c:88: borracho.py = borracho.y;
+   0166 01r03r00      [10]  377 	ld	bc,#_borracho + 3
+   0169 3Ar01r00      [13]  378 	ld	a, (#_borracho + 1)
+   016C 02            [ 7]  379 	ld	(bc),a
+                            380 ;src/enemigo/enemigo.c:89: dibujarBorracho();
+   016D C3rBDr00      [10]  381 	jp  _dibujarBorracho
+                            382 ;src/enemigo/enemigo.c:92: void andar_ani2(u8 direccion)
+                            383 ;	---------------------------------
+                            384 ; Function andar_ani2
+                            385 ; ---------------------------------
+   0170                     386 _andar_ani2::
+                            387 ;src/enemigo/enemigo.c:94: borracho.mira  = direccion;
+   0170 21r0Br00      [10]  388 	ld	hl,#(_borracho + 0x000b)
+   0173 FD 21 02 00   [14]  389 	ld	iy,#2
+   0177 FD 39         [15]  390 	add	iy,sp
+   0179 FD 7E 00      [19]  391 	ld	a,0 (iy)
+   017C 77            [ 7]  392 	ld	(hl),a
+                            393 ;src/enemigo/enemigo.c:95: if(++borracho.nframe == 5*4)
+   017D 01r0Ar00      [10]  394 	ld	bc,#_borracho + 10
+   0180 0A            [ 7]  395 	ld	a,(bc)
+   0181 3C            [ 4]  396 	inc	a
+   0182 02            [ 7]  397 	ld	(bc),a
+   0183 D6 14         [ 7]  398 	sub	a, #0x14
+   0185 C0            [11]  399 	ret	NZ
+                            400 ;src/enemigo/enemigo.c:96: borracho.nframe = 0;
+   0186 AF            [ 4]  401 	xor	a, a
+   0187 02            [ 7]  402 	ld	(bc),a
+   0188 C9            [10]  403 	ret
+                            404 ;src/enemigo/enemigo.c:99: void golpear_ani2(u8 direccion){
+                            405 ;	---------------------------------
+                            406 ; Function golpear_ani2
+                            407 ; ---------------------------------
+   0189                     408 _golpear_ani2::
+                            409 ;src/enemigo/enemigo.c:100: borracho.mira = direccion;
+   0189 21r0Br00      [10]  410 	ld	hl,#(_borracho + 0x000b)
+   018C FD 21 02 00   [14]  411 	ld	iy,#2
+   0190 FD 39         [15]  412 	add	iy,sp
+   0192 FD 7E 00      [19]  413 	ld	a,0 (iy)
+   0195 77            [ 7]  414 	ld	(hl),a
+                            415 ;src/enemigo/enemigo.c:101: if(++borracho.nframe == GOLPE_FRAMES*ANIM_PAUSA)
+   0196 01r0Ar00      [10]  416 	ld	bc,#_borracho + 10
+   0199 0A            [ 7]  417 	ld	a,(bc)
+   019A 3C            [ 4]  418 	inc	a
+   019B 02            [ 7]  419 	ld	(bc),a
+   019C D6 08         [ 7]  420 	sub	a, #0x08
+   019E C0            [11]  421 	ret	NZ
+                            422 ;src/enemigo/enemigo.c:102: borracho.nframe = 0;
+   019F AF            [ 4]  423 	xor	a, a
+   01A0 02            [ 7]  424 	ld	(bc),a
+   01A1 C9            [10]  425 	ret
+                            426 ;src/enemigo/enemigo.c:105: void ini_andar2(u8 direccion)
+                            427 ;	---------------------------------
+                            428 ; Function ini_andar2
+                            429 ; ---------------------------------
+   01A2                     430 _ini_andar2::
+                            431 ;src/enemigo/enemigo.c:107: borracho.nframe=0;
+   01A2 21r0Ar00      [10]  432 	ld	hl,#(_borracho + 0x000a)
+   01A5 36 00         [10]  433 	ld	(hl),#0x00
+                            434 ;src/enemigo/enemigo.c:108: borracho.estado=1;
+   01A7 21r07r00      [10]  435 	ld	hl,#(_borracho + 0x0007)
+   01AA 36 01         [10]  436 	ld	(hl),#0x01
+                            437 ;src/enemigo/enemigo.c:109: borracho.mira = direccion;
+   01AC 21r0Br00      [10]  438 	ld	hl,#(_borracho + 0x000b)
+   01AF FD 21 02 00   [14]  439 	ld	iy,#2
+   01B3 FD 39         [15]  440 	add	iy,sp
+   01B5 FD 7E 00      [19]  441 	ld	a,0 (iy)
+   01B8 77            [ 7]  442 	ld	(hl),a
+                            443 ;src/enemigo/enemigo.c:110: borracho.mover=SI;
+   01B9 21r06r00      [10]  444 	ld	hl,#(_borracho + 0x0006)
+   01BC 36 01         [10]  445 	ld	(hl),#0x01
+   01BE C9            [10]  446 	ret
+                            447 ;src/enemigo/enemigo.c:113: void izquierda()
+                            448 ;	---------------------------------
+                            449 ; Function izquierda
+                            450 ; ---------------------------------
+   01BF                     451 _izquierda::
+                            452 ;src/enemigo/enemigo.c:115: borracho.x--;
+   01BF 01r00r00      [10]  453 	ld	bc,#_borracho+0
+   01C2 0A            [ 7]  454 	ld	a,(bc)
+   01C3 C6 FF         [ 7]  455 	add	a,#0xFF
+   01C5 02            [ 7]  456 	ld	(bc),a
+                            457 ;src/enemigo/enemigo.c:116: andar_ani2(E_izquierda);
+   01C6 3E 01         [ 7]  458 	ld	a,#0x01
+   01C8 F5            [11]  459 	push	af
+   01C9 33            [ 6]  460 	inc	sp
+   01CA CDr70r01      [17]  461 	call	_andar_ani2
+   01CD 33            [ 6]  462 	inc	sp
+                            463 ;src/enemigo/enemigo.c:117: borracho.estado=1;
+   01CE 21r07r00      [10]  464 	ld	hl,#(_borracho + 0x0007)
+   01D1 36 01         [10]  465 	ld	(hl),#0x01
+                            466 ;src/enemigo/enemigo.c:119: borracho.mover=SI;
+   01D3 21r06r00      [10]  467 	ld	hl,#(_borracho + 0x0006)
+   01D6 36 01         [10]  468 	ld	(hl),#0x01
+                            469 ;src/enemigo/enemigo.c:121: if(borracho.mover){
+   01D8 3Ar06r00      [13]  470 	ld	a, (#(_borracho + 0x0006) + 0)
+   01DB B7            [ 4]  471 	or	a, a
+   01DC C8            [11]  472 	ret	Z
+                            473 ;src/enemigo/enemigo.c:123: seleccionarSpriteBorracho();
+   01DD CDr86r00      [17]  474 	call	_seleccionarSpriteBorracho
+                            475 ;src/enemigo/enemigo.c:124: cpct_waitVSYNC();
+   01E0 CDr00r00      [17]  476 	call	_cpct_waitVSYNC
+                            477 ;src/enemigo/enemigo.c:125: redibujarBorracho();
+   01E3 CDr5Cr01      [17]  478 	call	_redibujarBorracho
+                            479 ;src/enemigo/enemigo.c:126: borracho.mover = NO;
+   01E6 21r06r00      [10]  480 	ld	hl,#(_borracho + 0x0006)
+   01E9 36 00         [10]  481 	ld	(hl),#0x00
+   01EB C9            [10]  482 	ret
+                            483 ;src/enemigo/enemigo.c:130: void derecha()
+                            484 ;	---------------------------------
+                            485 ; Function derecha
+                            486 ; ---------------------------------
+   01EC                     487 _derecha::
+                            488 ;src/enemigo/enemigo.c:132: borracho.x++;
+   01EC 01r00r00      [10]  489 	ld	bc,#_borracho+0
+   01EF 0A            [ 7]  490 	ld	a,(bc)
+   01F0 3C            [ 4]  491 	inc	a
+   01F1 02            [ 7]  492 	ld	(bc),a
+                            493 ;src/enemigo/enemigo.c:133: andar_ani2(E_derecha);
+   01F2 AF            [ 4]  494 	xor	a, a
+   01F3 F5            [11]  495 	push	af
+   01F4 33            [ 6]  496 	inc	sp
+   01F5 CDr70r01      [17]  497 	call	_andar_ani2
+   01F8 33            [ 6]  498 	inc	sp
+                            499 ;src/enemigo/enemigo.c:134: borracho.estado=1;
+   01F9 21r07r00      [10]  500 	ld	hl,#(_borracho + 0x0007)
+   01FC 36 01         [10]  501 	ld	(hl),#0x01
+                            502 ;src/enemigo/enemigo.c:135: borracho.mover=SI;
+   01FE 21r06r00      [10]  503 	ld	hl,#(_borracho + 0x0006)
+   0201 36 01         [10]  504 	ld	(hl),#0x01
+                            505 ;src/enemigo/enemigo.c:137: if(borracho.mover){
+   0203 3Ar06r00      [13]  506 	ld	a, (#(_borracho + 0x0006) + 0)
+   0206 B7            [ 4]  507 	or	a, a
+   0207 C8            [11]  508 	ret	Z
+                            509 ;src/enemigo/enemigo.c:138: seleccionarSpriteBorracho();
+   0208 CDr86r00      [17]  510 	call	_seleccionarSpriteBorracho
+                            511 ;src/enemigo/enemigo.c:139: cpct_waitVSYNC();
+   020B CDr00r00      [17]  512 	call	_cpct_waitVSYNC
+                            513 ;src/enemigo/enemigo.c:140: redibujarBorracho();
+   020E CDr5Cr01      [17]  514 	call	_redibujarBorracho
+                            515 ;src/enemigo/enemigo.c:141: borracho.mover = NO;
+   0211 21r06r00      [10]  516 	ld	hl,#(_borracho + 0x0006)
+   0214 36 00         [10]  517 	ld	(hl),#0x00
+   0216 C9            [10]  518 	ret
+                            519 ;src/enemigo/enemigo.c:147: void golpear(u8 direccion){
+                            520 ;	---------------------------------
+                            521 ; Function golpear
+                            522 ; ---------------------------------
+   0217                     523 _golpear::
+                            524 ;src/enemigo/enemigo.c:150: golpear_ani2(direccion);
+   0217 21 02 00      [10]  525 	ld	hl, #2+0
+   021A 39            [11]  526 	add	hl, sp
+   021B 7E            [ 7]  527 	ld	a, (hl)
+   021C F5            [11]  528 	push	af
+   021D 33            [ 6]  529 	inc	sp
+   021E CDr89r01      [17]  530 	call	_golpear_ani2
+   0221 33            [ 6]  531 	inc	sp
+                            532 ;src/enemigo/enemigo.c:151: borracho.estado = 2;
+   0222 21r07r00      [10]  533 	ld	hl,#(_borracho + 0x0007)
+   0225 36 02         [10]  534 	ld	(hl),#0x02
+                            535 ;src/enemigo/enemigo.c:152: borracho.mover=SI;
+   0227 21r06r00      [10]  536 	ld	hl,#(_borracho + 0x0006)
+   022A 36 01         [10]  537 	ld	(hl),#0x01
+                            538 ;src/enemigo/enemigo.c:154: if(borracho.mover){
+   022C 3Ar06r00      [13]  539 	ld	a, (#(_borracho + 0x0006) + 0)
+   022F B7            [ 4]  540 	or	a, a
+   0230 CAr00r00      [10]  541 	jp	Z,_restaVida
+                            542 ;src/enemigo/enemigo.c:155: seleccionarSpriteBorracho();
+   0233 CDr86r00      [17]  543 	call	_seleccionarSpriteBorracho
+                            544 ;src/enemigo/enemigo.c:156: cpct_waitVSYNC();
+   0236 CDr00r00      [17]  545 	call	_cpct_waitVSYNC
+                            546 ;src/enemigo/enemigo.c:157: redibujarBorracho();
+   0239 CDr5Cr01      [17]  547 	call	_redibujarBorracho
+                            548 ;src/enemigo/enemigo.c:158: borracho.mover = NO;
+   023C 21r06r00      [10]  549 	ld	hl,#(_borracho + 0x0006)
+   023F 36 00         [10]  550 	ld	(hl),#0x00
+                            551 ;src/enemigo/enemigo.c:161: restaVida();
+   0241 C3r00r00      [10]  552 	jp  _restaVida
+                            553 ;src/enemigo/enemigo.c:166: void quietoENE()
+                            554 ;	---------------------------------
+                            555 ; Function quietoENE
+                            556 ; ---------------------------------
+   0244                     557 _quietoENE::
+                            558 ;src/enemigo/enemigo.c:168: borracho.estado=0;
+   0244 21r07r00      [10]  559 	ld	hl,#(_borracho + 0x0007)
+   0247 36 00         [10]  560 	ld	(hl),#0x00
+                            561 ;src/enemigo/enemigo.c:169: borracho.mover = SI;
+   0249 21r06r00      [10]  562 	ld	hl,#(_borracho + 0x0006)
+   024C 36 01         [10]  563 	ld	(hl),#0x01
+                            564 ;src/enemigo/enemigo.c:170: borracho.nframe=0;
+   024E 21r0Ar00      [10]  565 	ld	hl,#(_borracho + 0x000a)
+   0251 36 00         [10]  566 	ld	(hl),#0x00
+                            567 ;src/enemigo/enemigo.c:171: if(borracho.mover){
+   0253 3Ar06r00      [13]  568 	ld	a, (#(_borracho + 0x0006) + 0)
+   0256 B7            [ 4]  569 	or	a, a
+   0257 C8            [11]  570 	ret	Z
+                            571 ;src/enemigo/enemigo.c:172: seleccionarSpriteBorracho();
+   0258 CDr86r00      [17]  572 	call	_seleccionarSpriteBorracho
+                            573 ;src/enemigo/enemigo.c:173: cpct_waitVSYNC();
+   025B CDr00r00      [17]  574 	call	_cpct_waitVSYNC
+                            575 ;src/enemigo/enemigo.c:174: redibujarBorracho();
+   025E CDr5Cr01      [17]  576 	call	_redibujarBorracho
+                            577 ;src/enemigo/enemigo.c:175: e=1;
+   0261 21r11r00      [10]  578 	ld	hl,#_e + 0
+   0264 36 01         [10]  579 	ld	(hl), #0x01
+                            580 ;src/enemigo/enemigo.c:176: borracho.mover = NO;
+   0266 21r06r00      [10]  581 	ld	hl,#(_borracho + 0x0006)
+   0269 36 00         [10]  582 	ld	(hl),#0x00
+   026B C9            [10]  583 	ret
+                            584 ;src/enemigo/enemigo.c:181: void mata_enemigo()
+                            585 ;	---------------------------------
+                            586 ; Function mata_enemigo
+                            587 ; ---------------------------------
+   026C                     588 _mata_enemigo::
+   026C DD E5         [15]  589 	push	ix
+   026E DD 21 00 00   [14]  590 	ld	ix,#0
+   0272 DD 39         [15]  591 	add	ix,sp
+   0274 21 F4 FF      [10]  592 	ld	hl,#-12
+   0277 39            [11]  593 	add	hl,sp
+   0278 F9            [ 6]  594 	ld	sp,hl
+                            595 ;src/enemigo/enemigo.c:183: u8 cX=get_CX();
+   0279 CDr00r00      [17]  596 	call	_get_CX
+   027C DD 75 F6      [19]  597 	ld	-10 (ix),l
+                            598 ;src/enemigo/enemigo.c:184: u8 cY=get_CY();
+   027F CDr00r00      [17]  599 	call	_get_CY
+                            600 ;src/enemigo/enemigo.c:188: if(borracho.x-5 < cX && cX < borracho.x)
+   0282 3Ar00r00      [13]  601 	ld	a,(#_borracho+0)
+   0285 DD 77 FF      [19]  602 	ld	-1 (ix), a
+   0288 DD 77 FD      [19]  603 	ld	-3 (ix),a
+   028B DD 36 FE 00   [19]  604 	ld	-2 (ix),#0x00
+   028F DD 7E FD      [19]  605 	ld	a,-3 (ix)
+   0292 C6 FB         [ 7]  606 	add	a,#0xFB
+   0294 4F            [ 4]  607 	ld	c,a
+   0295 DD 7E FE      [19]  608 	ld	a,-2 (ix)
+   0298 CE FF         [ 7]  609 	adc	a,#0xFF
+   029A 47            [ 4]  610 	ld	b,a
+   029B DD 7E F6      [19]  611 	ld	a,-10 (ix)
+   029E DD 77 FB      [19]  612 	ld	-5 (ix),a
+   02A1 DD 36 FC 00   [19]  613 	ld	-4 (ix),#0x00
+                            614 ;src/enemigo/enemigo.c:191: cpct_etm_drawTileBox2x4(borracho.px / 2, (borracho.py-ORIGEN_MAPA_Y) / 4, w, h, 40, ORIGEN_MAPA, pmapa);
+   02A5 2Ar0Dr00      [16]  615 	ld	hl,(_pmapa)
+   02A8 DD 75 F9      [19]  616 	ld	-7 (ix),l
+   02AB DD 74 FA      [19]  617 	ld	-6 (ix),h
+                            618 ;src/enemigo/enemigo.c:188: if(borracho.x-5 < cX && cX < borracho.x)
+   02AE 79            [ 4]  619 	ld	a,c
+   02AF DD 96 FB      [19]  620 	sub	a, -5 (ix)
+   02B2 78            [ 4]  621 	ld	a,b
+   02B3 DD 9E FC      [19]  622 	sbc	a, -4 (ix)
+   02B6 E2rBBr02      [10]  623 	jp	PO, 00148$
+   02B9 EE 80         [ 7]  624 	xor	a, #0x80
+   02BB                     625 00148$:
+   02BB F2r3Br03      [10]  626 	jp	P,00105$
+   02BE DD 7E F6      [19]  627 	ld	a,-10 (ix)
+   02C1 DD 96 FF      [19]  628 	sub	a, -1 (ix)
+   02C4 30 75         [12]  629 	jr	NC,00105$
+                            630 ;src/enemigo/enemigo.c:189: { u8 w = 4 + (borracho.px & 1);
+   02C6 21r02r00      [10]  631 	ld	hl, #_borracho + 2
+   02C9 4E            [ 7]  632 	ld	c,(hl)
+   02CA 79            [ 4]  633 	ld	a,c
+   02CB E6 01         [ 7]  634 	and	a, #0x01
+   02CD 5F            [ 4]  635 	ld	e,a
+   02CE 1C            [ 4]  636 	inc	e
+   02CF 1C            [ 4]  637 	inc	e
+   02D0 1C            [ 4]  638 	inc	e
+   02D1 1C            [ 4]  639 	inc	e
+                            640 ;src/enemigo/enemigo.c:190: u8 h = 7 + (borracho.py & 3 ? 1 : 0);
+   02D2 21r03r00      [10]  641 	ld	hl, #_borracho + 3
+   02D5 6E            [ 7]  642 	ld	l,(hl)
+   02D6 7D            [ 4]  643 	ld	a,l
+   02D7 E6 03         [ 7]  644 	and	a, #0x03
+   02D9 28 04         [12]  645 	jr	Z,00110$
+   02DB 3E 01         [ 7]  646 	ld	a,#0x01
+   02DD 18 02         [12]  647 	jr	00111$
+   02DF                     648 00110$:
+   02DF 3E 00         [ 7]  649 	ld	a,#0x00
+   02E1                     650 00111$:
+   02E1 C6 07         [ 7]  651 	add	a, #0x07
+   02E3 DD 77 F5      [19]  652 	ld	-11 (ix),a
+                            653 ;src/enemigo/enemigo.c:191: cpct_etm_drawTileBox2x4(borracho.px / 2, (borracho.py-ORIGEN_MAPA_Y) / 4, w, h, 40, ORIGEN_MAPA, pmapa);
+   02E6 45            [ 4]  654 	ld	b,l
+   02E7 16 00         [ 7]  655 	ld	d,#0x00
+   02E9 78            [ 4]  656 	ld	a,b
+   02EA C6 BC         [ 7]  657 	add	a,#0xBC
+   02EC DD 77 F7      [19]  658 	ld	-9 (ix),a
+   02EF 7A            [ 4]  659 	ld	a,d
+   02F0 CE FF         [ 7]  660 	adc	a,#0xFF
+   02F2 DD 77 F8      [19]  661 	ld	-8 (ix),a
+   02F5 DD 6E F7      [19]  662 	ld	l,-9 (ix)
+   02F8 DD 66 F8      [19]  663 	ld	h,-8 (ix)
+   02FB DD CB F8 7E   [20]  664 	bit	7, -8 (ix)
+   02FF 28 08         [12]  665 	jr	Z,00112$
+   0301 78            [ 4]  666 	ld	a,b
+   0302 C6 BF         [ 7]  667 	add	a, #0xBF
+   0304 6F            [ 4]  668 	ld	l,a
+   0305 7A            [ 4]  669 	ld	a,d
+   0306 CE FF         [ 7]  670 	adc	a, #0xFF
+   0308 67            [ 4]  671 	ld	h,a
+   0309                     672 00112$:
+   0309 55            [ 4]  673 	ld	d,l
+   030A CB 2C         [ 8]  674 	sra	h
+   030C CB 1A         [ 8]  675 	rr	d
+   030E CB 2C         [ 8]  676 	sra	h
+   0310 CB 1A         [ 8]  677 	rr	d
+   0312 41            [ 4]  678 	ld	b,c
+   0313 CB 38         [ 8]  679 	srl	b
+   0315 DD 6E F9      [19]  680 	ld	l,-7 (ix)
+   0318 DD 66 FA      [19]  681 	ld	h,-6 (ix)
+   031B E5            [11]  682 	push	hl
+   031C 21 80 E2      [10]  683 	ld	hl,#0xE280
+   031F E5            [11]  684 	push	hl
+   0320 3E 28         [ 7]  685 	ld	a,#0x28
+   0322 F5            [11]  686 	push	af
+   0323 33            [ 6]  687 	inc	sp
+   0324 DD 7E F5      [19]  688 	ld	a,-11 (ix)
+   0327 F5            [11]  689 	push	af
+   0328 33            [ 6]  690 	inc	sp
+   0329 7B            [ 4]  691 	ld	a,e
+   032A F5            [11]  692 	push	af
+   032B 33            [ 6]  693 	inc	sp
+   032C D5            [11]  694 	push	de
+   032D 33            [ 6]  695 	inc	sp
+   032E C5            [11]  696 	push	bc
+   032F 33            [ 6]  697 	inc	sp
+   0330 CDr00r00      [17]  698 	call	_cpct_etm_drawTileBox2x4
+                            699 ;src/enemigo/enemigo.c:192: j=1;
+   0333 21r13r00      [10]  700 	ld	hl,#_j + 0
+   0336 36 01         [10]  701 	ld	(hl), #0x01
+   0338 C3rD0r03      [10]  702 	jp	00108$
+   033B                     703 00105$:
+                            704 ;src/enemigo/enemigo.c:195: else if(borracho.x<cX && cX<borracho.x+5)
+   033B DD 7E FF      [19]  705 	ld	a,-1 (ix)
+   033E DD 96 F6      [19]  706 	sub	a, -10 (ix)
+   0341 D2rD0r03      [10]  707 	jp	NC,00108$
+   0344 DD 7E FD      [19]  708 	ld	a,-3 (ix)
+   0347 C6 05         [ 7]  709 	add	a, #0x05
+   0349 4F            [ 4]  710 	ld	c,a
+   034A DD 7E FE      [19]  711 	ld	a,-2 (ix)
+   034D CE 00         [ 7]  712 	adc	a, #0x00
+   034F 47            [ 4]  713 	ld	b,a
+   0350 DD 7E FB      [19]  714 	ld	a,-5 (ix)
+   0353 91            [ 4]  715 	sub	a, c
+   0354 DD 7E FC      [19]  716 	ld	a,-4 (ix)
+   0357 98            [ 4]  717 	sbc	a, b
+   0358 E2r5Dr03      [10]  718 	jp	PO, 00150$
+   035B EE 80         [ 7]  719 	xor	a, #0x80
+   035D                     720 00150$:
+   035D F2rD0r03      [10]  721 	jp	P,00108$
+                            722 ;src/enemigo/enemigo.c:197: u8 w = 4 + (borracho.px & 1);
+   0360 3Ar02r00      [13]  723 	ld	a,(#_borracho + 2)
+   0363 DD 77 F7      [19]  724 	ld	-9 (ix), a
+   0366 E6 01         [ 7]  725 	and	a, #0x01
+   0368 C6 04         [ 7]  726 	add	a, #0x04
+   036A DD 77 F5      [19]  727 	ld	-11 (ix),a
+                            728 ;src/enemigo/enemigo.c:198: u8 h = 7 + (borracho.py & 3 ? 1 : 0);
+   036D 3Ar03r00      [13]  729 	ld	a,(#_borracho + 3)
+   0370 DD 77 FB      [19]  730 	ld	-5 (ix), a
+   0373 E6 03         [ 7]  731 	and	a, #0x03
+   0375 28 06         [12]  732 	jr	Z,00113$
+   0377 DD 36 FD 01   [19]  733 	ld	-3 (ix),#0x01
+   037B 18 04         [12]  734 	jr	00114$
+   037D                     735 00113$:
+   037D DD 36 FD 00   [19]  736 	ld	-3 (ix),#0x00
+   0381                     737 00114$:
+   0381 DD 7E FD      [19]  738 	ld	a,-3 (ix)
+   0384 C6 07         [ 7]  739 	add	a, #0x07
+   0386 DD 77 F4      [19]  740 	ld	-12 (ix),a
+                            741 ;src/enemigo/enemigo.c:199: cpct_etm_drawTileBox2x4(borracho.px / 2, (borracho.py-ORIGEN_MAPA_Y) / 4, w, h, 40, ORIGEN_MAPA, pmapa);
+   0389 DD 4E FB      [19]  742 	ld	c,-5 (ix)
+   038C 06 00         [ 7]  743 	ld	b,#0x00
+   038E 79            [ 4]  744 	ld	a,c
+   038F C6 BC         [ 7]  745 	add	a,#0xBC
+   0391 5F            [ 4]  746 	ld	e,a
+   0392 78            [ 4]  747 	ld	a,b
+   0393 CE FF         [ 7]  748 	adc	a,#0xFF
+   0395 57            [ 4]  749 	ld	d,a
+   0396 6B            [ 4]  750 	ld	l, e
+   0397 62            [ 4]  751 	ld	h, d
+   0398 CB 7A         [ 8]  752 	bit	7, d
+   039A 28 04         [12]  753 	jr	Z,00115$
+   039C 21 BF FF      [10]  754 	ld	hl,#0xFFBF
+   039F 09            [11]  755 	add	hl,bc
+   03A0                     756 00115$:
+   03A0 55            [ 4]  757 	ld	d,l
+   03A1 CB 2C         [ 8]  758 	sra	h
+   03A3 CB 1A         [ 8]  759 	rr	d
+   03A5 CB 2C         [ 8]  760 	sra	h
+   03A7 CB 1A         [ 8]  761 	rr	d
+   03A9 DD 46 F7      [19]  762 	ld	b,-9 (ix)
+   03AC CB 38         [ 8]  763 	srl	b
+   03AE DD 6E F9      [19]  764 	ld	l,-7 (ix)
+   03B1 DD 66 FA      [19]  765 	ld	h,-6 (ix)
+   03B4 E5            [11]  766 	push	hl
+   03B5 21 80 E2      [10]  767 	ld	hl,#0xE280
+   03B8 E5            [11]  768 	push	hl
+   03B9 3E 28         [ 7]  769 	ld	a,#0x28
+   03BB F5            [11]  770 	push	af
+   03BC 33            [ 6]  771 	inc	sp
+   03BD DD 66 F4      [19]  772 	ld	h,-12 (ix)
+   03C0 DD 6E F5      [19]  773 	ld	l,-11 (ix)
+   03C3 E5            [11]  774 	push	hl
+   03C4 D5            [11]  775 	push	de
+   03C5 33            [ 6]  776 	inc	sp
+   03C6 C5            [11]  777 	push	bc
+   03C7 33            [ 6]  778 	inc	sp
+   03C8 CDr00r00      [17]  779 	call	_cpct_etm_drawTileBox2x4
+                            780 ;src/enemigo/enemigo.c:200: j=1;     
+   03CB 21r13r00      [10]  781 	ld	hl,#_j + 0
+   03CE 36 01         [10]  782 	ld	(hl), #0x01
+   03D0                     783 00108$:
+   03D0 DD F9         [10]  784 	ld	sp, ix
+   03D2 DD E1         [14]  785 	pop	ix
+   03D4 C9            [10]  786 	ret
+                            787 ;src/enemigo/enemigo.c:207: void quitar_vida()
+                            788 ;	---------------------------------
+                            789 ; Function quitar_vida
+                            790 ; ---------------------------------
+   03D5                     791 _quitar_vida::
+                            792 ;src/enemigo/enemigo.c:209: u8 x=get_X();
+   03D5 CDr00r00      [17]  793 	call	_get_X
+   03D8 4D            [ 4]  794 	ld	c,l
+                            795 ;src/enemigo/enemigo.c:211: if(borracho.x==x)
+   03D9 21r00r00      [10]  796 	ld	hl,#_borracho+0
+   03DC 46            [ 7]  797 	ld	b,(hl)
+   03DD 79            [ 4]  798 	ld	a,c
+   03DE 90            [ 4]  799 	sub	a, b
+   03DF C0            [11]  800 	ret	NZ
+                            801 ;src/enemigo/enemigo.c:213: restaVida();
+   03E0 C3r00r00      [10]  802 	jp  _restaVida
+                            803 ;src/enemigo/enemigo.c:218: void wait4UserKeypress() {
+                            804 ;	---------------------------------
+                            805 ; Function wait4UserKeypress
+                            806 ; ---------------------------------
+   03E3                     807 _wait4UserKeypress::
+                            808 ;src/enemigo/enemigo.c:221: cpct_scanKeyboard_f(); 
+   03E3 CDr00r00      [17]  809 	call	_cpct_scanKeyboard_f
+                            810 ;src/enemigo/enemigo.c:222: if (cpct_isAnyKeyPressed()) 
+   03E6 CDr00r00      [17]  811 	call	_cpct_isAnyKeyPressed
+   03E9 7D            [ 4]  812 	ld	a,l
+   03EA B7            [ 4]  813 	or	a, a
+   03EB C8            [11]  814 	ret	Z
+                            815 ;src/enemigo/enemigo.c:224: if(cpct_isKeyPressed(Key_CursorRight)||cpct_isKeyPressed(Key_CursorLeft)||cpct_isKeyPressed(Key_CursorUp))
+   03EC 21 00 02      [10]  816 	ld	hl,#0x0200
+   03EF CDr00r00      [17]  817 	call	_cpct_isKeyPressed
+   03F2 7D            [ 4]  818 	ld	a,l
+   03F3 B7            [ 4]  819 	or	a, a
+   03F4 20 13         [12]  820 	jr	NZ,00101$
+   03F6 21 01 01      [10]  821 	ld	hl,#0x0101
+   03F9 CDr00r00      [17]  822 	call	_cpct_isKeyPressed
+   03FC 7D            [ 4]  823 	ld	a,l
+   03FD B7            [ 4]  824 	or	a, a
+   03FE 20 09         [12]  825 	jr	NZ,00101$
+   0400 21 00 01      [10]  826 	ld	hl,#0x0100
+   0403 CDr00r00      [17]  827 	call	_cpct_isKeyPressed
+   0406 7D            [ 4]  828 	ld	a,l
+   0407 B7            [ 4]  829 	or	a, a
+   0408 C8            [11]  830 	ret	Z
+   0409                     831 00101$:
+                            832 ;src/enemigo/enemigo.c:226: c++;
+   0409 21r14r00      [10]  833 	ld	hl, #_c+0
+   040C 34            [11]  834 	inc	(hl)
+   040D C0            [11]  835 	ret	NZ
+   040E 21r15r00      [10]  836 	ld	hl, #_c+1
+   0411 34            [11]  837 	inc	(hl)
+   0412 C0            [11]  838 	ret	NZ
+   0413 21r16r00      [10]  839 	ld	hl, #_c+2
+   0416 34            [11]  840 	inc	(hl)
+   0417 C0            [11]  841 	ret	NZ
+   0418 21r17r00      [10]  842 	ld	hl, #_c+3
+   041B 34            [11]  843 	inc	(hl)
+   041C C9            [10]  844 	ret
+                            845 ;src/enemigo/enemigo.c:231: u8 get_BX(){
+                            846 ;	---------------------------------
+                            847 ; Function get_BX
+                            848 ; ---------------------------------
+   041D                     849 _get_BX::
+                            850 ;src/enemigo/enemigo.c:232: return borracho.x;
+   041D 21r00r00      [10]  851 	ld	hl, #_borracho + 0
+   0420 6E            [ 7]  852 	ld	l,(hl)
+   0421 C9            [10]  853 	ret
+                            854 ;src/enemigo/enemigo.c:235: u8 get_BY(){
+                            855 ;	---------------------------------
+                            856 ; Function get_BY
+                            857 ; ---------------------------------
+   0422                     858 _get_BY::
+                            859 ;src/enemigo/enemigo.c:236: return borracho.y;
+   0422 21r01r00      [10]  860 	ld	hl, #(_borracho + 0x0001) + 0
+   0425 6E            [ 7]  861 	ld	l,(hl)
+   0426 C9            [10]  862 	ret
+                            863 ;src/enemigo/enemigo.c:240: void reviveIA( )
+                            864 ;	---------------------------------
+                            865 ; Function reviveIA
+                            866 ; ---------------------------------
+   0427                     867 _reviveIA::
+                            868 ;src/enemigo/enemigo.c:244: cpct_srand(c);
+   0427 FD 21r14r00   [14]  869 	ld	iy,#_c
+   042B FD 6E 00      [19]  870 	ld	l,0 (iy)
+   042E FD 21r14r00   [14]  871 	ld	iy,#_c
+   0432 FD 66 01      [19]  872 	ld	h,1 (iy)
+   0435 FD 21r14r00   [14]  873 	ld	iy,#_c
+   0439 FD 5E 02      [19]  874 	ld	e,2 (iy)
+   043C FD 21r14r00   [14]  875 	ld	iy,#_c
+   0440 FD 56 03      [19]  876 	ld	d,3 (iy)
+   0443 CDr00r00      [17]  877 	call	_cpct_setSeed_mxor
+   0446 CDr00r00      [17]  878 	call	_cpct_restoreState_mxor_u8
+                            879 ;src/enemigo/enemigo.c:245: random=cpct_rand()%70;
+   0449 CDr00r00      [17]  880 	call	_cpct_getRandom_mxor_u8
+   044C 45            [ 4]  881 	ld	b,l
+   044D 3E 46         [ 7]  882 	ld	a,#0x46
+   044F F5            [11]  883 	push	af
+   0450 33            [ 6]  884 	inc	sp
+   0451 C5            [11]  885 	push	bc
+   0452 33            [ 6]  886 	inc	sp
+   0453 CDr00r00      [17]  887 	call	__moduchar
+   0456 F1            [10]  888 	pop	af
+   0457 4D            [ 4]  889 	ld	c,l
+                            890 ;src/enemigo/enemigo.c:246: borracho.x=borracho.px=5+random;
+   0458 21r02r00      [10]  891 	ld	hl,#_borracho + 2
+   045B 79            [ 4]  892 	ld	a,c
+   045C C6 05         [ 7]  893 	add	a, #0x05
+   045E 77            [ 7]  894 	ld	(hl),a
+   045F 32r00r00      [13]  895 	ld	(#_borracho),a
+                            896 ;src/enemigo/enemigo.c:247: borracho.y=borracho.py=162;
+   0462 21r03r00      [10]  897 	ld	hl,#(_borracho + 0x0003)
+   0465 36 A2         [10]  898 	ld	(hl),#0xA2
+   0467 21r01r00      [10]  899 	ld	hl,#(_borracho + 0x0001)
+   046A 36 A2         [10]  900 	ld	(hl),#0xA2
+                            901 ;src/enemigo/enemigo.c:248: pmapa=mapaJug;
+   046C 2Ar0Fr00      [16]  902 	ld	hl,(_mapaJug)
+   046F 22r0Dr00      [16]  903 	ld	(_pmapa),hl
+                            904 ;src/enemigo/enemigo.c:249: c=0;
+   0472 AF            [ 4]  905 	xor	a, a
+   0473 32r14r00      [13]  906 	ld	(#_c + 0),a
+   0476 32r15r00      [13]  907 	ld	(#_c + 1),a
+   0479 32r16r00      [13]  908 	ld	(#_c + 2),a
+   047C 32r17r00      [13]  909 	ld	(#_c + 3),a
+                            910 ;src/enemigo/enemigo.c:250: j=0;
+   047F 21r13r00      [10]  911 	ld	hl,#_j + 0
+   0482 36 00         [10]  912 	ld	(hl), #0x00
+                            913 ;src/enemigo/enemigo.c:251: redibujarBorracho();
+   0484 CDr5Cr01      [17]  914 	call	_redibujarBorracho
+                            915 ;src/enemigo/enemigo.c:252: ini_estado();
+   0487 C3rDFr06      [10]  916 	jp  _ini_estado
+                            917 ;src/enemigo/enemigo.c:255: void IA()
+                            918 ;	---------------------------------
+                            919 ; Function IA
+                            920 ; ---------------------------------
+   048A                     921 _IA::
+   048A DD E5         [15]  922 	push	ix
+   048C DD 21 00 00   [14]  923 	ld	ix,#0
+   0490 DD 39         [15]  924 	add	ix,sp
+   0492 21 F6 FF      [10]  925 	ld	hl,#-10
+   0495 39            [11]  926 	add	hl,sp
+   0496 F9            [ 6]  927 	ld	sp,hl
+                            928 ;src/enemigo/enemigo.c:258: u8 x = get_X();
+   0497 CDr00r00      [17]  929 	call	_get_X
+   049A DD 75 F6      [19]  930 	ld	-10 (ix),l
+                            931 ;src/enemigo/enemigo.c:259: u8 y = get_Y();
+   049D CDr00r00      [17]  932 	call	_get_Y
+   04A0 DD 75 F7      [19]  933 	ld	-9 (ix),l
+                            934 ;src/enemigo/enemigo.c:261: mapaJug=get_tip_mapa();
+   04A3 CDr00r00      [17]  935 	call	_get_tip_mapa
+   04A6 22r0Fr00      [16]  936 	ld	(_mapaJug),hl
+                            937 ;src/enemigo/enemigo.c:262: if(mapaJug==pmapa)
+   04A9 3Ar0Fr00      [13]  938 	ld	a,(#_mapaJug + 0)
+   04AC FD 21r0Dr00   [14]  939 	ld	iy,#_pmapa
+   04B0 FD 96 00      [19]  940 	sub	a, 0 (iy)
+   04B3 C2rC5r06      [10]  941 	jp	NZ,00140$
+   04B6 3Ar10r00      [13]  942 	ld	a,(#_mapaJug + 1)
+   04B9 FD 21r0Dr00   [14]  943 	ld	iy,#_pmapa
+   04BD FD 96 01      [19]  944 	sub	a, 1 (iy)
+   04C0 C2rC5r06      [10]  945 	jp	NZ,00140$
+                            946 ;src/enemigo/enemigo.c:264: wait4UserKeypress();
+   04C3 CDrE3r03      [17]  947 	call	_wait4UserKeypress
+                            948 ;src/enemigo/enemigo.c:265: if(borracho.x-20 < x && x < borracho.x-6 && y==borracho.y-6)
+   04C6 01r00r00      [10]  949 	ld	bc,#_borracho+0
+   04C9 0A            [ 7]  950 	ld	a,(bc)
+   04CA 5F            [ 4]  951 	ld	e,a
+   04CB 16 00         [ 7]  952 	ld	d,#0x00
+   04CD 7B            [ 4]  953 	ld	a,e
+   04CE C6 EC         [ 7]  954 	add	a,#0xEC
+   04D0 6F            [ 4]  955 	ld	l,a
+   04D1 7A            [ 4]  956 	ld	a,d
+   04D2 CE FF         [ 7]  957 	adc	a,#0xFF
+   04D4 67            [ 4]  958 	ld	h,a
+   04D5 DD 7E F6      [19]  959 	ld	a,-10 (ix)
+   04D8 DD 77 F8      [19]  960 	ld	-8 (ix),a
+   04DB DD 36 F9 00   [19]  961 	ld	-7 (ix),#0x00
+   04DF DD 7E F7      [19]  962 	ld	a,-9 (ix)
+   04E2 DD 77 FE      [19]  963 	ld	-2 (ix),a
+   04E5 DD 36 FF 00   [19]  964 	ld	-1 (ix),#0x00
+   04E9 7D            [ 4]  965 	ld	a,l
+   04EA DD 96 F8      [19]  966 	sub	a, -8 (ix)
+   04ED 7C            [ 4]  967 	ld	a,h
+   04EE DD 9E F9      [19]  968 	sbc	a, -7 (ix)
+   04F1 E2rF6r04      [10]  969 	jp	PO, 00242$
+   04F4 EE 80         [ 7]  970 	xor	a, #0x80
+   04F6                     971 00242$:
+   04F6 F2r45r05      [10]  972 	jp	P,00135$
+   04F9 7B            [ 4]  973 	ld	a,e
+   04FA C6 FA         [ 7]  974 	add	a,#0xFA
+   04FC 6F            [ 4]  975 	ld	l,a
+   04FD 7A            [ 4]  976 	ld	a,d
+   04FE CE FF         [ 7]  977 	adc	a,#0xFF
+   0500 67            [ 4]  978 	ld	h,a
+   0501 DD 7E F8      [19]  979 	ld	a,-8 (ix)
+   0504 95            [ 4]  980 	sub	a, l
+   0505 DD 7E F9      [19]  981 	ld	a,-7 (ix)
+   0508 9C            [ 4]  982 	sbc	a, h
+   0509 E2r0Er05      [10]  983 	jp	PO, 00243$
+   050C EE 80         [ 7]  984 	xor	a, #0x80
+   050E                     985 00243$:
+   050E F2r45r05      [10]  986 	jp	P,00135$
+   0511 21r01r00      [10]  987 	ld	hl,#_borracho+1
+   0514 6E            [ 7]  988 	ld	l,(hl)
+   0515 26 00         [ 7]  989 	ld	h,#0x00
+   0517 7D            [ 4]  990 	ld	a,l
+   0518 C6 FA         [ 7]  991 	add	a,#0xFA
+   051A DD 77 FC      [19]  992 	ld	-4 (ix),a
+   051D 7C            [ 4]  993 	ld	a,h
+   051E CE FF         [ 7]  994 	adc	a,#0xFF
+   0520 DD 77 FD      [19]  995 	ld	-3 (ix),a
+   0523 DD 7E FE      [19]  996 	ld	a,-2 (ix)
+   0526 DD 96 FC      [19]  997 	sub	a, -4 (ix)
+   0529 20 1A         [12]  998 	jr	NZ,00135$
+   052B DD 7E FF      [19]  999 	ld	a,-1 (ix)
+   052E DD 96 FD      [19] 1000 	sub	a, -3 (ix)
+   0531 20 12         [12] 1001 	jr	NZ,00135$
+                           1002 ;src/enemigo/enemigo.c:267: if(j==0)
+   0533 3Ar13r00      [13] 1003 	ld	a,(#_j + 0)
+   0536 B7            [ 4] 1004 	or	a, a
+   0537 C2rC8r06      [10] 1005 	jp	NZ,00142$
+                           1006 ;src/enemigo/enemigo.c:269: izquierda();
+   053A CDrBFr01      [17] 1007 	call	_izquierda
+                           1008 ;src/enemigo/enemigo.c:270: e=0;
+   053D 21r11r00      [10] 1009 	ld	hl,#_e + 0
+   0540 36 00         [10] 1010 	ld	(hl), #0x00
+   0542 C3rC8r06      [10] 1011 	jp	00142$
+   0545                    1012 00135$:
+                           1013 ;src/enemigo/enemigo.c:274: else if(borracho.x+8<x && x<borracho.x+20 && y==borracho.y-6)
+   0545 21 08 00      [10] 1014 	ld	hl,#0x0008
+   0548 19            [11] 1015 	add	hl,de
+   0549 7D            [ 4] 1016 	ld	a,l
+   054A DD 96 F8      [19] 1017 	sub	a, -8 (ix)
+   054D 7C            [ 4] 1018 	ld	a,h
+   054E DD 9E F9      [19] 1019 	sbc	a, -7 (ix)
+   0551 E2r56r05      [10] 1020 	jp	PO, 00246$
+   0554 EE 80         [ 7] 1021 	xor	a, #0x80
+   0556                    1022 00246$:
+   0556 F2r99r05      [10] 1023 	jp	P,00130$
+   0559 21 14 00      [10] 1024 	ld	hl,#0x0014
+   055C 19            [11] 1025 	add	hl,de
+   055D DD 7E F8      [19] 1026 	ld	a,-8 (ix)
+   0560 95            [ 4] 1027 	sub	a, l
+   0561 DD 7E F9      [19] 1028 	ld	a,-7 (ix)
+   0564 9C            [ 4] 1029 	sbc	a, h
+   0565 E2r6Ar05      [10] 1030 	jp	PO, 00247$
+   0568 EE 80         [ 7] 1031 	xor	a, #0x80
+   056A                    1032 00247$:
+   056A F2r99r05      [10] 1033 	jp	P,00130$
+   056D 21r01r00      [10] 1034 	ld	hl,#_borracho+1
+   0570 5E            [ 7] 1035 	ld	e,(hl)
+   0571 16 00         [ 7] 1036 	ld	d,#0x00
+   0573 7B            [ 4] 1037 	ld	a,e
+   0574 C6 FA         [ 7] 1038 	add	a,#0xFA
+   0576 5F            [ 4] 1039 	ld	e,a
+   0577 7A            [ 4] 1040 	ld	a,d
+   0578 CE FF         [ 7] 1041 	adc	a,#0xFF
+   057A 57            [ 4] 1042 	ld	d,a
+   057B DD 7E FE      [19] 1043 	ld	a,-2 (ix)
+   057E 93            [ 4] 1044 	sub	a, e
+   057F 20 18         [12] 1045 	jr	NZ,00130$
+   0581 DD 7E FF      [19] 1046 	ld	a,-1 (ix)
+   0584 92            [ 4] 1047 	sub	a, d
+   0585 20 12         [12] 1048 	jr	NZ,00130$
+                           1049 ;src/enemigo/enemigo.c:276: if(j==0)
+   0587 3Ar13r00      [13] 1050 	ld	a,(#_j + 0)
+   058A B7            [ 4] 1051 	or	a, a
+   058B C2rC8r06      [10] 1052 	jp	NZ,00142$
+                           1053 ;src/enemigo/enemigo.c:278: derecha();
+   058E CDrECr01      [17] 1054 	call	_derecha
+                           1055 ;src/enemigo/enemigo.c:279: e=0;
+   0591 21r11r00      [10] 1056 	ld	hl,#_e + 0
+   0594 36 00         [10] 1057 	ld	(hl), #0x00
+   0596 C3rC8r06      [10] 1058 	jp	00142$
+   0599                    1059 00130$:
+                           1060 ;src/enemigo/enemigo.c:284: if(e==0)
+   0599 3Ar11r00      [13] 1061 	ld	a,(#_e + 0)
+   059C B7            [ 4] 1062 	or	a, a
+   059D 20 05         [12] 1063 	jr	NZ,00106$
+                           1064 ;src/enemigo/enemigo.c:286: quietoENE();
+   059F C5            [11] 1065 	push	bc
+   05A0 CDr44r02      [17] 1066 	call	_quietoENE
+   05A3 C1            [10] 1067 	pop	bc
+   05A4                    1068 00106$:
+                           1069 ;src/enemigo/enemigo.c:289: if( borracho.x-20 < x && x <= borracho.x-6 && (y<162 && y>135)){
+   05A4 0A            [ 7] 1070 	ld	a,(bc)
+   05A5 4F            [ 4] 1071 	ld	c,a
+   05A6 59            [ 4] 1072 	ld	e,c
+   05A7 16 00         [ 7] 1073 	ld	d,#0x00
+   05A9 7B            [ 4] 1074 	ld	a,e
+   05AA C6 EC         [ 7] 1075 	add	a,#0xEC
+   05AC 47            [ 4] 1076 	ld	b,a
+   05AD 7A            [ 4] 1077 	ld	a,d
+   05AE CE FF         [ 7] 1078 	adc	a,#0xFF
+   05B0 6F            [ 4] 1079 	ld	l,a
+   05B1 DD 7E F7      [19] 1080 	ld	a,-9 (ix)
+   05B4 D6 A2         [ 7] 1081 	sub	a, #0xA2
+   05B6 3E 00         [ 7] 1082 	ld	a,#0x00
+   05B8 17            [ 4] 1083 	rla
+   05B9 DD 77 FC      [19] 1084 	ld	-4 (ix),a
+   05BC 3E 87         [ 7] 1085 	ld	a,#0x87
+   05BE DD 96 F7      [19] 1086 	sub	a, -9 (ix)
+   05C1 3E 00         [ 7] 1087 	ld	a,#0x00
+   05C3 17            [ 4] 1088 	rla
+   05C4 DD 77 FE      [19] 1089 	ld	-2 (ix),a
+   05C7 78            [ 4] 1090 	ld	a,b
+   05C8 DD 96 F8      [19] 1091 	sub	a, -8 (ix)
+   05CB 7D            [ 4] 1092 	ld	a,l
+   05CC DD 9E F9      [19] 1093 	sbc	a, -7 (ix)
+   05CF E2rD4r05      [10] 1094 	jp	PO, 00250$
+   05D2 EE 80         [ 7] 1095 	xor	a, #0x80
+   05D4                    1096 00250$:
+   05D4 F2r0Br06      [10] 1097 	jp	P,00124$
+   05D7 7B            [ 4] 1098 	ld	a,e
+   05D8 C6 FA         [ 7] 1099 	add	a,#0xFA
+   05DA 47            [ 4] 1100 	ld	b,a
+   05DB 7A            [ 4] 1101 	ld	a,d
+   05DC CE FF         [ 7] 1102 	adc	a,#0xFF
+   05DE 6F            [ 4] 1103 	ld	l,a
+   05DF 78            [ 4] 1104 	ld	a,b
+   05E0 DD 96 F8      [19] 1105 	sub	a, -8 (ix)
+   05E3 7D            [ 4] 1106 	ld	a,l
+   05E4 DD 9E F9      [19] 1107 	sbc	a, -7 (ix)
+   05E7 E2rECr05      [10] 1108 	jp	PO, 00251$
+   05EA EE 80         [ 7] 1109 	xor	a, #0x80
+   05EC                    1110 00251$:
+   05EC FAr0Br06      [10] 1111 	jp	M,00124$
+   05EF DD 7E FC      [19] 1112 	ld	a,-4 (ix)
+   05F2 B7            [ 4] 1113 	or	a, a
+   05F3 28 16         [12] 1114 	jr	Z,00124$
+   05F5 DD 7E FE      [19] 1115 	ld	a,-2 (ix)
+   05F8 B7            [ 4] 1116 	or	a, a
+   05F9 28 10         [12] 1117 	jr	Z,00124$
+                           1118 ;src/enemigo/enemigo.c:291: golpear(E_izquierda);
+   05FB 3E 01         [ 7] 1119 	ld	a,#0x01
+   05FD F5            [11] 1120 	push	af
+   05FE 33            [ 6] 1121 	inc	sp
+   05FF CDr17r02      [17] 1122 	call	_golpear
+   0602 33            [ 6] 1123 	inc	sp
+                           1124 ;src/enemigo/enemigo.c:293: e=1;
+   0603 21r11r00      [10] 1125 	ld	hl,#_e + 0
+   0606 36 01         [10] 1126 	ld	(hl), #0x01
+   0608 C3rC8r06      [10] 1127 	jp	00142$
+   060B                    1128 00124$:
+                           1129 ;src/enemigo/enemigo.c:294: }else if(borracho.x+8<=x && x<borracho.x+20 && (y<162 && y>135)){
+   060B 21 08 00      [10] 1130 	ld	hl,#0x0008
+   060E 19            [11] 1131 	add	hl,de
+   060F DD 75 FA      [19] 1132 	ld	-6 (ix),l
+   0612 DD 74 FB      [19] 1133 	ld	-5 (ix),h
+   0615 DD 7E F8      [19] 1134 	ld	a,-8 (ix)
+   0618 DD 96 FA      [19] 1135 	sub	a, -6 (ix)
+   061B DD 7E F9      [19] 1136 	ld	a,-7 (ix)
+   061E DD 9E FB      [19] 1137 	sbc	a, -5 (ix)
+   0621 E2r26r06      [10] 1138 	jp	PO, 00252$
+   0624 EE 80         [ 7] 1139 	xor	a, #0x80
+   0626                    1140 00252$:
+   0626 FAr57r06      [10] 1141 	jp	M,00118$
+   0629 21 14 00      [10] 1142 	ld	hl,#0x0014
+   062C 19            [11] 1143 	add	hl,de
+   062D DD 7E F8      [19] 1144 	ld	a,-8 (ix)
+   0630 95            [ 4] 1145 	sub	a, l
+   0631 DD 7E F9      [19] 1146 	ld	a,-7 (ix)
+   0634 9C            [ 4] 1147 	sbc	a, h
+   0635 E2r3Ar06      [10] 1148 	jp	PO, 00253$
+   0638 EE 80         [ 7] 1149 	xor	a, #0x80
+   063A                    1150 00253$:
+   063A F2r57r06      [10] 1151 	jp	P,00118$
+   063D DD 7E FC      [19] 1152 	ld	a,-4 (ix)
+   0640 B7            [ 4] 1153 	or	a, a
+   0641 28 14         [12] 1154 	jr	Z,00118$
+   0643 DD 7E FE      [19] 1155 	ld	a,-2 (ix)
+   0646 B7            [ 4] 1156 	or	a, a
+   0647 28 0E         [12] 1157 	jr	Z,00118$
+                           1158 ;src/enemigo/enemigo.c:295: golpear(E_derecha);
+   0649 AF            [ 4] 1159 	xor	a, a
+   064A F5            [11] 1160 	push	af
+   064B 33            [ 6] 1161 	inc	sp
+   064C CDr17r02      [17] 1162 	call	_golpear
+   064F 33            [ 6] 1163 	inc	sp
+                           1164 ;src/enemigo/enemigo.c:297: e=1;
+   0650 21r11r00      [10] 1165 	ld	hl,#_e + 0
+   0653 36 01         [10] 1166 	ld	(hl), #0x01
+   0655 18 71         [12] 1167 	jr	00142$
+   0657                    1168 00118$:
+                           1169 ;src/enemigo/enemigo.c:299: else if(borracho.x<x && x<borracho.x+G_BORRACHO_0_W && y==156){
+   0657 DD 7E F7      [19] 1170 	ld	a,-9 (ix)
+   065A D6 9C         [ 7] 1171 	sub	a, #0x9C
+   065C 20 04         [12] 1172 	jr	NZ,00254$
+   065E 3E 01         [ 7] 1173 	ld	a,#0x01
+   0660 18 01         [12] 1174 	jr	00255$
+   0662                    1175 00254$:
+   0662 AF            [ 4] 1176 	xor	a,a
+   0663                    1177 00255$:
+   0663 6F            [ 4] 1178 	ld	l,a
+   0664 79            [ 4] 1179 	ld	a,c
+   0665 DD 96 F6      [19] 1180 	sub	a, -10 (ix)
+   0668 30 25         [12] 1181 	jr	NC,00113$
+   066A DD 7E F8      [19] 1182 	ld	a,-8 (ix)
+   066D DD 96 FA      [19] 1183 	sub	a, -6 (ix)
+   0670 DD 7E F9      [19] 1184 	ld	a,-7 (ix)
+   0673 DD 9E FB      [19] 1185 	sbc	a, -5 (ix)
+   0676 E2r7Br06      [10] 1186 	jp	PO, 00256$
+   0679 EE 80         [ 7] 1187 	xor	a, #0x80
+   067B                    1188 00256$:
+   067B F2r8Fr06      [10] 1189 	jp	P,00113$
+   067E 7D            [ 4] 1190 	ld	a,l
+   067F B7            [ 4] 1191 	or	a, a
+   0680 28 0D         [12] 1192 	jr	Z,00113$
+                           1193 ;src/enemigo/enemigo.c:300: izquierda();
+   0682 CDrBFr01      [17] 1194 	call	_izquierda
+                           1195 ;src/enemigo/enemigo.c:301: dibujarProta();
+   0685 CDr00r00      [17] 1196 	call	_dibujarProta
+                           1197 ;src/enemigo/enemigo.c:302: e=1;
+   0688 21r11r00      [10] 1198 	ld	hl,#_e + 0
+   068B 36 01         [10] 1199 	ld	(hl), #0x01
+   068D 18 39         [12] 1200 	jr	00142$
+   068F                    1201 00113$:
+                           1202 ;src/enemigo/enemigo.c:304: else if(borracho.x-10<x && x<borracho.x && y==156){
+   068F 7B            [ 4] 1203 	ld	a,e
+   0690 C6 F6         [ 7] 1204 	add	a,#0xF6
+   0692 5F            [ 4] 1205 	ld	e,a
+   0693 7A            [ 4] 1206 	ld	a,d
+   0694 CE FF         [ 7] 1207 	adc	a,#0xFF
+   0696 57            [ 4] 1208 	ld	d,a
+   0697 7B            [ 4] 1209 	ld	a,e
+   0698 DD 96 F8      [19] 1210 	sub	a, -8 (ix)
+   069B 7A            [ 4] 1211 	ld	a,d
+   069C DD 9E F9      [19] 1212 	sbc	a, -7 (ix)
+   069F E2rA4r06      [10] 1213 	jp	PO, 00257$
+   06A2 EE 80         [ 7] 1214 	xor	a, #0x80
+   06A4                    1215 00257$:
+   06A4 F2rBEr06      [10] 1216 	jp	P,00108$
+   06A7 DD 7E F6      [19] 1217 	ld	a,-10 (ix)
+   06AA 91            [ 4] 1218 	sub	a, c
+   06AB 30 11         [12] 1219 	jr	NC,00108$
+   06AD 7D            [ 4] 1220 	ld	a,l
+   06AE B7            [ 4] 1221 	or	a, a
+   06AF 28 0D         [12] 1222 	jr	Z,00108$
+                           1223 ;src/enemigo/enemigo.c:305: derecha();
+   06B1 CDrECr01      [17] 1224 	call	_derecha
+                           1225 ;src/enemigo/enemigo.c:306: dibujarProta();
+   06B4 CDr00r00      [17] 1226 	call	_dibujarProta
+                           1227 ;src/enemigo/enemigo.c:307: e=1;
+   06B7 21r11r00      [10] 1228 	ld	hl,#_e + 0
+   06BA 36 01         [10] 1229 	ld	(hl), #0x01
+   06BC 18 0A         [12] 1230 	jr	00142$
+   06BE                    1231 00108$:
+                           1232 ;src/enemigo/enemigo.c:310: e=0;
+   06BE 21r11r00      [10] 1233 	ld	hl,#_e + 0
+   06C1 36 00         [10] 1234 	ld	(hl), #0x00
+   06C3 18 03         [12] 1235 	jr	00142$
+   06C5                    1236 00140$:
+                           1237 ;src/enemigo/enemigo.c:315: reviveIA();
+   06C5 CDr27r04      [17] 1238 	call	_reviveIA
+   06C8                    1239 00142$:
+   06C8 DD F9         [10] 1240 	ld	sp, ix
+   06CA DD E1         [14] 1241 	pop	ix
+   06CC C9            [10] 1242 	ret
+                           1243 ;src/enemigo/enemigo.c:320: u8 alive()
+                           1244 ;	---------------------------------
+                           1245 ; Function alive
+                           1246 ; ---------------------------------
+   06CD                    1247 _alive::
+                           1248 ;src/enemigo/enemigo.c:322: return j;
+   06CD FD 21r13r00   [14] 1249 	ld	iy,#_j
+   06D1 FD 6E 00      [19] 1250 	ld	l,0 (iy)
+   06D4 C9            [10] 1251 	ret
+                           1252 ;src/enemigo/enemigo.c:325: void BOestado(u8 k)
+                           1253 ;	---------------------------------
+                           1254 ; Function BOestado
+                           1255 ; ---------------------------------
+   06D5                    1256 _BOestado::
+                           1257 ;src/enemigo/enemigo.c:327: switch(k)
+   06D5 21 02 00      [10] 1258 	ld	hl, #2+0
+   06D8 39            [11] 1259 	add	hl, sp
+   06D9 7E            [ 7] 1260 	ld	a, (hl)
+   06DA B7            [ 4] 1261 	or	a, a
+   06DB C0            [11] 1262 	ret	NZ
+                           1263 ;src/enemigo/enemigo.c:329: case 0: IA();  break;
+                           1264 ;src/enemigo/enemigo.c:331: }
+   06DC C3r8Ar04      [10] 1265 	jp  _IA
+                           1266 ;src/enemigo/enemigo.c:334: void ini_estado()
+                           1267 ;	---------------------------------
+                           1268 ; Function ini_estado
+                           1269 ; ---------------------------------
+   06DF                    1270 _ini_estado::
+                           1271 ;src/enemigo/enemigo.c:336: BOestado(0);
+   06DF AF            [ 4] 1272 	xor	a, a
+   06E0 F5            [11] 1273 	push	af
+   06E1 33            [ 6] 1274 	inc	sp
+   06E2 CDrD5r06      [17] 1275 	call	_BOestado
+   06E5 33            [ 6] 1276 	inc	sp
+   06E6 C9            [10] 1277 	ret
+                           1278 ;src/enemigo/enemigo.c:339: void inicializar_borracho()
+                           1279 ;	---------------------------------
+                           1280 ; Function inicializar_borracho
+                           1281 ; ---------------------------------
+   06E7                    1282 _inicializar_borracho::
+                           1283 ;src/enemigo/enemigo.c:342: borracho.x= borracho.px = 60;
+   06E7 21r02r00      [10] 1284 	ld	hl,#(_borracho + 0x0002)
+   06EA 36 3C         [10] 1285 	ld	(hl),#0x3C
+   06EC 21r00r00      [10] 1286 	ld	hl,#_borracho
+   06EF 36 3C         [10] 1287 	ld	(hl),#0x3C
+                           1288 ;src/enemigo/enemigo.c:343: borracho.y= borracho.py = 162;
+   06F1 21r03r00      [10] 1289 	ld	hl,#(_borracho + 0x0003)
+   06F4 36 A2         [10] 1290 	ld	(hl),#0xA2
+   06F6 21r01r00      [10] 1291 	ld	hl,#(_borracho + 0x0001)
+   06F9 36 A2         [10] 1292 	ld	(hl),#0xA2
+                           1293 ;src/enemigo/enemigo.c:344: borracho.mover=SI;
+   06FB 21r06r00      [10] 1294 	ld	hl,#(_borracho + 0x0006)
+   06FE 36 01         [10] 1295 	ld	(hl),#0x01
+                           1296 ;src/enemigo/enemigo.c:345: borracho.estado = 0;//quieto
+   0700 21r07r00      [10] 1297 	ld	hl,#(_borracho + 0x0007)
+   0703 36 00         [10] 1298 	ld	(hl),#0x00
+                           1299 ;src/enemigo/enemigo.c:346: borracho.nframe = 0;
+   0705 21r0Ar00      [10] 1300 	ld	hl,#(_borracho + 0x000a)
+   0708 36 00         [10] 1301 	ld	(hl),#0x00
+                           1302 ;src/enemigo/enemigo.c:347: borracho.frame  = &g_Frames[0];
+   070A 21r26r00      [10] 1303 	ld	hl,#_g_Frames
+   070D 22r08r00      [16] 1304 	ld	((_borracho + 0x0008)), hl
+                           1305 ;src/enemigo/enemigo.c:348: borracho.mira   = E_derecha;
+   0710 21r0Br00      [10] 1306 	ld	hl,#(_borracho + 0x000b)
+   0713 36 00         [10] 1307 	ld	(hl),#0x00
+                           1308 ;src/enemigo/enemigo.c:349: pmapa=g_map1;
+   0715 21r00r00      [10] 1309 	ld	hl,#_g_map1+0
+   0718 22r0Dr00      [16] 1310 	ld	(_pmapa),hl
+                           1311 ;src/enemigo/enemigo.c:350: mapaJug=get_tip_mapa();
+   071B CDr00r00      [17] 1312 	call	_get_tip_mapa
+   071E 22r0Fr00      [16] 1313 	ld	(_mapaJug),hl
+                           1314 ;src/enemigo/enemigo.c:351: e=0;
+   0721 21r11r00      [10] 1315 	ld	hl,#_e + 0
+   0724 36 00         [10] 1316 	ld	(hl), #0x00
+                           1317 ;src/enemigo/enemigo.c:352: c=0;
+   0726 AF            [ 4] 1318 	xor	a, a
+   0727 32r14r00      [13] 1319 	ld	(#_c + 0),a
+   072A 32r15r00      [13] 1320 	ld	(#_c + 1),a
+   072D 32r16r00      [13] 1321 	ld	(#_c + 2),a
+   0730 32r17r00      [13] 1322 	ld	(#_c + 3),a
+                           1323 ;src/enemigo/enemigo.c:353: j=0;
+   0733 21r13r00      [10] 1324 	ld	hl,#_j + 0
+   0736 36 00         [10] 1325 	ld	(hl), #0x00
+                           1326 ;src/enemigo/enemigo.c:354: dibujarBorracho();
+   0738 C3rBDr00      [10] 1327 	jp  _dibujarBorracho
+                           1328 	.area _CODE
+                           1329 	.area _INITIALIZER
+                           1330 	.area _CABS (ABS)
